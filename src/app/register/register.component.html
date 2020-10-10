@@ -1,0 +1,54 @@
+<div class="col-md-12">
+  <div class="card card-container">
+    <img id="profile-img" class="card-img-top profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      alt="">
+    <form action="" *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+      <div class="form-group">
+        <label for="userName">Họ và tên</label>
+        <input type="text" name="userName" id="userName" class="form-control" placeholder="Họ và tên"
+          [(ngModel)]="form.userName" required minlength="3" #userName>
+        <div class="alrt-danger" *ngIf="f.submitted && userName.invalid">
+          <div *ngIf="userName.errors.required">
+            Username is required!
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="">Số điện thoại</label>
+        <input type="tel" name="phone" id="phone" class="form-control" placeholder="Số điện thoại"
+          [(ngModel)]="form.phone" required #phone>
+        <div class="alert-danger" *ngIf="f.submitted && phone.invalid">
+          <div *ngIf="phone.errors.required">
+            Phone is required!
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <input type="password" name="password" id="passwird" class="form-control" placeholder="Mật khẩu"
+          [(ngModel)]="form.password" required #password>
+        <div class="alert-danger" *ngIf="f.submitted && password.invalid">
+          <div *ngIf="password.errors.required">
+            Password is required!
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary btn-block">
+          Sign Up
+        </button>
+      </div>
+
+      <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+        Sign up failed! <br /> {{errorMessage}}
+      </div>
+
+      <div class="alert alert-success" *ngIf="isSuccessful">
+        Your registration is successful!
+      </div>
+    </form>
+  </div>
+</div>

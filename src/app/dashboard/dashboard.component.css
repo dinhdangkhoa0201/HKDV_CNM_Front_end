@@ -1,0 +1,12 @@
+.brandImage {
+  width: 50px;
+}
+
+.container-list-message {
+  position: relative;
+}
+
+.list-message {
+  position: absolute;
+  width: 300px;
+}
