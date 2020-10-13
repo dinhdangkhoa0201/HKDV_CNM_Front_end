@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 import {TokenStorageService} from './_services/token-storage.service';
 import {Component, OnInit} from '@angular/core';
 

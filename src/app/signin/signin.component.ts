@@ -29,7 +29,6 @@ export class SignInComponent implements OnInit {
   onSubmit(): void {
     this.authService.signIn(this.form).subscribe(
       (data) => {
-
         this.tokenStorage.saveToken(data.accessToken);
         this.tokenStorage.saveUser(data);
         this.isLoginFailed = false;

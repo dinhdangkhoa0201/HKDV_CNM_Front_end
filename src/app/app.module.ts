@@ -8,10 +8,27 @@ import { SignInComponent } from './signin/signin.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
-import { BoardAdminComponent } from './board-admin/board-admin.component';
+
 import { BoardUserComponent } from './board-user/board-user.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { AdminComponent } from './admin/admin.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatTableModule } from '@angular/material/table';
+import { MatSliderModule } from '@angular/material/slider'
+import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 @NgModule({
   declarations: [
@@ -20,14 +37,40 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
-    BoardAdminComponent,
-    BoardUserComponent
+    BoardUserComponent,
+    AdminComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatSliderModule,
+    MatTableModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    FlexLayoutModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
+  exports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatSortModule,
+    FlexLayoutModule,
+    MatSlideToggleModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

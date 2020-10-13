@@ -128,6 +128,15 @@
   dependencies:
     tslib "^2.0.0"
 
+"@angular/cdk@^10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-10.2.4.tgz#656095648af005e7fa02c4cc68865be4bf59fc10"
+  integrity sha512-Ccm/iRb6zELWwMem6qTnFCalMVX/aS17hhN65efpNKrH3ovhyQSPWtF4p9IaEJ3rZpfXqXMPBneJ9ZXAA/iKog==
+  dependencies:
+    tslib "^2.0.0"
+  optionalDependencies:
+    parse5 "^5.0.0"
+
 "@angular/cli@~10.1.4":
   version "10.1.4"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-10.1.4.tgz#8aa6b677da3d7ef9661e341893d5b53a5256645d"
@@ -204,10 +213,24 @@
   dependencies:
     tslib "^2.0.0"
 
+"@angular/flex-layout@^10.0.0-beta.32":
+  version "10.0.0-beta.32"
+  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-10.0.0-beta.32.tgz#a797ebd6f3689c71a63e99aa62f2b9cb933f5e2d"
+  integrity sha512-JvuY4dUoy5jyCTIrFiq7n30Znakh1pD3nbg0h0hs2r3t1OiDQb0ZSI1wcumosG/vYHsuJQTuNhbfaIZzA1x8nA==
+  dependencies:
+    tslib "^2.0.0"
+
 "@angular/forms@~10.1.4":
   version "10.1.4"
   resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-10.1.4.tgz#db81ecd854ebcfd53ee8b4ebc94ae1b4d6e5a3e6"
   integrity sha512-pupOvPZAUZymjOViB25+gUp3/vK5T5XORNMASHubBZAdZ59nhFU3XMHGDl/uRfuy/CiWOOKaB4aS4MqUo+kK2w==
+  dependencies:
+    tslib "^2.0.0"
+
+"@angular/material@^10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-10.2.4.tgz#9a3e4958ed72ae77c1638075efe5bff5158b2ba4"
+  integrity sha512-m5pRzCZQlpb7BZrc+LV+eeMU9M76obWVbNy8or6gvBPa6awfbwOz8uBryIvVngdkhoIieqAu1iV4bG7b7Xp3sg==
   dependencies:
     tslib "^2.0.0"
 
@@ -3856,6 +3879,11 @@ follow-redirects@^1.0.0:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
   integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
 
+font-awesome@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
+  integrity sha1-j6jPBBGhoxr9B7BtKQK7n8gVoTM=
+
 for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -6232,6 +6260,11 @@ parse5@6.0.1, parse5@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"
   integrity sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==
+
+parse5@^5.0.0:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/parse5/-/parse5-5.1.1.tgz#f68e4e5ba1852ac2cadc00f4555fff6c2abb6178"
+  integrity sha512-ugq4DFI0Ptb+WWjAdOK16+u/nHfiIrcE+sh8kZMaM0WllQKLI9rOUq6c2b7cwPkXdzfQESqvoqK6ug7U/Yyzug==
 
 parseqs@0.0.5:
   version "0.0.5"
