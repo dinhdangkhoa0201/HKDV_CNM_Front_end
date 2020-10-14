@@ -16,12 +16,11 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   signIn(credentials): Observable<any> {
-
     console.log('credential : ' + JSON.stringify(credentials));
     return this.http.post(
       AUTH_API + 'sign-in',
       {
-        phone: credentials.phone,
+        phoneEmail: credentials.phoneEmail,
         password: credentials.password,
       },
       httpOptions
@@ -29,9 +28,10 @@ export class AuthService {
   }
 
   register(user): Observable<any> {
+    console.log('register user : ' + JSON.stringify(user));
     return this.http.post(AUTH_API + 'sign-up', {
       userName: user.userName,
-      phone: user.phone,
+      phoneEmail: user.phoneEmail,
       password: user.password,
     });
   }

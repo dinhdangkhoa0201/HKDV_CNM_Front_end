@@ -51,6 +51,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     this.dataSource = new MatTableDataSource<User>(this.temps);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    // this.isLoadingResults = true;
     // this.adminService.findAllUsers().subscribe(
     //   data => {
     //     const users = Array.from<User>(data);
@@ -61,7 +62,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     //   },
     //   err => {}
     // );
-    this.isLoadingResults = true;
+
   }
 
   applyFilter(event: Event): void {
@@ -73,7 +74,13 @@ export class AdminComponent implements OnInit, AfterViewInit {
     }
   }
 
-  confirmSetEnable(): void {
+  confirmSetEnable(value, enable): void {
+    const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirm Set Enable User',
+        message: enable === false ? 'Do you want to set Enable for this user?' : 'Do you want to set Disable for this user?',
+      }
+    });
   }
 
   onChange(value, userId): void {
@@ -90,6 +97,12 @@ export class AdminComponent implements OnInit, AfterViewInit {
       data: {
         title: 'Confirm Remove Employee',
         message: 'Are you sure, you want to remove an employee: ' + userId
+      }
+    });
+
+    confirmDialog.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.adminService.deleteUser(userId);
       }
     });
   }

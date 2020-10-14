@@ -39,4 +39,8 @@ export class AdminService {
   findAll(sort, order, page): Observable<any>{
     return this.http.get(`${ADMIN_API + '/users/page'}?sort=${sort}&order=${order}&page=${page}`);
   }
+
+  deleteUser(userId): Observable<any>{
+    return this.http.delete(`${ADMIN_API + '/users'}/${userId}`);
+  }
 }

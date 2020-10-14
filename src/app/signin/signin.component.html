@@ -1,42 +1,35 @@
-<div class="col-md-12">
-  <div class="card card-container">
-    <img src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="" class="profile-img-card">
-    <form action="" *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
-      <div class="form-group">
-        <label for="phone">Số điện thoại</label>
-        <input type="tel" name="phone" id="phone" class="form-control" placeholder="Số điện thoại"
-          [(ngModel)]="form.phone" required #phone="ngModel">
-        <div class="alert alert-danger" role="alert" *ngIf="f.submitted && phone.invalid">
-          Phone is required!
-        </div>
-      </div>
+<section fxLayout="column wrap" fxLayoutAlign="center center">
+  <mat-card fxFlex.xs="100%">
+    <mat-card-title>Login</mat-card-title>
 
-      <div class="form-group">
-        <label for="password">Mật khẩu</label>
-        <input type="password" name="password" id="password" class="form-control" placeholder="Mật khẩu"
-          [(ngModel)]="form.password" required #password>
-        <div class="alert alert-danger" role="alert" *ngIf="f.submitted && password.invalid">
-          <div *ngIf="password.errors.required">
-            Password is required!
-          </div>
-        </div>
-      </div>
+    <form [formGroup]="requestLoginForm" autocomplete="off" novalidate (ngSubmit)="createUser(requestLoginForm.value)"
+      fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="">
+      <!-- Content -->
+      <mat-card-content>
+        <!-- PhoneEmail -->
+        <mat-form-field>
+          <input matInput type="text" placeholder="Phone / Email" formControlName="phoneEmail" id="phoneEmail"
+            #phoneEmail>
+          <mat-error *ngIf="hasError('phoneEmail', 'required')">Phone / Email is required!</mat-error>
+        </mat-form-field>
+      </mat-card-content>
 
-      <div class="form-group">
-        <button class="btn btn-primary btn-block">
-          Log in
-        </button>
-      </div>
+      <!-- Password -->
+      <mat-card-content>
+        <mat-form-field>
+          <input matInput type="password" placeholder="Password" formControlName="password" name="password"
+            id="password">
+          <mat-error *ngIf="hasError('password', 'required')">Password is required!</mat-error>
 
-      <div class="form-group">
-        <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed">
-          Login failed: {{errorMessage}}
-        </div>
-      </div>
+        </mat-form-field>
+
+      </mat-card-content>
+      <!-- Action -->
+      <mat-card-actions>
+        <button mat-raised-button color="primary" [disabled]="!requestLoginForm.valid">Login</button>
+        <button mat-raised-button color="warn">Cancel</button>
+      </mat-card-actions>
+
     </form>
-
-    <div class="alert alert-success" *ngIf="isLoggedIn">
-      Logged in as {{roles}}
-    </div>
-  </div>
-</div>
+  </mat-card>
+</section>

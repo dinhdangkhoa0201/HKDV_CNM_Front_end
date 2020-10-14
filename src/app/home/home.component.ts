@@ -15,17 +15,19 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userName = '';
     this.userService.getPublicContent().subscribe(
       (data) => {
         this.content = data;
-
       },
       (err) => {
         this.content = JSON.parse(err.error.message);
       }
     );
-
     const user = this.tokenStore.getUser();
+    if(user instanceof undefined){
+      this.userName = '';
+    }
     this.userName = user.userName;
   }
 }

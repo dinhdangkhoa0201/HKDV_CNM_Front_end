@@ -6,9 +6,9 @@
             <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
         </mat-form-field>
     </div>
-    <!-- <div class="example-loading-shade" *ngIf="isLoadingResults">
+    <div class="example-loading-shade" *ngIf="isLoadingResults">
         <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-    </div> -->
+    </div>
 
     <table mat-table [dataSource]="dataSource" matSort matSortActive="UserId" matSortDisableClear
         matSortDirection="asc">
@@ -37,12 +37,14 @@
             <th mat-header-cell *matHeaderCellDef>Enable</th>
             <td mat-cell *matCellDef="let user">
                 <div *ngIf="user.enable == true">
-                    <mat-slide-toggle [checked]="true" (change)="onChange($event, user.userId)" class="example-margin">
+                    <mat-slide-toggle [checked]="true" (click)="confirmSetEnable($event, user.enable)"
+                        class="example-margin">
                         Slide me!
                     </mat-slide-toggle>
                 </div>
                 <div *ngIf="user.enable == false">
-                    <mat-slide-toggle [checked]="false" (change)="onChange($event, user.userId)" class="example-margin">
+                    <mat-slide-toggle [checked]="false" (click)="confirmSetEnable($event, user.enable)"
+                        class="example-margin">
                         Slide me!
                     </mat-slide-toggle>
                 </div>

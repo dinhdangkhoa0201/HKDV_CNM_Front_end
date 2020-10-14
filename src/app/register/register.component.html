@@ -1,4 +1,4 @@
-<div class="col-md-12">
+ <!--<div class="col-md-12">
   <div class="card card-container">
     <img id="profile-img" class="card-img-top profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
       alt="">
@@ -16,10 +16,10 @@
 
       <div class="form-group">
         <label for="">Số điện thoại</label>
-        <input type="tel" name="phone" id="phone" class="form-control" placeholder="Số điện thoại"
-          [(ngModel)]="form.phone" required #phone>
-        <div class="alert-danger" *ngIf="f.submitted && phone.invalid">
-          <div *ngIf="phone.errors.required">
+        <input type="tel" name="phoneEmail" id="phoneEmail" class="form-control" placeholder="Số điện thoại"
+          [(ngModel)]="form.phoneEmail" required #phoneEmail>
+        <div class="alert-danger" *ngIf="f.submitted && phoneEmail.invalid">
+          <div *ngIf="phoneEmail.errors.required">
             Phone is required!
           </div>
         </div>
@@ -51,4 +51,26 @@
       </div>
     </form>
   </div>
+</div>-->
+
+<!--<mat-tab-group dynamicHeight>
+  <mat-tab label="Short tab">
+    <form action="" [formGroup]="verifyPhoneForm" >
+      <mat-form-field>
+        <input matInput type="tel" placeholder="Phone number" name="phone" formControlName="phone" id="phone">
+        <mat-error *ngIf="hasError('phone', 'required')">Phone is required!</mat-error>
+        <mat-error *ngIf="hasError('phone', 'pattern')"></mat-error>
+      </mat-form-field>
+    </form>
+  </mat-tab>
+  <mat-tab label="Long tab">
+
+  </mat-tab>
+</mat-tab-group>-->
+
+<div>
+  <app-verify-phone></app-verify-phone>
+</div>
+<div *ngIf="isVerifyPhoneSuccess || isVerifyEmailSuccess">
+  <h2>Hello</h2>
 </div>
