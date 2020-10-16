@@ -14,7 +14,7 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { AdminComponent } from './admin/admin.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
-import { MatSliderModule } from '@angular/material/slider'
+import { MatSliderModule } from '@angular/material/slider';
 import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -28,13 +28,13 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
-import { VerifyPhoneComponent } from './verify-phone/verify-phone.component';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatStepperModule } from '@angular/material/stepper';
 import { WindowService } from './_services/window.service';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { StepperComponent } from './stepper/stepper.component';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -56,7 +56,7 @@ const config = {
     BoardUserComponent,
     AdminComponent,
     ConfirmDialogComponent,
-    VerifyPhoneComponent,
+    StepperComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,7 +80,8 @@ const config = {
     MatCardModule,
     AngularFireModule.initializeApp(config),
     AngularFireAuthModule,
-    MatTabsModule
+    MatTabsModule,
+    MatStepperModule
   ],
   exports: [
     MatFormFieldModule,
@@ -94,7 +95,8 @@ const config = {
     MatButtonModule,
     MatDialogModule,
     MatCardModule,
-    MatTabsModule
+    MatTabsModule,
+    MatStepperModule
   ],
   providers: [authInterceptorProviders, WindowService],
   bootstrap: [AppComponent]

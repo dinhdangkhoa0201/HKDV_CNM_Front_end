@@ -1,9 +1,10 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {WindowService} from '../_services/window.service';
 import * as firebase from 'firebase';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {environment} from '../../environments/environment.prod';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {AuthService} from '../_services/auth.service';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -16,39 +17,37 @@ const config = {
   measurementId: environment.configFirebase.messagingSenderId,
 };
 
-export class PhoneNumber {
-  country: string;
-  area: string;
-  prefix: string;
-  line: string;
-  // format phone numbers as E.164
-  get e164(): any {
-    const num = this.country + this.area + this.prefix + this.line;
-    return `+${num}`;
-  }
-}
-
 @Component({
   selector: 'app-verify-phone',
   templateUrl: './verify-phone.component.html',
   styleUrls: ['./verify-phone.component.css']
 })
-export class VerifyPhoneComponent implements OnInit, AfterViewInit {
-  windowRef: any;
-  phone: string;
-  phoneNumber = new PhoneNumber();
-  verificationCode: string;
+export class VerifyPhoneComponent implements OnInit {
+    ngOnInit(): void {
+        throw new Error('Method not implemented.');
+    }
+/*  public verifyPhoneForm: FormGroup;
+  public verifyEmailForm: FormGroup;
+
+  @Input() isRegister: boolean;
+
+  @Output() isVerify = new EventEmitter<boolean>();
 
   isVerifyPhoneSuccess: boolean;
   isVerifyEmailSuccess: boolean;
 
-  verifyPhoneForm: FormGroup;
-  verifyEmailForm: FormGroup;
+  isExistedPhone: boolean;
+  isExistedEmail: boolean;
+
+  errMessage: string;
+
+
+
   PHONE_REGEXP = /^[0-9]{10}$/i;
   EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 
 
-  constructor(private win: WindowService, public fireAuthService: AngularFireAuth) {
+  constructor(private win: WindowService, public fireAuthService: AngularFireAuth, private authService: AuthService) {
     this.windowRef = this.win.windowRef;
   }
 
@@ -59,9 +58,13 @@ export class VerifyPhoneComponent implements OnInit, AfterViewInit {
     this.verifyEmailForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.pattern(this.EMAIL_REGEXP)])
     });
+
     firebase.initializeApp(config);
     this.isVerifyEmailSuccess = false;
     this.isVerifyPhoneSuccess = false;
+    this.isExistedPhone = false;
+    this.isExistedEmail = false;
+    this.errMessage = '';
   }
 
 
@@ -77,35 +80,47 @@ export class VerifyPhoneComponent implements OnInit, AfterViewInit {
   }
 
   sendLoginCode(): void {
-    const appVerifier = this.windowRef.recaptchaVerifier;
+
     console.log('phone : ' + this.phone);
     console.log('phone : ' + this.modifyPhone(this.phone));
 
-    firebase.auth()
-      .signInWithPhoneNumber(this.modifyPhone(this.phone), appVerifier)
-      .then(result => {
-        this.windowRef.confirmationResult = result;
-      })
-      .catch(error => console.log('error', error));
+    this.authService.isExistedPhone(this.phone).subscribe(
+      data => {
+        this.isExistedPhone = data;
+        console.log(('exist phone before : ' + this.isExistedPhone));
+        this.sendCode();
+      }, err => {
+        this.errMessage = err.error.message;
+      }
+    );
   }
 
-  modifyPhone(phone): any{
-    return '+84' + phone.substring(1);
+  sendCode(): void {
+    const appVerifier = this.windowRef.recaptchaVerifier;
+    if (this.isExistedPhone === false) {
+      firebase.auth()
+        .signInWithPhoneNumber(this.modifyPhone(this.phone), appVerifier)
+        .then(result => {
+          this.windowRef.confirmationResult = result;
+        })
+        .catch(error => console.log('error', error));
+    }
   }
+
 
   verifyLoginCode(): void {
     this.windowRef.confirmationResult
       .confirm(this.verificationCode)
-      .then( result => {
-
+      .then(result => {
         console.log(result);
         sessionStorage.setItem('phone', this.phone);
-        
-        this.isVerifyPhoneSuccess = true;
         this.isVerifyEmailSuccess = true;
-      })
-      .catch( error => console.log(error, 'Incorrect code entered?'));
+        this.isVerifyPhoneSuccess = true;
 
-  }
+        this.isVerify.emit(this.isVerifyPhoneSuccess);
+        this.isVerify.emit(this.isVerifyEmailSuccess);
+      })
+      .catch(error => console.log(error, 'Incorrect code entered?'));
+  }*/
 
 }

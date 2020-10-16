@@ -1,5 +1,7 @@
 export interface RequestRegister {
     userName: string;
-    phoneEmail: string;
+    birthday: string;
+    phone: string;
+    email: string;
     password: string;
 }

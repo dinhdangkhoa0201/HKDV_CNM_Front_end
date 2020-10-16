@@ -30,3 +30,12 @@
     Please login
   </ng-template>
 </div>
+
+<div *ngIf="isLoggedIn">
+  
+</div>
+<div *ngIf="!isLoggedIn">
+  <div class="alert alert-danger">
+    <p>Đăng nhập đê bạn ơi ^^</p>
+  </div>
+</div>

@@ -1,11 +1,12 @@
+<!--
 <mat-tab-group>
   <mat-tab label="Xác nhận bằng Số điện thoại">
     <div fxLayout="column" fxLayoutAlign="space-around center">
-      <!--   Mat card   -->
+      &lt;!&ndash;   Mat card   &ndash;&gt;
       <mat-card fxFlex.xs="100%">
-        <!--    Title    -->
+        &lt;!&ndash;    Title    &ndash;&gt;
         <mat-card-title>Xác nhận bằng Số điện thoại</mat-card-title>
-        <!--    Conten phone    -->
+        &lt;!&ndash;    Conten phone    &ndash;&gt;
         <mat-card-content>
           <form [formGroup]="verifyPhoneForm" fxLayout="column">
             <mat-form-field>
@@ -16,19 +17,23 @@
             </mat-form-field>
           </form>
         </mat-card-content>
-        <!--    Conten CAPTCHA    -->
+        &lt;!&ndash;    Conten CAPTCHA    &ndash;&gt;
         <mat-card-content>
           <div id="recaptcha-container"></div>
         </mat-card-content>
-        <!--    Action    -->
+        &lt;!&ndash;    Action    &ndash;&gt;
         <mat-card-actions>
-          <button color="primary" (click)="sendLoginCode()" mat-raised-button>
+          <button [disabled]="!verifyPhoneForm.valid && isExistedPhone === false" color="primary" (click)="sendLoginCode()" mat-raised-button>
             <mat-icon>check_circle_outline</mat-icon>
             Xác nhận
           </button>
         </mat-card-actions>
       </mat-card>
-      <!--      *ngIf="windowRef.confirmationResult"-->
+
+      <div class="alert alert-danger" *ngIf="isExistedPhone === true || isExistedEmail === true">
+        <p>Số điện thoại đã được sử dụng</p>
+      </div>
+      &lt;!&ndash;      *ngIf="windowRef.confirmationResult"&ndash;&gt;
 
       <mat-card fxFlex.xl="100%">
 
@@ -43,17 +48,18 @@
         </mat-card-content>
 
         <mat-card-actions>
-          <button mat-raised-button color="accent" (click)="verifyLoginCode()">Xác nhận</button>
+          <button [disabled]="isExistedPhone === true" mat-raised-button color="accent" (click)="verifyLoginCode()">Xác nhận</button>
         </mat-card-actions>
       </mat-card>
     </div>
   </mat-tab>
   <mat-tab label="Xác nhận bằng Email">
-    <!--    <form action="" [formGroup]="verifyPhoneForm" >
+    &lt;!&ndash;    <form action="" [formGroup]="verifyPhoneForm" >
           <mat-form-field>
             <input matInput type="email" placeholder="Phone number" name="email" formControlName="email" id="email">
             <mat-error *ngIf="hasError('email', 'required')">Email is required!</mat-error>
           </mat-form-field>
-        </form>-->
+        </form>&ndash;&gt;
   </mat-tab>
 </mat-tab-group>
+-->

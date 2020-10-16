@@ -9,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 export class ProfileComponent implements OnInit {
   currentUser: any;
 
+  isLoggedIn: boolean;
+
   constructor(private token: TokenStorageService) {}
 
   ngOnInit(): void {
     this.currentUser = this.token.getUser();
+    if (sessionStorage.getItem('isLoggedIn') === 'true'){
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
+    }
   }
 }

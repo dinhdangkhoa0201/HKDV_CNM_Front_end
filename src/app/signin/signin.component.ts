@@ -3,6 +3,7 @@ import { TokenStorageService } from './../_services/token-storage.service';
 import { AuthService } from './../_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -22,7 +23,8 @@ export class SignInComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private tokenStorage: TokenStorageService
+    private tokenStorage: TokenStorageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -47,12 +49,13 @@ export class SignInComponent implements OnInit {
     }
   }
 
-
-  executeUserCreation(requestLogin): void {
+  executeUserCreation(requestLoginForm): void {
     const temp: RequestLogin = {
-      phoneEmail: requestLogin.phoneEmail,
-      password: requestLogin.password
+      phoneEmail: requestLoginForm.phoneEmail,
+      password: requestLoginForm.password
     };
+
+    console.log('temp : ' + temp);
 
     this.authService.signIn(temp).subscribe(
       (data) => {
@@ -62,6 +65,8 @@ export class SignInComponent implements OnInit {
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
         this.reloadPage();
+
+        sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
       },
       (err) => {
         this.errorMessage = err.error.message;
@@ -71,6 +76,8 @@ export class SignInComponent implements OnInit {
   }
 
   reloadPage(): void {
-    window.location.reload();
+    if (this.isLoggedIn){
+      this.router.navigate(['profile']);
+    }
   }
 }
