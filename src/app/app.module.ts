@@ -30,11 +30,17 @@ import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
 import { WindowService } from './_services/window.service';
+
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { StepperComponent } from './stepper/stepper.component';
+import {DialogChangeInformationComponent} from './dialog/dialog-change-information/dialog-change-information.component';
+import {DialogChangePasswordComponent} from './dialog/dialog-change-password/dialog-change-password.component';
+import {DialogUserInformationComponent} from './dialog/dialog-user-information/dialog-user-information.component';
+import { DialogAddUserComponent } from './dialog/dialog-add-user/dialog-add-user.component';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -57,6 +63,10 @@ const config = {
     AdminComponent,
     ConfirmDialogComponent,
     StepperComponent,
+    DialogChangeInformationComponent,
+    DialogChangePasswordComponent,
+    DialogUserInformationComponent,
+    DialogAddUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,7 +91,8 @@ const config = {
     AngularFireModule.initializeApp(config),
     AngularFireAuthModule,
     MatTabsModule,
-    MatStepperModule
+    MatStepperModule,
+    MatSelectModule
   ],
   exports: [
     MatFormFieldModule,
@@ -96,7 +107,8 @@ const config = {
     MatDialogModule,
     MatCardModule,
     MatTabsModule,
-    MatStepperModule
+    MatStepperModule,
+    MatSelectModule
   ],
   providers: [authInterceptorProviders, WindowService],
   bootstrap: [AppComponent]

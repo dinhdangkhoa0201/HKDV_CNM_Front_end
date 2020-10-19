@@ -1,12 +1,87 @@
-.brandImage {
-  width: 50px;
+* {
+  margin: 0;
+  padding: 0;
+}
+/* SIDE_BAR */
+.sidebar {
+  /* z-index: 1; */
+  background: #2f323a;
+  /* position: fixed; */
+  height: 90vh;
+  /* transition: 0.3s;
+  transition-property: width;
+  overflow-y: auto; */
+  border-right: 1px solid black;
 }
 
-.container-list-message {
+/* .sidebar .sidebar-menu {
+  overflow: hidden;
+} */
+
+.sidebar .sidebar-menu .list-group .list-group-item {
+  text-align: center;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 0%;
+}
+
+.sidebar .sidebar-menu .list-group .profile {
+  background: #2f323a;
+  margin-top: 20px;
+}
+
+.sidebar .sidebar-menu .profile input {
+  /* margin: 20px 0px 0px -5px; */
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background-size: cover;
+  outline: none;
+}
+
+/* .sidebar .sidebar-menu .item {
+  overflow: hidden;
+} */
+
+.sidebar .sidebar-menu .item .menu-btn {
+  display: block;
+  color: #fff;
   position: relative;
+  padding: 10px 10px;
+  /* transition-property: background; */
+  background: #3498db;
+  /* overflow: hidden; */
+}
+
+.sidebar .sidebar-menu .item .menu-btn:hover {
+  background: #55b1f0;
+  text-decoration: none;
+}
+
+.sidebar .sidebar-menu .item .menu-btn i {
+  margin-right: 10px;
+}
+
+/*middleBar*/
+.middle-bar {
+  background: #e6e6e6;
+  padding: 0vh 2vh 0vh 2vh;
+  border-right: 1px solid #000000;
+}
+.brandImage {
+  width: 8vh;
 }
 
 .list-message {
-  position: absolute;
-  width: 300px;
+  position: relative;
+  /* height: 100vh; */
+  /* height: 100%;
+  width: 150; */
+  z-index: 1;
+}
+
+.message {
+  overflow-y: scroll;
+  border: 1px solid black;
+  background-color: gray;
 }

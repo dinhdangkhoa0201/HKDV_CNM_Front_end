@@ -1,0 +1,23 @@
+<button class="close" mat-button color="warn" mat-dialog-close>&times;</button>
+<h2 mat-dialog-title align="center">Thông tin người dùng</h2>
+<hr />
+<mat-dialog-content>
+  <h3 align="center">{{ user.userName }}</h3>
+  <div fxLayout="row" fxLayoutAlign="space-evenly stretch">
+    <div fxLayout="column" fxLayoutAlign="space-evenly stretch">
+      <p>Điện thoai:</p>
+      <p>Ngày sinh:</p>
+      <p>Email:</p>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="space-evenly stretch">
+      <p>{{ user.phone }}</p>
+      <p>{{ user.birthday }}</p>
+      <p>{{ user.email }}</p>
+    </div>
+  </div>
+</mat-dialog-content>
+<hr />
+<mat-dialog-actions align="center">
+  <button mat-stroked-button (click)="openChangePassword()">Đổi mật khẩu</button>
+  <button mat-stroked-button (click)="openUserUpdate()">Chỉnh sửa thông tin</button>
+</mat-dialog-actions>

@@ -5,11 +5,12 @@ import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 import { merge, Observable, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import {DialogAddUserComponent} from '../dialog/dialog-add-user/dialog-add-user.component';
 
 
 @Component({
@@ -22,15 +23,17 @@ export class AdminComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<User>;
   isLoadingResults: boolean;
 
+  dialogRef: MatDialogRef<any>;
+
   temps = Array.from<User>(
     [
       {
-        'userId': 1,
-        'userName': 'DDK',
-        'birthday': '1999-10-02',
-        'phone': '0398122553',
-        'email': 'dinhdangkhoa@gmail.com',
-        'enable': false
+        userId: 1,
+        userName: 'DDK',
+        birthday: '1999-10-02',
+        phone: '0398122553',
+        email: 'dinhdangkhoa@gmail.com',
+        enable: false
       }
     ]
   );
@@ -107,5 +110,10 @@ export class AdminComponent implements OnInit, AfterViewInit {
     });
   }
 
+  addUser(): void {
+    this.dialogRef = this.dialog.open(DialogAddUserComponent, {
+      disableClose: true
+    });
+  }
 }
 

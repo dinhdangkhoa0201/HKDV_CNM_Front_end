@@ -1,15 +1,14 @@
 <section fxLayout="column wrap" fxLayoutAlign="center center">
-  <mat-card fxFlex.xs="100%">
+  <mat-card fxFlex.xs="100%" *ngIf="!isLoggedIn ">
     <mat-card-title>Login</mat-card-title>
-
-    <form [formGroup]="requestLoginForm" autocomplete="off" novalidate (ngSubmit)="createUser(requestLoginForm.value)"
+    <form [formGroup]="requestLoginForm" novalidate (ngSubmit)="createUser(requestLoginForm.value)"
       fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="">
       <!-- Content -->
       <mat-card-content>
         <!-- PhoneEmail -->
         <mat-form-field>
           <input matInput type="text" placeholder="Phone / Email" formControlName="phoneEmail" id="phoneEmail"
-            #phoneEmail>
+            #phoneEmail value="0398122553">
           <mat-error *ngIf="hasError('phoneEmail', 'required')">Phone / Email is required!</mat-error>
         </mat-form-field>
       </mat-card-content>
@@ -18,7 +17,7 @@
       <mat-card-content>
         <mat-form-field>
           <input matInput type="password" placeholder="Password" formControlName="password" name="password"
-            id="password">
+            id="password" value="025825273aA">
           <mat-error *ngIf="hasError('password', 'required')">Password is required!</mat-error>
 
         </mat-form-field>

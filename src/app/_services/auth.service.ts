@@ -1,7 +1,9 @@
 import { environment } from './../../environments/environment.prod';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Observable, timer} from 'rxjs';
 import { Injectable } from '@angular/core';
+import {AbstractControl, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
+import {map, switchMap} from 'rxjs/operators';
 
 const AUTH_API = environment.API_URL + '/api/auth';
 
@@ -45,7 +47,33 @@ export class AuthService {
   }
   isExistedEmail(email): Observable<any> {
     let body = new HttpParams();
-    body = body.set('phone', email);
-    return this.http.post(`${ AUTH_API + '/isExistedPhone' }`, body);
+    body = body.set('email', email);
+    return this.http.post(`${ AUTH_API + '/isExistedEmail' }`, body);
+  }
+
+  checkPhoneExistAsyn(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<{ [key: string]: any } | null> => {
+      console.log('control : ' + control.value);
+      return this.isExistPhoneAsync(control.value)
+        .pipe(
+          map(res => {
+            console.log('res : ' + res);
+            if (res.length){
+              return {state: true};
+            }
+          })
+        );
+    };
+  }
+
+  isExistPhoneAsync(phone): Observable<any> {
+    return timer(1000)
+      .pipe(
+        switchMap(() => {
+          let body = new HttpParams();
+          body = body.set('phone', phone);
+          return this.http.post(`${ AUTH_API + '/isExistedPhone' }`, body);
+        })
+      );
   }
 }

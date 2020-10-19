@@ -1,0 +1,51 @@
+<button class="close" mat-button color="warn" mat-dialog-close>&times;</button>
+<h2 mat-dialog-title align="center">Cập nhật thông tin</h2>
+<hr />
+<mat-dialog-content>
+  <form [formGroup]="userForm" *ngIf="userForm" fxLayout="column" fxLayoutAlign="space-evenly stretch">
+    <br />
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tên:</mat-label>
+      <input type="text" matInput placeholder="Nhập tên" formControlName="userName" id="userName" name="userName">
+      <mat-error *ngIf="controls.userName.touched && controls.userName.invalid">
+        <span *ngIf="controls.userName.errors.required">Chưa nhập tên.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Số điện thoại:</mat-label>
+      <input type="tel" matInput placeholder="Nhập số điện thoại" formControlName="phone" id="phone" name="phone">
+      <mat-error *ngIf="controls.phone.touched && controls.phone.invalid">
+        <span *ngIf="controls.phone.errors.required">Chưa nhập số điện thoại.</span>
+        <!-- <span *ngIf="controls.phone.errors.pattern">Số điện thoại chỉ có 10 ký tự và bắt đầu bằng số 0</span> -->
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ngày sinh:</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" id="date" name="date">
+      <mat-datepicker-toggle matSuffix [for]="picker">
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="controls.date.touched && controls.date.invalid">
+        <span *ngIf="controls.date.errors.required">Chưa chọn ngày.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email:</mat-label>
+      <input type="email" matInput placeholder="pat@example.com" formControlName="email" id="email" name="email">
+      <mat-error *ngIf="controls.email.touched && controls.email.invalid">
+        <span *ngIf="controls.email.errors.required">Chưa nhập email</span>
+        <span *ngIf="controls.email.errors.email">Phải nhập email</span>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<hr />
+<mat-dialog-actions align="center">
+  <button mat-stroked-button [disabled]="userForm.invalid && userForm.dirty" (click)="onSubmit()"
+    [mat-dialog-close]="userForm.value">Cập
+    nhật</button>
+</mat-dialog-actions>

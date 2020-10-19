@@ -61,7 +61,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
   /* Các thông tin để cho Firebase thực hiện việc gửi mã OTP */
   windowRefPhone: any;
-  windowRefEmail: any;
   verificationCodePhone: string;
   verificationCodeEmail: string;
   phone: string;
@@ -78,7 +77,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
   constructor(private authService: AuthService, private router: Router, private win: WindowService, public fireAuthService: AngularFireAuth, private formBuilder: FormBuilder) {
     this.windowRefPhone = this.win.windowRef;
-    this.windowRefEmail = this.win.windowRef;
   }
 
   ngOnInit(): void {
@@ -104,7 +102,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       confirmPassword: new FormControl('', [Validators.required])
     });
-
+    this.verificationCodePhone = '';
     this.isExistedPhone = false;
     this.isExistedEmail = false;
     this.isSentCode = false;
@@ -114,28 +112,14 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     this.isLoadingResults = false;
     this.registerSuccess = false;
 
-
     firebase.initializeApp(config);
-
     this.phone = '';
     this.email = '';
-
   }
-
   /* Display reCaptCha */
   ngAfterViewInit(): void {
     this.windowRefPhone.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container-phone');
-    this.windowRefPhone.recaptchaVerifier.render().then((widgetId) => {
-      this.windowRefPhone = widgetId;
-    });
-
-    /*this.windowRefEmail.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container-email');
-
-    this.captchaEmail = this.windowRefEmail.recaptchaVerifier;
-    this.captchaEmail.render().then((widgetId) => {
-      this.captchaEmail = widgetId;
-    });
-    */
+    this.windowRefPhone.recaptchaVerifier.render();
   }
 
   hasError(controlName, errorName, form): boolean {
@@ -143,8 +127,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   }
 
   registerUser(user): void {
-
-    console.log('user ' + user);
     if (this.informUserForm.valid) {
       const temp: RequestRegister = {
         userName: user.userName,
@@ -153,17 +135,13 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         email: this.email,
         password: user.password
       };
-
-      console.log('register user : ' + JSON.stringify(temp));
       this.authService.register(temp).subscribe(
         data => {
-          if (data.value === true) {
+          if (data === true) {
             this.registerSuccess = true;
           } else {
             this.registerSuccess = false;
           }
-          console.log('data : ' + data);
-          console.log('registerSuccess : ' + this.registerSuccess);
         },
         error => {
           console.log('error : ' + error.erros.message);
@@ -173,14 +151,11 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   }
 
   checkExistEmail(): void {
+    console.log('email  : ' + this.email);
     this.authService.isExistedEmail(this.email).subscribe(
       data => {
-        this.isExistedEmail = data;
-        this.isSentCode = true;
-        console.log('exist email : ' + this.isExistedEmail);
-
+        console.log(data);
         if (!this.isExistedEmail) {
-          this.sendCodeToEmail();
         }
       },
       err => {
@@ -193,13 +168,14 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       data => {
         this.isExistedPhone = data;
         this.isSentCode = true;
-
+        console.log('checked : ' + this.isExistedPhone);
         /* Khi không tồn tại SĐT, sẽ kích hoạt firebase gửi tin nhắn OTP */
         if (!this.isExistedPhone) {
           this.sendCodeToPhone();
         }
         console.log('exist phone : ' + this.isExistedPhone);
       }, err => {
+        console.log('err', err);
       }
     );
   }
@@ -208,37 +184,19 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     return '+84' + phone.substring(1);
   }
 
-  sendCodeToEmail(): void {
-
-    this.fireAuthService.createUserWithEmailAndPassword(this.email, this.email)
-      .then((res) => {
-        console.log(res);
-        res.user.sendEmailVerification();
-      })
-      .catch((err) => {
-        window.alert(err.message);
-      });
-  }
-
-  checkEmailVerified(): void{
-    this.fireAuthService.currentUser
-      .then((res) => {
-        console.log(res);
-        console.log('email verified : ' + res.emailVerified);
-        // this.isVerifiedCode = res
-      })
-      .then((err) => {});
-  }
+  checkEmailVerified(): void{}
 
   sendCodeToPhone(): void {
     const appVerifier = this.windowRefPhone.recaptchaVerifier;
     if (this.isExistedPhone === false) {
       firebase.auth()
-        .signInWithPhoneNumber(this.modifyPhone(this.phone), appVerifier)
+        .signInWithPhoneNumber(this.modifyPhone(this.phone), this.windowRefPhone.recaptchaVerifier)
         .then(result => {
           this.windowRefPhone.confirmationResult = result;
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {
+          console.log('error', error.errors.message);
+        });
     }
   }
 

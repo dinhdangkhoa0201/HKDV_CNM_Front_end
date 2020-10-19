@@ -14,12 +14,15 @@ export class AppComponent implements OnInit {
   isLoggedIn = false;
   showAdminBoard = false;
   userName: string;
+  isAdmin: boolean;
 
   constructor(private token: TokenStorageService) {
   }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.token.getToken();
+
+    console.log('is Logged in : ' + this.isLoggedIn);
 
     if (this.isLoggedIn) {
       const user = this.token.getUser();
@@ -28,6 +31,13 @@ export class AppComponent implements OnInit {
       console.log('user : ' + user);
 
       this.roles = user.roles;
+      if (this.roles.length > 0){
+        if (this.roles.indexOf('ROLE_ADMIN') > 0){
+          this.isAdmin = true;
+        } else {
+          this.isAdmin = false;
+        }
+      }
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.userName = user.userName;
     }

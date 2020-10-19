@@ -59,14 +59,16 @@ export class SignInComponent implements OnInit {
 
     this.authService.signIn(temp).subscribe(
       (data) => {
-        this.tokenStorage.saveToken(data.accessToken);
-        this.tokenStorage.saveUser(data);
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.roles = this.tokenStorage.getUser().roles;
-        this.reloadPage();
-
-        sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
+        console.log('sigin data : ' + data);
+        if (typeof data !== 'boolean'){
+          this.tokenStorage.saveToken(data.accessToken);
+          this.tokenStorage.saveUser(data);
+          this.isLoginFailed = false;
+          this.isLoggedIn = true;
+          this.roles = this.tokenStorage.getUser().roles;
+          this.reloadPage();
+          sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
+        }
       },
       (err) => {
         this.errorMessage = err.error.message;
@@ -76,8 +78,6 @@ export class SignInComponent implements OnInit {
   }
 
   reloadPage(): void {
-    if (this.isLoggedIn){
-      this.router.navigate(['profile']);
-    }
+    window.location.reload();
   }
 }
