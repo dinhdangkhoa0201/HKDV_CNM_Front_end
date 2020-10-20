@@ -11,13 +11,13 @@
       <form [formGroup]="addUserForm" fxLayout="column" >
         <mat-form-field>
           <mat-label>Họ và tên</mat-label>
-          <input matInput formControlName="userName" id="userName" name="userName" placeholder="Họ và tên" [(ngModel)]="userName">
+          <input matInput formControlName="userName" id="userName" name="userName" placeholder="Họ và tên">
           <mat-error *ngIf="hasError('userName', 'required')">Chưa nhập Họ tên</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Giới tính</mat-label>
-          <mat-select formControlName="gender" id="gender" name="gender" placeholder="Giới tính" [(ngModel)]="gender">
+          <mat-select formControlName="gender" id="gender" name="gender" placeholder="Giới tính">
             <mat-option value="Nam">Nam</mat-option>
             <mat-option value="Nữ">Nữ</mat-option>
             <mat-option value="Khác">Khác</mat-option>
@@ -27,13 +27,13 @@
 
         <mat-form-field>
           <mat-label>Ngày sinh</mat-label>
-          <input matInput formControlName="birthday" type="date" id="birthday" placeholder="Ngày sinh" [(ngModel)]="birthday">
+          <input matInput formControlName="birthday" type="date" id="birthday" placeholder="Ngày sinh">
           <mat-error *ngIf="hasError('birthday', 'required')">Chưa chọn Ngày sinh</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Số điện thoại</mat-label>
-          <input matInput type="tel" formControlName="phone" id="phone" placeholder="Số điện thoại" [(ngModel)]="phone">
+          <input matInput type="tel" formControlName="phone" id="phone" placeholder="Số điện thoại">
           <mat-error *ngIf="hasError('phone', 'required')">Chưa nhập Số điện thoại</mat-error>
           <mat-error *ngIf="hasError('phone', 'pattern')">Số điện thoại sai định dạng</mat-error>
           <mat-error *ngIf="hasError('phone', 'state')">Số điện thoại đã được sử dụng</mat-error>
@@ -41,27 +41,33 @@
 
         <mat-form-field>
           <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" id="email" placeholder="Email" [(ngModel)]="email">
+          <input matInput type="email" formControlName="email" id="email" placeholder="Email">
           <mat-error *ngIf="hasError('email', 'required')">Chưa nhập Email</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Mật khẩu</mat-label>
-          <input matInput type="password" formControlName="password" id="password" placeholder="Mật khẩu" [(ngModel)]="password">
+          <input matInput type="password" formControlName="password" id="password" placeholder="Mật khẩu" #password>
           <mat-error *ngIf="hasError('password', 'required')">Chưa nhập mật khẩu</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Xác nhận mật khẩu</mat-label>
-          <input matInput type="password" formControlName="confirmPassword" id="confirmPassword" placeholder="Xác nhận mật khẩu" [(ngModel)]="confirmPassword" pattern="{{ this.password }}">
+          <input matInput type="password" formControlName="confirmPassword" id="confirmPassword" placeholder="Xác nhận mật khẩu" pattern="{{ this.password }}">
           <mat-error *ngIf="hasError('confirmPassword', 'required')">Chưa nhập Xác nhận mật khẩu</mat-error>
           <mat-error *ngIf="hasError('confirmPassword', 'pattern')">Xác nhận mật khẩu không chính xác</mat-error>
         </mat-form-field>
+
+        <section fxLayout="row" fxLayoutAlign="space-around">
+          <mat-checkbox [checked]="roleUser" value="ROLE_USER" (change)="addRole($event.source)">USER</mat-checkbox>
+          <mat-checkbox [checked]="roleAdmin" value="ROLE_ADMIN" (change)="addRole($event.source)">ADMIN</mat-checkbox>
+        </section>
+
       </form>
     </mat-dialog-content>
 
     <div mat-dialog-actions fxLayoutAlign="center">
-      <button mat-raised-button color="accent">Thêm</button>
+      <button mat-raised-button color="accent" (click)="onSubmit()">Thêm</button>
       <button mat-raised-button color="warn" (click)="closeDialog()">Huỷ</button>
     </div>
   </mat-card>

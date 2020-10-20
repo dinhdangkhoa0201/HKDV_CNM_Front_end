@@ -13,21 +13,28 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  updatePassword(userId: string, data: any): Observable<any>{
+  updatePassword(userId, oldPassword, newPassword): Observable<any>{
     console.log(userId);
-    return this.http.post(`${ API_URL + '/changePassword/'}` + `${userId}`, data.oldPassword, data.newPassword);
+    return this.http.post(`${ API_URL + '/changePassword'}/${userId}`, {}, {
+      params: {
+        oldPassword,
+        newPassword
+      }
+    });
   }
 
+  updateInformationUser(userId, user): Observable<any>{
+    return this.http.post(`${API_URL + '/update'}/${userId}`, {
+      userName: user.userName,
+      gender: user.gender,
+      birthday: user.birthday,
+      phone: user.phone,
+      email: user.email,
+      password: user.password
+    });
+  }
 
   getPublicContent(): Observable<any> {
     return this.http.get(API_URL + 'all', {responseType: 'text'});
-  }
-
-  getUserBoard(): Observable<any> {
-    return this.http.get(API_URL + 'user', {responseType: 'text'});
-  }
-
-  getAdminBoard(): Observable<any> {
-    return this.http.get(API_URL + 'admin', {responseType: 'text'});
   }
 }

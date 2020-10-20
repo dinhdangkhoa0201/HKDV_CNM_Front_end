@@ -1,13 +1,10 @@
-<div id="app">
+`<div id="app">
   <nav class="navbar navbar-expand">
     <a href="/" class="navbar-brand">
       <img class="brandImage" src="./assets/image/chat.png" alt="">
     </a>
-    <ul class="navbar-nav mr-auto" routerLinkActive="active">
-      <li class="nav-item" *ngIf="showAdminBoard">
-        <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
-      </li>
-      <li class="nav-item" *ngIf="isAdmin">
+    <ul class="navbar-nav mr-auto" routerLinkActive="active" >
+      <li class="nav-item" *ngIf="isAdmin" >
         <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
       </li>
     </ul>
@@ -23,7 +20,11 @@
 
     <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
       <li class="nav-item">
-        <a href="/profile" class="nav-link" routerLink="profile">{{ userName }}</a>
+        <button mat-raised-button [mat-menu-trigger-for]="menu">{{ userName }}</button>
+        <mat-menu #menu>
+          <button mat-menu-item (click)="openProfile()">Thông tin cá nhân</button>
+          <button mat-menu-item (click)="changePassword()">Đổi mật khẩu</button>
+        </mat-menu>
       </li>
       <li class="nav-item">
         <a href class="nav-link" (click)="logout()">LogOut</a>
@@ -33,3 +34,4 @@
 </div>
 <router-outlet></router-outlet>
 
+`

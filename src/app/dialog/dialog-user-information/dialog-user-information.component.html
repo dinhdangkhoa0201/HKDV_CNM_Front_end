@@ -1,23 +1,55 @@
-<button class="close" mat-button color="warn" mat-dialog-close>&times;</button>
-<h2 mat-dialog-title align="center">Thông tin người dùng</h2>
-<hr />
-<mat-dialog-content>
-  <h3 align="center">{{ user.userName }}</h3>
-  <div fxLayout="row" fxLayoutAlign="space-evenly stretch">
-    <div fxLayout="column" fxLayoutAlign="space-evenly stretch">
-      <p>Điện thoai:</p>
-      <p>Ngày sinh:</p>
-      <p>Email:</p>
+<div fxLayout="row">
+  <mat-card fxFill>
+    <div mat-dialog-title>
+      <h1>Thông tin cá nhân</h1>
     </div>
-    <div fxLayout="column" fxLayoutAlign="space-evenly stretch">
-      <p>{{ user.phone }}</p>
-      <p>{{ user.birthday }}</p>
-      <p>{{ user.email }}</p>
-    </div>
-  </div>
-</mat-dialog-content>
-<hr />
-<mat-dialog-actions align="center">
-  <button mat-stroked-button (click)="openChangePassword()">Đổi mật khẩu</button>
-  <button mat-stroked-button (click)="openUserUpdate()">Chỉnh sửa thông tin</button>
-</mat-dialog-actions>
+
+    <mat-dialog-content>
+      <form [formGroup]="userInformForm" fxLayout="column">
+        <mat-form-field appearance="outline">
+          <mat-label>Họ và tên</mat-label>
+          <input matInput formControlName="userName" [readonly]="readonly"/>
+          <mat-icon matSuffix>assignment_ind</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Giới tính</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="Nam">Nam</mat-option>
+            <mat-option value="Nữ">Nữ</mat-option>
+            <mat-option value="Khác">Khác</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Ngày sinh</mat-label>
+          <input matInput formControlName="birthday" type="date" [readonly]="readonly">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Số điện thoại</mat-label>
+          <input matInput formControlName="phone" type="tel" [readonly]="readonly">
+          <mat-icon matSuffix>contact_phone</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" [readonly]="readonly">
+          <mat-icon matSuffix>email</mat-icon>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+      <button *ngIf="!readonly" mat-raised-button color="accent" (click)="save(userInformForm.get('userId'))">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+      <button *ngIf="readonly" mat-raised-button color="warn" (click)="removeReadonly()">
+        <mat-icon inline>edit</mat-icon>
+        Thay đổi
+      </button>
+      <button mat-raised-button (click)="closeDialog()" color="primary"><mat-icon inline>close</mat-icon> Đóng</button>
+    </mat-dialog-actions>
+  </mat-card>
+</div>

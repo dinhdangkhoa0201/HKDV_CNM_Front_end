@@ -5,12 +5,14 @@ import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 import { merge, Observable, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import {DialogAddUserComponent} from '../dialog/dialog-add-user/dialog-add-user.component';
+import {UserService} from '../_services/user.service';
+import {TokenStorageService} from '../_services/token-storage.service';
 
 
 @Component({
@@ -19,29 +21,16 @@ import {DialogAddUserComponent} from '../dialog/dialog-add-user/dialog-add-user.
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['UserId', 'UserName', 'Birthday', 'Phone', 'Email', 'Enable', 'Delete'];
+  displayedColumns: string[] = ['UserId', 'UserName', 'Gender', 'Birthday', 'Phone', 'Email', 'Enable', 'Delete'];
   dataSource: MatTableDataSource<User>;
   isLoadingResults: boolean;
-
   dialogRef: MatDialogRef<any>;
 
-  temps = Array.from<User>(
-    [
-      {
-        userId: 1,
-        userName: 'DDK',
-        birthday: '1999-10-02',
-        phone: '0398122553',
-        email: 'dinhdangkhoa@gmail.com',
-        enable: false
-      }
-    ]
-  );
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private adminService: AdminService, private dialog: MatDialog) {
+  constructor(private adminService: AdminService, private dialog: MatDialog, private userService: UserService, private token: TokenStorageService) {
   }
   ngAfterViewInit(): void {
   }
@@ -51,20 +40,27 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   getUser(): void {
     this.dataSource = new MatTableDataSource();
-    this.dataSource = new MatTableDataSource<User>(this.temps);
+/*    this.dataSource = new MatTableDataSource<User>(this.temps);*/
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    // this.isLoadingResults = true;
-    // this.adminService.findAllUsers().subscribe(
-    //   data => {
-    //     const users = Array.from<User>(data);
-    //     this.isLoadingResults = false;
-    //     this.dataSource = new MatTableDataSource<User>(users);
-    //     this.dataSource.paginator = this.paginator;
-    //     this.dataSource.sort = this.sort;
-    //   },
-    //   err => {}
-    // );
+    this.isLoadingResults = true;
+    this.adminService.findAllUsers().subscribe(
+      data => {
+        const users = Array.from<User>(data);
+        users.forEach((item, index) => {
+          if (item.userId === this.token.getUser().userId){
+            users.splice(index, 1);
+          }
+        });
+        this.isLoadingResults = false;
+        this.dataSource = new MatTableDataSource<User>(users);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
 
   }
 
@@ -77,13 +73,30 @@ export class AdminComponent implements OnInit, AfterViewInit {
     }
   }
 
-  confirmSetEnable(value, enable): void {
-    const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
+  confirmSetEnable(userId, enable): void {
+    console.log('enable : ', enable);
+    this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Confirm Set Enable User',
         message: enable === false ? 'Do you want to set Enable for this user?' : 'Do you want to set Disable for this user?',
       }
     });
+
+    this.dialogRef.afterClosed().subscribe(
+      rs => {
+        if (rs){
+          this.adminService.setEnableUser(userId, enable).subscribe(
+            data => {
+              console.log('data ', data);
+            },
+            err => {
+              console.log('err ', err);
+            }
+          );
+        }
+        console.log('rs : ' + rs);
+      }
+    );
   }
 
   onChange(value, userId): void {

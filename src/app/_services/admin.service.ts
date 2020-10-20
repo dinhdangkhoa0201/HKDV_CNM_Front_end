@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import {HttpHeaders, HttpClient, HttpParams} from '@angular/common/http';
 import { environment } from './../../environments/environment.prod';
 import { Injectable } from '@angular/core';
 
@@ -20,6 +20,18 @@ export class AdminService {
     return this.http.get(`${ADMIN_API + '/users'}`);
   }
 
+  addUser(user): Observable<any>{
+    return this.http.post(`${ADMIN_API + '/users/addUser'}`, {
+      userName: user.userName,
+      gender: user.gender,
+      birthday: user.birthday,
+      phone: user.phone,
+      email: user.email,
+      roles: user.roles,
+      password: user.password,
+    });
+  }
+
   findUserById(userId): Observable<any>{
     return this.http.get(`${ADMIN_API + '/users'}/${userId}`);
   }
@@ -33,7 +45,13 @@ export class AdminService {
   }
 
   setEnableUser(userId, enable): Observable<any>{
-    return this.http.put(`${ADMIN_API + '/users'}/${userId}`, enable);
+    const body = new HttpParams();
+    body.set('enable', enable);
+    return this.http.post(`${ADMIN_API + '/users'}/${userId}`, {}, {
+      params : {
+        enable,
+      }
+    });
   }
 
   findAll(sort, order, page): Observable<any>{

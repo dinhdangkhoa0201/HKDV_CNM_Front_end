@@ -13,10 +13,6 @@ import {TokenStorageService} from '../../_services/token-storage.service';
 export class DialogChangePasswordComponent implements OnInit {
   user: any;
   passwordForm: FormGroup;
-  updatePasswordRequest: any = {
-    oldPassword: '',
-    newPassword: '',
-  };
   hide = true;
   hide1 = true;
   hide2 = true;
@@ -29,25 +25,33 @@ export class DialogChangePasswordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.dialogRef.updateSize('30%', '50%');
     this.user = this.token.getUser();
     this.passwordForm = this.formBuilder.group({
       currentPassword: ['', [Validators.required]],
       newPassword: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
     });
+
+    console.log('user : ', this.user);
   }
 
-  get controls() {
+  get controls(): any {
     return this.passwordForm.controls;
   }
+
+  hasError(controlName, errorName): boolean {
+    return this.passwordForm.controls[controlName].hasError(errorName);
+  }
+
   onSubmit(): void {
-    console.log(this.user);
+    console.log(this.user.userId);
     this.dialogRef.afterClosed().subscribe((result) => {
-      this.updatePasswordRequest.oldPassword = result.currentPassword;
-      this.updatePasswordRequest.newPassword = result.newPassword;
-      this.userService.updatePassword(this.user.userID, this.updatePasswordRequest).subscribe(res => {
-        console.log(res);
+      this.userService.updatePassword(this.user.userId, this.passwordForm.get('currentPassword').value, this.passwordForm.get('newPassword').value)
+        .subscribe(res => {
+        console.log('res : ', res);
       });
     });
   }
+
 }
