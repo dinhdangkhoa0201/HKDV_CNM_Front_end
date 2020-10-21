@@ -45,10 +45,15 @@ export class AuthService {
     body = body.set('phone', phone);
     return this.http.post(`${ AUTH_API + '/isExistedPhone' }`, body);
   }
+
   isExistedEmail(email): Observable<any> {
     let body = new HttpParams();
     body = body.set('email', email);
-    return this.http.post(`${ AUTH_API + '/isExistedEmail' }`, body);
+    return this.http.post(`${ AUTH_API + '/isExistedEmail' }`, {}, {
+      params: {
+        email
+      }
+    });
   }
 
   checkPhoneExistAsyn(): AsyncValidatorFn {
@@ -75,5 +80,25 @@ export class AuthService {
           return this.http.post(`${ AUTH_API + '/isExistedPhone' }`, body);
         })
       );
+  }
+
+  sendEmail(email): Observable<any> {
+    let body = new HttpParams();
+    body = body.set('email', email);
+    return this.http.post(`${ AUTH_API + '/isExistedEmail/sendEmail' }`, {}, {
+      params: {
+        email
+      }
+    });
+  }
+
+  verifyOTPCode(email, otp): Observable<any>{
+    console.log('email: ' + email + ', otp : ' + otp);
+    return this.http.post(`${AUTH_API + '/verifyOTPEmail'}`, {}, {
+      params: {
+        email,
+        otp
+      }
+    })
   }
 }

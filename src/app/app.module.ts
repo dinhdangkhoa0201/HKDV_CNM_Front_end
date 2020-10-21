@@ -44,6 +44,8 @@ import {DialogChangePasswordComponent} from './dialog/dialog-change-password/dia
 import {DialogUserInformationComponent} from './dialog/dialog-user-information/dialog-user-information.component';
 import {DialogAddUserComponent} from './dialog/dialog-add-user/dialog-add-user.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
+import { RegisterByPhoneComponent } from './register/register-by-phone/register-by-phone.component';
+import { RegisterByEmailComponent } from './register/register-by-email/register-by-email.component';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -72,6 +74,8 @@ const config = {
     DialogUserInformationComponent,
     DialogAddUserComponent,
     SnackbarComponent,
+    RegisterByPhoneComponent,
+    RegisterByEmailComponent,
   ],
   imports: [
     BrowserModule,

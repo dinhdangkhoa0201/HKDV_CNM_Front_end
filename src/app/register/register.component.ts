@@ -144,24 +144,13 @@ export class RegisterComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          console.log('error : ' + error.erros.message);
+          console.log('error : ' + error);
         }
       );
     }
   }
 
-  checkExistEmail(): void {
-    console.log('email  : ' + this.email);
-    this.authService.isExistedEmail(this.email).subscribe(
-      data => {
-        console.log(data);
-        if (!this.isExistedEmail) {
-        }
-      },
-      err => {
-      }
-    );
-  }
+
 
   checkExistPhone(): void {
     this.authService.isExistedPhone(this.phone).subscribe(
@@ -180,11 +169,48 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     );
   }
 
+  checkExistEmail(): void {
+    console.log('email  : ' + this.email);
+    this.authService.isExistedEmail(this.email).subscribe(
+      data => {
+        if (data === false){
+          this.isExistedEmail = false;
+          this.sendEmail();
+          this.isSentCode = true;
+        }
+      },
+      err => {
+        console.log('err: ', err);
+      }
+    );
+  }
+
+  sendEmail(): void {
+    this.authService.sendEmail(this.email).subscribe(
+      data => {
+        this.isSentCode = true;
+        console.log('data : ', data);
+      },
+        error => {
+        console.log('error : ', error);
+        }
+    );
+  }
+
   modifyPhone(phone): any {
     return '+84' + phone.substring(1);
   }
 
-  checkEmailVerified(): void{}
+  checkEmailVerified(): void{
+/*    this.authService.isExistedEmail(this.email).subscribe(
+      data => {
+
+      },
+      error => {
+        console.log('err : ', error);
+      }
+    );*/
+  }
 
   sendCodeToPhone(): void {
     const appVerifier = this.windowRefPhone.recaptchaVerifier;
@@ -216,5 +242,20 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         console.log(error, 'Incorrect code entered?');
       });
   }
+
+  verifyCodeOTP(): void {
+    this.authService.verifyOTPCode(this.email, this.verifyEmailCodeForm.get('verificationCodeEmail').value).subscribe(
+      data => {
+        console.log('data : ', data);
+        if (data === true) {
+          this.isVerifiedCode = true;
+        }
+      },
+      error => {
+        console.log('err : ', error);
+      }
+    );
+  }
+
 
 }

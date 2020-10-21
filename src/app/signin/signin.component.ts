@@ -73,6 +73,7 @@ export class SignInComponent implements OnInit {
         }
       },
       (err) => {
+        console.log('err : ', err);
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
       }

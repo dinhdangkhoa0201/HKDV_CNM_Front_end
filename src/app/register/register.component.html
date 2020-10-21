@@ -1,10 +1,31 @@
+<div class="container-fluid">
+  <div class="jumbotron">
+    <h1>Đăng ký tài khoản</h1>
+
+    <div class="alert alert-success fade show">
+      <strong>Đăng ký tài khoản bằng Email</strong>
+      <a mat-raised-button href="/register-by-email" routerLink="/register-by-email" class="btn btn-outline-success">
+        <mat-icon>keyboard_return</mat-icon>
+      </a>
+    </div>
+
+    <div class="alert alert-info fade show" role="alert">
+      <strong>Đăng ký tài khoản bằng Số điện thoại!</strong>
+      <a mat-raised-button href="/register-by-phone" routerLink="/register-by-phone" class="btn btn-outline-info">
+        <mat-icon>keyboard_return</mat-icon>
+      </a>
+    </div>
+
+  </div>
+</div>
+<!--
 <mat-horizontal-stepper #stepper>
-  <!--Step 1-->
+  &lt;!&ndash;Step 1&ndash;&gt;
   <mat-step [stepControl]="verifyPhoneCodeForm && verifyPhoneForm" editable="false" disabled="true">
     <ng-template matStepLabel>Xác nhận thông tin liên lạc</ng-template>
-    <!--  Tab  -->
+    &lt;!&ndash;  Tab  &ndash;&gt;
     <mat-tab-group>
-      <!--Tab Phone-->
+      &lt;!&ndash;Tab Phone&ndash;&gt;
       <mat-tab label="Xác nhận bằng Số điện thoại">
         <div fxLayout="column" fxLayoutAlign="space-around center">
           <mat-card fxFlex.xs="100%" fxLayout="column" *ngIf="!isSentCode">
@@ -19,7 +40,7 @@
                 </mat-form-field>
               </form>
             </mat-card-content>
-            <!--    Conten CAPTCHA    -->
+            &lt;!&ndash;    Conten CAPTCHA    &ndash;&gt;
             <mat-card-content>
               <div id="recaptcha-container-phone"></div>
             </mat-card-content>
@@ -76,7 +97,7 @@
         </div>
       </mat-tab>
 
-      <!-- Tab Email -->
+      &lt;!&ndash; Tab Email &ndash;&gt;
       <mat-tab label="Xác nhận bằng Email">
 
           <div fxLayout="column" fxLayoutAlign="space-around center">
@@ -93,23 +114,18 @@
                   </mat-form-field>
                 </form>
               </mat-card-content>
-              <!--    Conten CAPTCHA    -->
-<!--              <mat-card-content>
-                <div id="recaptcha-container-email"></div>
-              </mat-card-content>-->
               <mat-card-actions>
-                <button [disabled]="!verifyEmailForm.valid" color="primary"
+                <button [disabled]="!verifyEmailForm.valid || isExistedEmail === true" color="primary"
                         (click)="checkExistEmail()" mat-raised-button>
                   <mat-icon>check_circle_outline</mat-icon>
                   Xác nhận
                 </button>
               </mat-card-actions>
             </mat-card>
-
-            <button mat-raised-button (click)="checkEmailVerified()" >Check Email</button>
+&lt;!&ndash;            <button mat-raised-button (click)="checkEmailVerified()" >Check Email</button>&ndash;&gt;
 
             <div class="alert alert-danger"
-                 *ngIf="(isExistedPhone === true || isExistedEmail === true) && isSentCode === true">
+                 *ngIf="isExistedEmail === true">
               <p>Email đã được sử dụng</p>
             </div>
           </div>
@@ -139,7 +155,7 @@
               </mat-card-content>
               <mat-card-actions>
                 <button [disabled]="!verifyEmailCodeForm.valid" mat-raised-button color="accent"
-                        (click)="verifyLoginCode()">
+                        (click)="verifyCodeOTP()">
                   Xác nhận
                 </button>
               </mat-card-actions>
@@ -152,14 +168,15 @@
           </div>
         </mat-tab>
 
-
     </mat-tab-group>
+
+
     <div>
       <button [disabled]="!isVerifiedCode" mat-raised-button mat-button color="accent" matStepperNext>Next</button>
     </div>
   </mat-step>
 
-  <!--Step 2-->
+  &lt;!&ndash;Step 2&ndash;&gt;
   <mat-step [stepControl]="informUserForm" editable="false">
     <ng-template matStepLabel>Bổ sung thông tin các nhân</ng-template>
     <div fxLayout="column" fxLayoutAlign="center center">
@@ -237,7 +254,7 @@
   </mat-step>
 </mat-horizontal-stepper>
 
-<!--<div class="col-md-12">
+&lt;!&ndash;<div class="col-md-12">
   <div class="card card-container">
     <img id="profile-img" class="card-img-top profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
       alt="">
@@ -290,9 +307,9 @@
       </div>
     </form>
   </div>
-</div>-->
+</div>&ndash;&gt;
 
-<!--<mat-tab-group dynamicHeight>
+&lt;!&ndash;<mat-tab-group dynamicHeight>
   <mat-tab label="Short tab">
     <form action="" [formGroup]="verifyPhoneForm" >
       <mat-form-field>
@@ -305,15 +322,15 @@
   <mat-tab label="Long tab">
 
   </mat-tab>
-</mat-tab-group>-->
+</mat-tab-group>&ndash;&gt;
 
-<!--<mat-horizotal-stepper linear #stepper>
+&lt;!&ndash;<mat-horizotal-stepper linear #stepper>
   <mat-step [stepControl]="firstStep" >
 
   </mat-step>
-</mat-horizotal-stepper>-->
+</mat-horizotal-stepper>&ndash;&gt;
 
-<!--<div *ngIf="!isSuccessful">
+&lt;!&ndash;<div *ngIf="!isSuccessful">
 
   <div *ngIf="!isVerifyPhoneSuccess || !isVerifyEmailSuccess">
     <app-verify-phone (isVerify)="isVerify($event)"></app-verify-phone>
@@ -370,9 +387,9 @@
 <div class="alert alert-success" *ngIf="isSuccessful">
   <p>Your registration is successful!</p>
   <a href="/login" class="nav-link" routerLink="login">Login</a>
-</div>-->
+</div>&ndash;&gt;
 
-<!--      <form action="" *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+&lt;!&ndash;      <form action="" *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
         <div class="form-group">
           <label for="userName">Họ và tên</label>
           <input type="text" name="userName" id="userName" class="form-control" placeholder="Họ và tên"
@@ -423,4 +440,5 @@
         <div class="alert alert-success" *ngIf="isSuccessful">
           Your registration is successful!
         </div>
-      </form>-->
+      </form>&ndash;&gt;
+-->

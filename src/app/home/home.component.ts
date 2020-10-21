@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.userName = '';
-    this.userService.getPublicContent().subscribe(
+/*    this.userService.getPublicContent().subscribe(
       (data) => {
         this.content = data;
       },
@@ -28,6 +28,6 @@ export class HomeComponent implements OnInit {
     if(user instanceof undefined){
       this.userName = '';
     }
-    this.userName = user.userName;
+    this.userName = user.userName;*/
   }
 }
