@@ -76,11 +76,11 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   REGEX_EMAIL = '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$';
 
   constructor(private authService: AuthService, private router: Router, private win: WindowService, public fireAuthService: AngularFireAuth, private formBuilder: FormBuilder) {
-    this.windowRefPhone = this.win.windowRef;
+/*    this.windowRefPhone = this.win.windowRef;*/
   }
 
   ngOnInit(): void {
-    this.verifyPhoneForm = this.formBuilder.group({
+/*    this.verifyPhoneForm = this.formBuilder.group({
       phone: new FormControl('', [Validators.required]),
     });
 
@@ -114,19 +114,21 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
     firebase.initializeApp(config);
     this.phone = '';
-    this.email = '';
+    this.email = '';*/
   }
   /* Display reCaptCha */
   ngAfterViewInit(): void {
-    this.windowRefPhone.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container-phone');
-    this.windowRefPhone.recaptchaVerifier.render();
+/*    this.windowRefPhone.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container-phone');
+    this.windowRefPhone.recaptchaVerifier.render();*/
   }
 
+/*
   hasError(controlName, errorName, form): boolean {
     return form.controls[controlName].hasError(errorName);
   }
+*/
 
-  registerUser(user): void {
+/*  registerUser(user): void {
     if (this.informUserForm.valid) {
       const temp: RequestRegister = {
         userName: user.userName,
@@ -148,17 +150,18 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         }
       );
     }
-  }
+  }*/
 
 
 
+/*
   checkExistPhone(): void {
     this.authService.isExistedPhone(this.phone).subscribe(
       data => {
         this.isExistedPhone = data;
         this.isSentCode = true;
         console.log('checked : ' + this.isExistedPhone);
-        /* Khi không tồn tại SĐT, sẽ kích hoạt firebase gửi tin nhắn OTP */
+        /!* Khi không tồn tại SĐT, sẽ kích hoạt firebase gửi tin nhắn OTP *!/
         if (!this.isExistedPhone) {
           this.sendCodeToPhone();
         }
@@ -201,18 +204,18 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     return '+84' + phone.substring(1);
   }
 
-  checkEmailVerified(): void{
-/*    this.authService.isExistedEmail(this.email).subscribe(
+/!*  checkEmailVerified(): void{
+/!*    this.authService.isExistedEmail(this.email).subscribe(
       data => {
 
       },
       error => {
         console.log('err : ', error);
       }
-    );*/
-  }
+    );*!/
+  }*!/
 
-  sendCodeToPhone(): void {
+/!*  sendCodeToPhone(): void {
     const appVerifier = this.windowRefPhone.recaptchaVerifier;
     if (this.isExistedPhone === false) {
       firebase.auth()
@@ -224,7 +227,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
           console.log('error', error.errors.message);
         });
     }
-  }
+  }*!/
 
   verifyLoginCode(): void {
     this.windowRefPhone.confirmationResult
@@ -257,5 +260,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     );
   }
 
+*/
 
 }

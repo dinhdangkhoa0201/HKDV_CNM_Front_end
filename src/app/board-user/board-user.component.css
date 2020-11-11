@@ -1,0 +1,25 @@
+
+.brandImage {
+  width: 50px;
+}
+
+.main_content {
+  width:100%;
+  height: calc(100vh - 100px);
+  background: #efefef;
+}
+
+#main{
+  height: 93% !important;
+  margin: 0;
+}
+
+mat-sidenav-container{
+  height: 100% !important;
+}
+
+/*
+mat-sidenav {
+  background-color: #ffcce0;
+}
+*/

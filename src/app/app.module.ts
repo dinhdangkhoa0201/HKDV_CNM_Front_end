@@ -35,17 +35,31 @@ import {WindowService} from './_services/window.service';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatBadgeModule} from '@angular/material/badge';
 
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
-import {StepperComponent} from './stepper/stepper.component';
 import {DialogChangeInformationComponent} from './dialog/dialog-change-information/dialog-change-information.component';
 import {DialogChangePasswordComponent} from './dialog/dialog-change-password/dialog-change-password.component';
 import {DialogUserInformationComponent} from './dialog/dialog-user-information/dialog-user-information.component';
 import {DialogAddUserComponent} from './dialog/dialog-add-user/dialog-add-user.component';
-import { SnackbarComponent } from './snackbar/snackbar.component';
-import { RegisterByPhoneComponent } from './register/register-by-phone/register-by-phone.component';
-import { RegisterByEmailComponent } from './register/register-by-email/register-by-email.component';
+import {RegisterByPhoneComponent} from './register/register-by-phone/register-by-phone.component';
+import {RegisterByEmailComponent} from './register/register-by-email/register-by-email.component';
+import {UniqueEmailValidatorDirective} from './_services/unique-email-validator.directive';
+import {UniquePhoneValidatorDirective} from './_services/unique-phone-validator.directive';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatListModule} from '@angular/material/list';
+import {HeaderComponent} from './header/header.component';
+import {LeftMenuComponent} from './left-menu/left-menu.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {SidenavService} from './_services/sidenav.service';
+import {ContactComponent} from './contact/contact.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {DialogFriendInformationComponent} from './dialog/dialog-friend-information/dialog-friend-information.component';
+import { NotifyRequestAddFriendComponent } from './notify/notify-request-add-friend/notify-request-add-friend.component';
+import { NotifyNewMessageComponent } from './notify/notify-new-message/notify-new-message.component';
+import { NotifyAcceptedAddFriendComponent } from './notify/notify-accepted-add-friend/notify-accepted-add-friend.component';
+import { ChatComponent } from './chat/chat.component';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -68,14 +82,22 @@ const config = {
     BoardUserComponent,
     AdminComponent,
     ConfirmDialogComponent,
-    StepperComponent,
     DialogChangeInformationComponent,
     DialogChangePasswordComponent,
     DialogUserInformationComponent,
     DialogAddUserComponent,
-    SnackbarComponent,
     RegisterByPhoneComponent,
     RegisterByEmailComponent,
+    UniqueEmailValidatorDirective,
+    UniquePhoneValidatorDirective,
+    HeaderComponent,
+    LeftMenuComponent,
+    ContactComponent,
+    DialogFriendInformationComponent,
+    NotifyRequestAddFriendComponent,
+    NotifyNewMessageComponent,
+    NotifyAcceptedAddFriendComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,7 +126,12 @@ const config = {
     MatSelectModule,
     MatCheckboxModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDividerModule,
+    MatListModule,
+    MatSidenavModule,
+    MatTooltipModule,
+    MatBadgeModule
   ],
   exports: [
     MatFormFieldModule,
@@ -123,9 +150,12 @@ const config = {
     MatSelectModule,
     MatCheckboxModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDividerModule,
+    MatListModule,
+    MatBadgeModule
   ],
-  providers: [authInterceptorProviders, WindowService],
+  providers: [authInterceptorProviders, WindowService, SidenavService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

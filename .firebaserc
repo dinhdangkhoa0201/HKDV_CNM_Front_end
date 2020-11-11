@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "verify-account-spring-boot-aws": {
+      "hosting": {
+        "user-manager-system-frontend": [
+          "verify-account-spring-boot-aws"
+        ]
+      }
+    }
+  }
+}

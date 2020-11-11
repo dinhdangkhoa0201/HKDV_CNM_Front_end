@@ -1,0 +1,47 @@
+<div class="row mt-2">
+  <div class="col-3">
+    <div class="chat-choose-wrapper" fxFill>
+      <mat-card class="chat-choose">
+        <mat-selection-list #list [multiple]="false">
+          <mat-list-option *ngFor="let friend of listFriend" (click)="chooseMessage(list)" [value]="friend">
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <img src="./assets/image/user.png" width="40px">
+              <div class="ml-2" fxLayout="column">
+                <strong>{{friend.userName}}</strong>
+                <p>{{friend.email}}</p>
+              </div>
+            </div>
+
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-card>
+    </div>
+  </div>
+  <div class="col-5">
+    <mat-card fxFill class="w-100 h-100">
+      <mat-list>
+        <mat-list-item *ngFor="let message of newMessage">
+          <strong>{{message.sender}}</strong>
+          <p>{{message.content}}</p>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+
+    <mat-card class="mt-1" fxLayout="column" fxLayoutAlign="start center">
+      <form [formGroup]="formMessage" fxFill fxLayout="column">
+        <mat-form-field appearance="legacy" class="w-75">
+          <input matInput formControlName="message" placeholder="Nhập tin nhắn" #message>
+          <mat-icon matSuffix>chat</mat-icon>
+        </mat-form-field>
+      </form>
+
+      <button class="ml-2" mat-raised-button (click)="sendMessage()">Send Message</button>
+    </mat-card>
+  </div>
+
+  <div class="col-4">
+
+  </div>
+
+</div>

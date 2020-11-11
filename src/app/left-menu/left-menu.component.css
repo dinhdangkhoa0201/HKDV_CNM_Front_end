@@ -1,0 +1,15 @@
+.sidenav_container {
+  height: 100% !important;
+  min-width: 60px;
+  height: calc(100vh - 70px);
+  background-color: #2f323a;
+}
+mat-nav-list a {
+  color: white;
+}
+
+/*
+.iconColor {
+  color: white;
+}
+*/

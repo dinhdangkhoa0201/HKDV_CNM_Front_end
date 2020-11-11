@@ -1,0 +1,50 @@
+<mat-card fxLayout="column" fxLayoutAlign="center center">
+  <div class="p-5" style="background-color: #039BE5" fxFill fxLayoutAlign="center">
+    <img src="./assets/image/user.png" width="120px">
+  </div>
+  <mat-dialog-content fxFill class="mt-3">
+    <form [formGroup]="friendInformation" fxFill>
+
+      <mat-form-field appearance="outline" fxFill>
+        <mat-label>Họ và tên</mat-label>
+        <input matInput [readonly]="readonly" formControlName="userName">
+        <mat-icon matSuffix>account_circle</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFill>
+        <mat-label>Giới tính</mat-label>
+        <input matInput formControlName="gender" [readonly]="readonly">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFill>
+        <mat-label>Ngày sinh</mat-label>
+        <input matInput formControlName="birthday" [readonly]="readonly">
+        <mat-icon matSuffix>date_range</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFill>
+        <mat-label>Số điện thoại</mat-label>
+        <input matInput formControlName="phone" [readonly]="readonly">
+        <mat-icon matSuffix>phone_android</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFill>
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" [readonly]="readonly">
+        <mat-icon matSuffix>mail</mat-icon>
+      </mat-form-field>
+
+    </form>
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+
+    <button mat-raised-button color="primary" (click)="sendRequestAddFriend()" *ngIf="relationType === 0">Gửi lời kết bạn</button>
+    <button mat-raised-button color="warn" *ngIf="relationType === 1">Đã gửi lời kết bạn! Huỷ kết bạn</button>
+    <button mat-raised-button color="warn" *ngIf="relationType === 2">Xác nhận</button>
+    <button mat-raised-button color="accent">Huỷ kết bạn</button>
+  </mat-dialog-actions>
+
+</mat-card>
+
+

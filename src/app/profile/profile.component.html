@@ -1,41 +1,189 @@
-<div class="container" *ngIf="currentUser">
-  <header class="jumbotron">
-    <h3>
-      <strong>{{currentUser.userName}}</strong>
-    </h3>
-  </header>
-  <p>
-    <strong>Token: </strong>
-    {{currentUser.accessToken.substring(0, 20)}}
-    {{currentUser.accessToken.substr(currentUser.accessToken.lenght - 20)}}
-  </p>
-  <p>
-    <strong>Phone: </strong>
-    {{currentUser.phone}}
-  </p>
-  <p>
-    <strong>Name : </strong>
-    {{currentUser.userName}}
-  </p>
-  <p>
-    <strong>Roles: </strong>
-  </p>
-  <ul>
-    <li *ngFor="let role of currentUser.roles">
-      {{role}}
-    </li>
-  </ul>
+<div class="container" class="h-100">
+  <div id="header">
+    <img id="image-avatar" src="./assets/image/user.png" height="512" width="512"/>
+  </div>
+  <div class="mt-2">
+    <mat-tab-group>
+      <!-- # Start Tag : Thông tin cá nhân-->
+      <mat-tab label="Thông tin cá nhân">
 
-  <ng-template #loggedOut>
-    Please login
-  </ng-template>
-</div>
+        <div class="container">
+          <!-- ## Start Table : Thông tin cá nhân -->
+          <mat-card class="mt-2" *ngIf="!editable">
+            <table class="table table-borderless">
+              <tr>
+                <th>Họ và tên</th>
+                <td>
+                  {{this.informationUser.get('userName').value}}
+                </td>
+              </tr>
+              <tr>
+                <th>Giới tính</th>
+                <td>
+                  {{this.informationUser.get('gender').value}}
+                </td>
+              </tr>
+              <tr>
+                <th>Ngày sinh</th>
+                <td>
+                  {{this.informationUser.get('birthday').value}}
+                </td>
+              </tr>
+              <tr>
+                <th>Số điện thoại</th>
+                <td>
+                  {{this.informationUser.get('phone').value}}
+                </td>
+              </tr>
+              <tr>
+                <th>Email</th>
+                <td>
+                  {{this.informationUser.get('email').value}}
+                </td>
+              </tr>
+            </table>
+            <mat-card-actions>
+              <button mat-card-content class="btn btn-outline-primary" (click)="editable = !editable">Chỉnh sửa</button>
+            </mat-card-actions>
+            <!-- ## End Table : Thông tin cá nhân -->
+          </mat-card>
 
-<div *ngIf="isLoggedIn">
-  
-</div>
-<div *ngIf="!isLoggedIn">
-  <div class="alert alert-danger">
-    <p>Đăng nhập đê bạn ơi ^^</p>
+          <!-- ## Start Form : Thông tin cá nhân -->
+          <mat-card *ngIf="editable" class="mt-2">
+            <mat-card-content>
+              <form [formGroup]="informationUser">
+                <table class="table table-borderless">
+                  <tr>
+                    <th>Họ và tên</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-label>Họ và tên</mat-label>
+                        <input matInput formControlName="userName" name="userName">
+                        <mat-icon matSuffix>account_circle</mat-icon>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Giới tính</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-select formControlName="gender">
+                          <mat-option value="Nam">Nam</mat-option>
+                          <mat-option value="Nữ">Nữ</mat-option>
+                          <mat-option value="Khác">Khác</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Ngày sinh</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-label>Ngày sinh</mat-label>
+                        <input matInput type="date" formControlName="birthday">
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Số điện thoại</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-label>Số điện thoại</mat-label>
+                        <input matInput formControlName="phone" [readonly]="currentUser.phone.trim().length > 0" uniquePhone>
+                        <mat-icon matSuffix>phone_android</mat-icon>
+                      </mat-form-field>
+
+                      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+                        <div class="alert alert-danger" *ngIf="hasError('phone', 'uniquePhone', informationUser)">
+                          Số {{ phone.value }} không khả dụng
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" [readonly]="currentUser.email.trim().length > 0">
+                        <mat-icon matSuffix>mail</mat-icon>
+                      </mat-form-field>
+                      <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                        <div class="alert alert-danger" *ngIf="hasError('email', 'uniqueEmail', informationUser)">
+                          Email {{ email.value }} không khả dụng
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button class="btn btn-outline-primary" (click)="updateInformation()">Cập nhật</button>
+              <button mat-raised-button class="btn btn-outline-danger" (click)="editable = !editable">Huỷ</button>
+
+            </mat-card-actions>
+
+          </mat-card>
+          <!-- ## End Form : Thông tin cá nhân -->
+
+
+        </div>
+      </mat-tab>
+      <!-- # End Tag : Thông tin cá nhân-->
+
+      <!-- # Start Tag : Đổi mật khẩu -->
+      <mat-tab label="Đổi mật khẩu">
+        <mat-card>
+          <form [formGroup]="changePassword">
+            <table class="table table-borderless">
+              <tr>
+                <th>Mật khẩu hiện tại</th>
+                <td>
+                  <mat-form-field appearance="outline" fxFill>
+                    <mat-label>Mật khẩu hiện tại</mat-label>
+                    <input matInput [type]="hideCurrentPassword ? 'password' : 'text'" formControlName="currentPassword" type="password">
+                    <button mat-icon-button matSuffix (click)="hideCurrentPassword = !hideCurrentPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideCurrentPassword">
+                      <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="hasError('currentPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>
+                  </mat-form-field>
+                </td>
+              </tr>            <tr>
+              <th>Mật khẩu mới</th>
+              <td>
+                <mat-form-field appearance="outline" fxFill>
+                  <mat-label>Mật khẩu hiện mới</mat-label>
+                  <input matInput [type]="hideNewPassword ? 'password' : 'text'" formControlName="newPassword" type="password">
+                  <button mat-icon-button matSuffix (click)="hideNewPassword = !hideNewPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideNewPassword">
+                    <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="hasError('newPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>
+                </mat-form-field>
+              </td>
+            </tr>            <tr>
+              <th>Xác nhận mật khẩu mới</th>
+              <td>
+                <mat-form-field appearance="outline" fxFill>
+                  <mat-label>Xác nhận mật khẩu mới</mat-label>
+                  <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmNewPassword" type="password">
+                  <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
+                    <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="hasError('confirmNewPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>
+                </mat-form-field>
+              </td>
+            </tr>
+            </table>
+          </form>
+          <mat-card-actions>
+            <button mat-raised-button class="btn btn-outline-primary" (click)="submitChangePassword()">Xác nhận</button>
+            <button mat-raised-button class="btn btn-outline-danger" (click)="changePassword.reset()">Huỷ</button>
+          </mat-card-actions>
+        </mat-card>
+      </mat-tab>
+      <!-- # End Tag : Đổi mật khẩu -->
+
+    </mat-tab-group>
   </div>
 </div>

@@ -1,14 +1,18 @@
-import { environment } from './../environments/environment';
+import {environment} from './../environments/environment';
 import {TokenStorageService} from './_services/token-storage.service';
 import {Component, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogUserInformationComponent} from './dialog/dialog-user-information/dialog-user-information.component';
 import {DialogChangePasswordComponent} from './dialog/dialog-change-password/dialog-change-password.component';
+import {onMainContentChange} from './_interfaces/animation';
+import {SidenavService} from './_services/sidenav.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  animations: [onMainContentChange],
+
 })
 export class AppComponent implements OnInit {
   title = 'user-manager-system-frontend';
@@ -19,7 +23,12 @@ export class AppComponent implements OnInit {
   userName: string;
   isAdmin: boolean;
 
-  constructor(private token: TokenStorageService, private dialog: MatDialog) {
+  onSideNavChange: boolean;
+
+  constructor(private token: TokenStorageService, private dialog: MatDialog, private sidenavService: SidenavService) {
+    this.sidenavService.sideNavState$.subscribe(res => {
+      this.onSideNavChange = res;
+    });
   }
 
   ngOnInit(): void {
@@ -30,8 +39,8 @@ export class AppComponent implements OnInit {
     if (this.isLoggedIn) {
       const user = this.token.getUser();
       this.roles = user.roles;
-      if (this.roles.length > 0){
-        if (this.roles.indexOf('ROLE_ADMIN') > 0){
+      if (this.roles.length > 0) {
+        if (this.roles.indexOf('ROLE_ADMIN') > 0) {
           this.isAdmin = true;
         } else {
           this.isAdmin = false;

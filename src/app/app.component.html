@@ -1,39 +1,116 @@
-`<div id="app" class="container">
-  <nav class="navbar navbar-expand">
-    <a href="/" class="navbar-brand">
-      <img class="brandImage" src="./assets/image/chat.png" alt="">
-    </a>
-    <ul class="navbar-nav mr-auto" routerLinkActive="active" >
-      <li class="nav-item" *ngIf="isAdmin" >
-        <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
-      </li>
-    </ul>
+<!--<div class="row h-100">
+  <div id="wallpaper-title" class="col-lg-9">
+    <div class="left-side">
+      <h1 class="title">Welcome to the HKVD team!</h1>
+    </div>
 
-    <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
-      <li class="nav-item">
-        <div class="">
-          <a mat-raised-button href="/login" class="nav-link btn btn-outline-primary" routerLink="login">Login</a>
-          <a mat-raised-button href="/register" class="nav-link btn btn-outline-success" routerLink="register">Register</a>
+&lt;!&ndash;    <div id="body" claas="container">
+      <div id="title" class="jumbotron">
+        <h1>Chào mừng bạn</h1>
+        <p>Đây là demo về một web chat</p>
+      </div>
+      <div>
+
+      </div>
+    </div>&ndash;&gt;
+
+
+  </div>
+
+  <div class="col-lg-3" fxLayout="column" fxLayoutAlign="center center">
+    <router-outlet></router-outlet>
+  </div>
+</div>-->
+
+<!--<router-outlet></router-outlet>-->
+<!--<div id="main">
+  <app-header [sidenav]="leftSidenav"></app-header>
+
+  <mat-sidenav-container class="custom-sidenav-container">
+
+    <mat-sidenav #leftSidenav mode="side" opened>
+      <app-left-menu></app-left-menu>
+    </mat-sidenav>
+
+    <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'">
+      <div class="container">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+</div>-->
+
+<!--<div>
+  <app-header [sidenav]="leftSidenav"></app-header>
+
+  <mat-sidenav-container>
+    <mat-sidenav $leftSidenav mode="side" opened>
+      <app-left-menu></app-left-menu>
+    </mat-sidenav>
+    <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open' : 'close'">
+      <div class="main_content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>-->
+<div *ngIf="isLoggedIn === false" fxFill>
+  <div id="app" class="container">
+    <nav class="navbar navbar-expand">
+      <a href="/" class="navbar-brand">
+        <img class="brandImage" src="./assets/image/chat.png" alt="">
+      </a>
+      <ul class="navbar-nav mr-auto" routerLinkActive="active" >
+        <li class="nav-item" *ngIf="isAdmin">
+          <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
+        <li class="nav-item">
+          <div class="">
+            <a mat-raised-button href="/login" class="nav-link btn btn-outline-primary" routerLink="login">Login</a>
+            <a mat-raised-button href="/register" class="nav-link btn btn-outline-success" routerLink="register">Register</a>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
+        <li class="nav-item">
+          <button mat-raised-button [mat-menu-trigger-for]="menu">{{ userName }}</button>
+          <mat-menu #menu>
+            <button mat-menu-item (click)="openProfile()">Thông tin cá nhân</button>
+            <button mat-menu-item (click)="changePassword()">Đổi mật khẩu</button>
+          </mat-menu>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">LogOut</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div *ngIf="isLoggedIn === true" fxFill>
+  <div id="main">
+    <app-header [sidenav]="leftSidenav"></app-header>
+
+    <mat-sidenav-container class="custom-sidenav-container h-100">
+
+      <mat-sidenav #leftSidenav mode="side" opened>
+        <app-left-menu></app-left-menu>
+      </mat-sidenav>
+
+      <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'">
+        <div class="container-fluid">
+          <router-outlet class="h-100"></router-outlet>
         </div>
-      </li>
-    </ul>
+      </mat-sidenav-content>
 
-    <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
-      <li class="nav-item">
-        <button mat-raised-button [mat-menu-trigger-for]="menu">{{ userName }}</button>
-        <mat-menu #menu>
-          <button mat-menu-item (click)="openProfile()">Thông tin cá nhân</button>
-          <button mat-menu-item (click)="changePassword()">Đổi mật khẩu</button>
-        </mat-menu>
-      </li>
-      <li class="nav-item">
-        <a href class="nav-link" (click)="logout()">LogOut</a>
-      </li>
-    </ul>
-  </nav>
+    </mat-sidenav-container>
+  </div>
 </div>
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
-
-`

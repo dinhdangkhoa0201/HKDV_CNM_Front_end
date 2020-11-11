@@ -1,6 +1,18 @@
+#wallpaper-title {
+  height: 100%!important;
+  background-image: url('../../assets/image/wallpager-signin.jpg');
+  background-size: cover;
+}
 mat-form-field {
   width: 400px;
 }
 mat-card-title {
   text-align: center;
+}
+
+.alignCenter {
+  top:50%;
+  left: 50%;
+  transform: translate3d(-50%,50%, 0);
+  position: absolute;
 }

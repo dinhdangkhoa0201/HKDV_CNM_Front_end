@@ -1,12 +1,12 @@
-import { User } from './../../_interfaces/user';
+import {User} from './../../_interfaces/user';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
-import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
-import { DialogChangePasswordComponent } from '../dialog-change-password/dialog-change-password.component';
-import { DialogChangeInformationComponent } from '../dialog-change-information/dialog-change-information.component';
+import {Component, OnInit, ViewEncapsulation, Inject} from '@angular/core';
+import {DialogChangePasswordComponent} from '../dialog-change-password/dialog-change-password.component';
+import {DialogChangeInformationComponent} from '../dialog-change-information/dialog-change-information.component';
 import {TokenStorageService} from '../../_services/token-storage.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {UserService} from '../../_services/user.service';
@@ -56,7 +56,8 @@ export class DialogUserInformationComponent implements OnInit {
     private token: TokenStorageService,
     private formBuilder: FormBuilder,
     private userService: UserService
-  ) {}
+  ) {
+  }
 
   openChangePassword(): void {
     this.dialog.open(DialogChangePasswordComponent, {
@@ -90,6 +91,7 @@ export class DialogUserInformationComponent implements OnInit {
       );
     }
     this.readonly = !this.readonly;
+
   }
 
   removeReadonly(): void {
@@ -97,7 +99,7 @@ export class DialogUserInformationComponent implements OnInit {
   }
 
   closeDialog(): void {
-    if (confirm('Bạn có muốn huỷ?')){
+    if (confirm('Bạn có muốn huỷ?')) {
       this.dialogRef.close();
     }
   }

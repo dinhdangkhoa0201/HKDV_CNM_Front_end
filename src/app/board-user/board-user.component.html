@@ -1,1 +1,17 @@
-<p>board-user works!</p>
+<div id="main">
+  <app-header [sidenav]="leftSidenav"></app-header>
+
+  <mat-sidenav-container class="custom-sidenav-container">
+
+    <mat-sidenav #leftSidenav mode="side" opened>
+      <app-left-menu></app-left-menu>
+    </mat-sidenav>
+
+    <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'">
+      <div class="">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+</div>

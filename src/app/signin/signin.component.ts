@@ -61,15 +61,13 @@ export class SignInComponent implements OnInit {
       (data) => {
         console.log('sigin data : ' + data);
         if (typeof data !== 'boolean'){
-
           this.tokenStorage.saveToken(data.accessToken);
           this.tokenStorage.saveUser(data);
           this.isLoginFailed = false;
           this.isLoggedIn = true;
           this.roles = this.tokenStorage.getUser().roles;
-          this.reloadPage();
-
           sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
+          this.reloadPage();
         }
       },
       (err) => {

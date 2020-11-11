@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {User} from '../_interfaces/user';
+import {A} from '@angular/cdk/keycodes';
 
 const API_URL = environment.API_URL + '/api/user';
 
@@ -34,7 +35,36 @@ export class UserService {
     });
   }
 
-  getPublicContent(): Observable<any> {
-    return this.http.get(API_URL + 'all', {responseType: 'text'});
+  findFriend(friendId): Observable<any> {
+    return this.http.get(`${API_URL + '/findFriend?strFind=' + friendId}`);
+  }
+
+  addFriend(userId, friendId): Observable<any> {
+    console.log('add friend: ownerId ', userId + ', friendId : ', friendId);
+    return this.http.get(`${API_URL + '/addFriend/' + userId + '?friendId=' + friendId}`);
+  }
+
+  getListInvites(userId): Observable<any> {
+    return this.http.get(`${API_URL + '/invites/' + userId}`);
+  }
+
+  getListFriends(userId): Observable<any> {
+    return this.http.get(`${API_URL + '/friends/' + userId}`);
+  }
+
+  getListOfSentInvitation(userId): Observable<any> {
+    return this.http.get(`${API_URL + '/requests/' + userId}`);
+  }
+
+  checkSentInvitation(userId, friendId): Observable<any> {
+    return this.http.get(`${API_URL + '/checkSentInvitation/' + userId + '?friendId=' + friendId}`);
+  }
+
+  checkReceivedInvitation(userId, friendId): Observable<any> {
+    return this.http.get(`${API_URL + '/checkReceivedInvitation/' + userId + '?friendId=' + friendId}`);
+  }
+
+  acceptRequestAddFriend(userId, friendId): Observable<any>{
+    return this.http.get(`${API_URL + '/acceptRequestAddFriend/' + userId + '?friendId=' + friendId}`);
   }
 }

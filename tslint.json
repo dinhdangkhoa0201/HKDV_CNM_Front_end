@@ -137,7 +137,8 @@
       true,
       "attribute",
       "app",
-      "camelCase"
+      "camelCase",
+      "services"
     ],
     "component-selector": [
       true,

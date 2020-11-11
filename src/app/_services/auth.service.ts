@@ -29,16 +29,50 @@ export class AuthService {
     );
   }
 
-  register(user): Observable<any> {
+  registerByPhone(user): Observable<any> {
     console.log('register user : ' + JSON.stringify(user));
-    return this.http.post(AUTH_API + '/sign-up', {
+    return this.http.post(AUTH_API + '/sign-up/by-phone', {
+      userId: user.userId,
+      userName: user.userName,
+      gender: user.gender,
+      birthday: user.birthday,
       phone: user.phone,
       email: user.email,
-      userName: user.userName,
-      birthday: user.birthday,
       password: user.password,
+      enable: user.enable,
+      roles: user.roles
     });
   }
+
+  registerByEmail(user): Observable<any> {
+    console.log('register user : ' + JSON.stringify(user));
+    return this.http.post(AUTH_API + '/sign-up/by-email', {
+      userId: user.userId,
+      userName: user.userName,
+      gender: user.gender,
+      birthday: user.birthday,
+      phone: user.phone,
+      email: user.email,
+      password: user.password,
+      enable: user.enable,
+      roles: user.roles
+    });
+  }
+
+/*  register(user): Observable<any> {
+    console.log('register user : ' + JSON.stringify(user));
+    return this.http.post(AUTH_API + '/sign-up', {
+      userId: user.userId,
+      userName: user.userName,
+      gender: user.gender,
+      birthday: user.birthday,
+      phone: user.phone,
+      email: user.email,
+      password: user.password,
+      enable: user.enable,
+      roles: user.roles
+    });
+  }*/
 
   isExistedPhone(phone): Observable<any> {
     let body = new HttpParams();
@@ -47,8 +81,6 @@ export class AuthService {
   }
 
   isExistedEmail(email): Observable<any> {
-    let body = new HttpParams();
-    body = body.set('email', email);
     return this.http.post(`${ AUTH_API + '/isExistedEmail' }`, {}, {
       params: {
         email
@@ -82,7 +114,7 @@ export class AuthService {
       );
   }
 
-  sendEmail(email): Observable<any> {
+  sendOTPToEmail(email): Observable<any> {
     let body = new HttpParams();
     body = body.set('email', email);
     return this.http.post(`${ AUTH_API + '/isExistedEmail/sendEmail' }`, {}, {
@@ -92,13 +124,14 @@ export class AuthService {
     });
   }
 
-  verifyOTPCode(email, otp): Observable<any>{
+  verifyOTPCode(userId, email, otp): Observable<any>{
     console.log('email: ' + email + ', otp : ' + otp);
     return this.http.post(`${AUTH_API + '/verifyOTPEmail'}`, {}, {
       params: {
+        userId,
         email,
         otp
       }
-    })
+    });
   }
 }
