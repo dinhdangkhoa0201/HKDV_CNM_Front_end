@@ -2,6 +2,9 @@ import {TokenStorageService} from './../_services/token-storage.service';
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../_services/user.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {NotifyErrorComponent} from '../notify/notify-error/notify-error.component';
+import {NotifySuccessComponent} from '../notify/notify-success/notify-success.component';
 
 @Component({
   selector: 'app-profile',
@@ -17,9 +20,10 @@ export class ProfileComponent implements OnInit {
   hideCurrentPassword: boolean;
   hideNewPassword: boolean;
   hideConfirmPassword: boolean;
+  timeSnackbar = 5000;
 
 
-  constructor(private token: TokenStorageService, private userService: UserService) {
+  constructor(private token: TokenStorageService, private userService: UserService, private snackbar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -82,12 +86,13 @@ export class ProfileComponent implements OnInit {
     if (confirm('Bạn có muốn lưu?')) {
       this.userService.updateInformationUser(this.userId.value, this.informationUser.getRawValue()).subscribe(
         data => {
-          this.token.saveToken(data.accessToken);
+          this.snackbarSuccess('Thông tin cá nhân cập nhật thành công');
           this.token.saveUser(data);
           this.reloadPage();
         },
         error => {
           console.log('err ', error);
+          this.snackbarError('Thông tin cá nhân cập nhật không thành công');
         }
       );
     }
@@ -98,10 +103,76 @@ export class ProfileComponent implements OnInit {
     window.location.reload();
   }
 
+  get currentPassword(): any {
+    return this.changePassword.get('currentPassword').value;
+  }
+
+  get newPassword(): any {
+    return this.changePassword.get('newPassword').value;
+  }
+
+  get confirmNewPassword(): any {
+    return this.changePassword.get('confirmNewPassword').value;
+  }
+
   submitChangePassword(): void {
-    this.userService.updatePassword(this.currentUser.userId, this.changePassword.get('currentPassword').value, this.changePassword.get('newPassword').value)
-      .subscribe(res => {
-        console.log('res : ', res);
+    if (!this.currentPassword) {
+      this.snackbar.openFromComponent(NotifyErrorComponent, {
+        data: {
+          content: 'Chưa nhập Mật khẩu hiệu tại'
+        },
+        duration: this.timeSnackbar,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['mat-toolbar', 'mat-primary']
       });
+    } else if (!this.newPassword) {
+      this.snackbar.openFromComponent(NotifyErrorComponent, {
+        data: {
+          content: 'Chưa nhập Mật khẩu mới'
+        },
+        duration: this.timeSnackbar,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['mat-toolbar', 'mat-primary']
+      });
+    } else if (!this.confirmNewPassword) {
+      this.snackbar.openFromComponent(NotifyErrorComponent, {
+        data: {
+          content: 'Chưa nhập Xác nhận mật khẩu mới'
+        },
+        duration: this.timeSnackbar,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['mat-toolbar', 'mat-primary']
+      });
+    } else {
+      this.userService.updatePassword(this.currentUser.userId, this.changePassword.get('currentPassword').value, this.changePassword.get('newPassword').value)
+        .subscribe(res => {
+          console.log('res : ', res);
+        });
+    }
+  }
+
+  snackbarError(message): void {
+    this.snackbar.openFromComponent(NotifyErrorComponent, {
+      data: {
+        content: message
+      },
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+  }
+
+  snackbarSuccess(message): void {
+    this.snackbar.openFromComponent(NotifySuccessComponent, {
+      data: {
+        content: message
+      },
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 }

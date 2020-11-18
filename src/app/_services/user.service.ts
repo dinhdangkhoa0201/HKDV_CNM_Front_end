@@ -25,13 +25,13 @@ export class UserService {
   }
 
   updateInformationUser(userId, user): Observable<any>{
+    console.log('user updateInformationUser', user);
     return this.http.post(`${API_URL + '/update'}/${userId}`, {
       userName: user.userName,
       gender: user.gender,
       birthday: user.birthday,
       phone: user.phone,
       email: user.email,
-      password: user.password
     });
   }
 

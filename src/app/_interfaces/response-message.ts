@@ -1,7 +1,6 @@
-export class Message{
+export class ResponseMessage {
   senderId: number;
   senderName: string;
-  roomId: number;
   content: string;
-  type: string;
+  create: string;
 }

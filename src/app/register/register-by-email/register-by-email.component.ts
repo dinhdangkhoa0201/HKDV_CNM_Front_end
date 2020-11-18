@@ -10,6 +10,9 @@ import {TokenStorageService} from '../../_services/token-storage.service';
 import {Router} from '@angular/router';
 import {AppRoutingModule} from '../../app-routing.module';
 import {EventEmitter} from 'events';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {NotifyErrorComponent} from '../../notify/notify-error/notify-error.component';
+import {NotifySuccessComponent} from '../../notify/notify-success/notify-success.component';
 
 @Component({
   selector: 'app-register-by-email',
@@ -25,6 +28,7 @@ export class RegisterByEmailComponent implements OnInit {
   isSentOTP: boolean;
   isLoading: boolean;
   sendOTPSuccess: boolean;
+
   responseOTP: ResponseOTP;
   verifyOTPSuccess: boolean;
   sendOTPToVerify: boolean;
@@ -40,9 +44,9 @@ export class RegisterByEmailComponent implements OnInit {
   responseAfterRegister: ResponseAfterRegister;
 
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router, private snackbar: MatSnackBar) {
     this.checkEmail = this.formBuilder.group({
-      email: new FormControl('', [Validators.email], [uniqueEmailValidator(this.authService)])
+      email: new FormControl('', [])
     });
   }
 
@@ -83,10 +87,14 @@ export class RegisterByEmailComponent implements OnInit {
     });
   }
 
+  hasError(controlName, errorName, form): boolean {
+    return form.controls[controlName].hasError(errorName);
+  }
+
   noWhitespaceValidator(control: FormControl): any {
     const isWhitespace = (control.value || '').trim().length === 0;
     const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
+    return isValid ? null : {whitespace: true};
   }
 
   get currentUser(): any {
@@ -94,83 +102,139 @@ export class RegisterByEmailComponent implements OnInit {
   }
 
   get email(): any {
-    return this.checkEmail.get('email');
+    return this.checkEmail.get('email').value;
   }
 
-  hasError(controlName, errorName, form): boolean {
-    return form.controls[controlName].hasError(errorName);
+  get otp(): any {
+    return this.checkOTP.get('otp').value;
   }
 
-  sendOTPEmail(): void {
-    this.isSentOTP = true;
-    this.isLoading = true;
-    this.authService.sendOTPToEmail(this.checkEmail.get('email').value)
+  get userName(): any {
+    return this.informationUser.get('userName').value;
+  }
+
+  get gender(): any {
+    return this.informationUser.get('gender').value;
+  }
+
+  get birthday(): any {
+    return this.informationUser.get('birthday').value;
+  }
+
+  get password(): any {
+    return this.informationUser.get('password').value;
+  }
+
+  get confirmPassword(): any {
+    return this.informationUser.get('confirmPassword').value;
+  }
+
+  checkIsEmail(): void {
+    if (this.email.trim().length === 0) {
+      this.snackbarError('Chưa nhập Email');
+    } else {
+      this.authService.isExistedEmail(this.email)
+        .subscribe(
+          data => {
+            console.log('data isExistedEmail :', data);
+            if (data === false) {
+              this.snackbarSuccess('Email hợp lệ!');
+              this.sendOTP();
+              this.isSentOTP = true;
+              this.isLoading = true;
+            } else {
+              this.snackbarError('Email đã được sử dụng, vui lòng nhập Email khác!');
+            }
+          }, error => {
+            console.log('error isExistedEmail before sendOTPEmail ', error);
+          }
+        );
+    }
+  }
+
+  sendOTP(): void {
+    this.authService.sendOTPToEmail(this.email)
       .subscribe(
         data => {
           this.responseOTP = data;
           console.log('data sendOTPToEmail : ', this.responseOTP);
           this.isLoading = false;
           this.sendOTPSuccess = true;
+          this.snackbarSuccess('Mã OTP đã được gửi tới Email cửa bạn, vui lòng kiểm tra Email!');
         },
         error => {
           console.log('err: ', error);
+          this.snackbarError('Lỗi, không gửi được mã OTP');
         }
       );
   }
 
+
   onSubmit(): void {
-    const user: User = {
-      userId: this.responseOTP.userId,
-      userName: this.informationUser.get('userName').value,
-      gender: this.informationUser.get('gender').value,
-      birthday: this.informationUser.get('birthday').value,
-      phone: '',
-      email: this.checkEmail.get('email').value,
-      password: this.informationUser.get('password').value,
-      roles: ['user'],
-      enable: true,
-    };
-    this.authService.registerByEmail(user).subscribe(
-      data => {
-        if (data !== null){
-          this.responseAfterRegister = data;
-          this.registerSuccess = true;
-          console.log('data register After register : ', this.responseAfterRegister);
+    if (this.informationUser.invalid) {
+      this.snackbarError('Bạn phải nhập đầy đủ thông tin!');
+
+    } else {
+      const user: User = {
+        userId: this.responseOTP.userId,
+        userName: this.informationUser.get('userName').value,
+        gender: this.informationUser.get('gender').value,
+        birthday: this.informationUser.get('birthday').value,
+        phone: '',
+        email: this.checkEmail.get('email').value,
+        password: this.informationUser.get('password').value,
+        roles: ['user'],
+        enable: true,
+      };
+      this.authService.registerByEmail(user).subscribe(
+        data => {
+          if (data === true) {
+            this.responseAfterRegister = data;
+            this.registerSuccess = true;
+            console.log('data register After register : ', this.responseAfterRegister);
+            this.snackbarSuccess('Đăng ký thành công!');
+          }
+        },
+        error => {
+          console.log('error : ', error);
+          this.snackbarError('Đăng ký không thành công!');
         }
-      },
-      error => {
-        console.log('error : ', error);
-      }
-    );
+      );
+    }
   }
 
   verifyOTP(): void {
-    this.authService.verifyOTPCode(this.responseOTP.userId, this.email.value, this.checkOTP.get('otp').value).subscribe(
-      data => {
-        console.log('data verify : ', data);
-        this.beVerifyingOTP = true;
-        this.verifyOTPSuccess = data;
-      },
-      error => {
-        console.log('error : ', error);
-      }
-    );
+    if (this.otp.trim().length === 0) {
+      this.snackbarError('Chưa nhập mã OTP');
+    } else {
+      this.authService.verifyOTPCode(this.responseOTP.userId, this.email, this.otp).subscribe(
+        data => {
+          console.log('data verify : ', data);
+          this.beVerifyingOTP = true;
+          this.verifyOTPSuccess = data;
+        },
+        error => {
+          console.log('error : ', error);
+        }
+      );
+    }
   }
 
   signIn(): void {
     const temp: RequestLogin = {
-      phoneEmail: this.responseAfterRegister.email,
-      password: this.informationUser.get('password').value
+      phoneEmail: this.email,
+      password: this.password
     };
 
     this.authService.signIn(temp).subscribe(
       (data) => {
-        console.log('sigin data : ' + data);
-        if (typeof data !== 'boolean'){
+        if (data !== null) {
           this.tokenStorage.saveToken(data.accessToken);
           this.tokenStorage.saveUser(data);
           this.reloadPage();
           sessionStorage.setItem('isLoggedIn', String(true));
+        } else {
+          this.snackbarError('Đăng nhập không thành công!');
         }
       },
       (err) => {
@@ -182,6 +246,28 @@ export class RegisterByEmailComponent implements OnInit {
   reloadPage(): void {
     window.location.reload();
     window.location.href = '/profile';
+  }
+
+  snackbarError(message): void {
+    this.snackbar.openFromComponent(NotifyErrorComponent, {
+      data: {
+        content: message
+      },
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+  }
+
+  snackbarSuccess(message): void {
+    this.snackbar.openFromComponent(NotifySuccessComponent, {
+      data: {
+        content: message
+      },
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 }
 

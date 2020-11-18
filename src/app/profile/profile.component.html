@@ -146,7 +146,7 @@
                     <button mat-icon-button matSuffix (click)="hideCurrentPassword = !hideCurrentPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideCurrentPassword">
                       <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
-                    <mat-error *ngIf="hasError('currentPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>
+<!--                    <mat-error *ngIf="hasError('currentPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
                   </mat-form-field>
                 </td>
               </tr>            <tr>
@@ -158,7 +158,7 @@
                   <button mat-icon-button matSuffix (click)="hideNewPassword = !hideNewPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideNewPassword">
                     <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                   </button>
-                  <mat-error *ngIf="hasError('newPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>
+<!--                  <mat-error *ngIf="hasError('newPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
                 </mat-form-field>
               </td>
             </tr>            <tr>
@@ -170,7 +170,7 @@
                   <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
                     <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                   </button>
-                  <mat-error *ngIf="hasError('confirmNewPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>
+<!--                  <mat-error *ngIf="hasError('confirmNewPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
                 </mat-form-field>
               </td>
             </tr>

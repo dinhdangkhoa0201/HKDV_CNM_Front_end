@@ -1,42 +1,63 @@
 <div class="row mt-2">
   <div class="col-3">
+
     <div class="chat-choose-wrapper" fxFill>
+
       <mat-card class="chat-choose">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Tìm kiếm</mat-label>
+          <input matInput autocomplete="off" placeholder="Tìm kiếm">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
         <mat-selection-list #list [multiple]="false">
-          <mat-list-option *ngFor="let friend of listFriend" (click)="chooseMessage(list)" [value]="friend">
+          <mat-list-option class="list-option-item" *ngFor="let friend of listFriend" (click)="chooseMessage(list)"
+                           [value]="friend" [selected]="listFriend.indexOf(friend) === 0">
 
             <div fxLayout="row" fxLayoutAlign="start center">
               <img src="./assets/image/user.png" width="40px">
               <div class="ml-2" fxLayout="column">
                 <strong>{{friend.userName}}</strong>
-                <p>{{friend.email}}</p>
+                <mat-hint *ngIf="listFriendAndStatus.indexOf(friend.userId) < 0">Offline</mat-hint>
+                <mat-hint *ngIf="listFriendAndStatus.indexOf(friend.userId) >= 0">Online</mat-hint>
               </div>
             </div>
 
+            <mat-divider></mat-divider>
           </mat-list-option>
+
         </mat-selection-list>
       </mat-card>
     </div>
   </div>
-  <div class="col-5">
+  <div class="col-8">
     <mat-card fxFill class="w-100 h-100">
       <mat-list>
-        <mat-list-item *ngFor="let message of newMessage">
-          <strong>{{message.sender}}</strong>
-          <p>{{message.content}}</p>
+        <mat-list-item *ngFor="let message of newMessage" class="mt-5">
+          <div class="card">
+            <div class="card-body" style="margin: 0; padding: 0">
+              <strong>{{message.senderName}}</strong>
+              <p>{{message.content}}</p>
+              <p>
+                <mat-hint>{{message.create}}</mat-hint>
+                <br>
+                <mat-hint>
+                  <mat-icon>done</mat-icon>
+                  Đã gửi
+                </mat-hint>
+              </p>
+            </div>
+          </div>
         </mat-list-item>
       </mat-list>
     </mat-card>
 
-    <mat-card class="mt-1" fxLayout="column" fxLayoutAlign="start center">
-      <form [formGroup]="formMessage" fxFill fxLayout="column">
-        <mat-form-field appearance="legacy" class="w-75">
-          <input matInput formControlName="message" placeholder="Nhập tin nhắn" #message>
-          <mat-icon matSuffix>chat</mat-icon>
-        </mat-form-field>
-      </form>
-
-      <button class="ml-2" mat-raised-button (click)="sendMessage()">Send Message</button>
+    <mat-card class="d-flex-row mt-1">
+      <mat-form-field appearance="outline" class="flex-grow-1">
+        <input  matInput placeholder="Nhập tin nhắn" [(ngModel)]="message" autocomplete="off">
+        <mat-icon matSuffix>chat</mat-icon>
+      </mat-form-field>
+      <button class="" mat-raised-button (click)="sendMessage(message)">Send Message</button>
     </mat-card>
   </div>
 

@@ -68,29 +68,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<User>();
-    const tempData: User[] = [
-      {
-        userId: 1,
-        userName: 'Dinh Dang Khoa',
-        birthday: '0398122553',
-        gender: 'Name',
-        phone: '0398122553',
-        email: 'dinhdangkhoa0201@gmail.com',
-        password: '',
-        enable: true,
-        roles: [],
-      }, {
-        userId: 2,
-        userName: 'Dinh Dang Khoa',
-        birthday: '0398122553',
-        gender: 'Name',
-        phone: '0398122553',
-        email: 'dinhdangkhoa0201@gmail.com',
-        password: '',
-        enable: true,
-        roles: [],
-      },
-    ];
     this.getListFriend();
     this.notify();
     this.buttonStyle = 0;
@@ -277,4 +254,5 @@ export class ContactComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
 }

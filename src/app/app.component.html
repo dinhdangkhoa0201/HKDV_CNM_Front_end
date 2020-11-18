@@ -1,60 +1,4 @@
-<!--<div class="row h-100">
-  <div id="wallpaper-title" class="col-lg-9">
-    <div class="left-side">
-      <h1 class="title">Welcome to the HKVD team!</h1>
-    </div>
 
-&lt;!&ndash;    <div id="body" claas="container">
-      <div id="title" class="jumbotron">
-        <h1>Chào mừng bạn</h1>
-        <p>Đây là demo về một web chat</p>
-      </div>
-      <div>
-
-      </div>
-    </div>&ndash;&gt;
-
-
-  </div>
-
-  <div class="col-lg-3" fxLayout="column" fxLayoutAlign="center center">
-    <router-outlet></router-outlet>
-  </div>
-</div>-->
-
-<!--<router-outlet></router-outlet>-->
-<!--<div id="main">
-  <app-header [sidenav]="leftSidenav"></app-header>
-
-  <mat-sidenav-container class="custom-sidenav-container">
-
-    <mat-sidenav #leftSidenav mode="side" opened>
-      <app-left-menu></app-left-menu>
-    </mat-sidenav>
-
-    <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'">
-      <div class="container">
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-content>
-
-  </mat-sidenav-container>
-</div>-->
-
-<!--<div>
-  <app-header [sidenav]="leftSidenav"></app-header>
-
-  <mat-sidenav-container>
-    <mat-sidenav $leftSidenav mode="side" opened>
-      <app-left-menu></app-left-menu>
-    </mat-sidenav>
-    <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open' : 'close'">
-      <div class="main_content">
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>-->
 <div *ngIf="isLoggedIn === false" fxFill>
   <div id="app" class="container">
     <nav class="navbar navbar-expand">
@@ -90,6 +34,7 @@
       </ul>
     </nav>
   </div>
+
   <div class="container">
     <router-outlet></router-outlet>
   </div>

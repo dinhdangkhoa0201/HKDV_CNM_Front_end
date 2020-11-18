@@ -1,15 +1,6 @@
-/*
-.chat-choose-wrapper{
-  position: relative;
-  height: 100%;
-  width: 100%;
+mat-hint {
+  font-size: 11px;
 }
-
-.chat-choose{
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  bottom: 0;
+.list-option-item {
+  height: 80px;
 }
-*/

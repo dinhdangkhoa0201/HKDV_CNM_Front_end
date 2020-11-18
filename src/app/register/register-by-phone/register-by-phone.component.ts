@@ -12,6 +12,9 @@ import {ResponseAfterRegister} from '../../_interfaces/response-after-register';
 import {RequestLogin} from '../../_request/request-login';
 import {TokenStorageService} from '../../_services/token-storage.service';
 import {uniquePhoneValidator} from '../../_services/unique-phone-validator.directive';
+import {NotifyErrorComponent} from '../../notify/notify-error/notify-error.component';
+import {NotifySuccessComponent} from '../../notify/notify-success/notify-success.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 const existingPhoneValidator = (authService: AuthService) => (c: FormControl) => {
   console.log('c : ', c.value);
@@ -61,6 +64,12 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   hidePassword: boolean;
   hideConfirmPassword: boolean;
 
+
+  constructor(private authService: AuthService, private win: WindowService, private fireAuthService: AngularFireAuth, private tokenStorage: TokenStorageService, private snackbar: MatSnackBar) {
+    this.windowRef = this.win.windowRef;
+  }
+
+
   ngOnInit(): void {
     this.checkPhone = new FormGroup({
       phone: new FormControl('', [], [uniquePhoneValidator(this.authService)])
@@ -98,8 +107,32 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(private authService: AuthService, private win: WindowService, private fireAuthService: AngularFireAuth, private tokenStorage: TokenStorageService) {
-    this.windowRef = this.win.windowRef;
+  get phone(): any {
+    return this.checkPhone.get('phone').value;
+  }
+
+  get otp(): any {
+    return this.verifyOTP.get('otp').value;
+  }
+
+  get userName(): any {
+    return this.informationUser.get('userName').value;
+  }
+
+  get gender(): any {
+    return this.informationUser.get('gender').value;
+  }
+
+  get birthday(): any {
+    return this.informationUser.get('birthday').value;
+  }
+
+  get password(): any {
+    return this.informationUser.get('password').value;
+  }
+
+  get confirmPassword(): any {
+    return this.informationUser.get('confirmPassword').value;
   }
 
   ngAfterViewInit(): void {
@@ -112,29 +145,33 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   }
 
   checkExistingPhone(): void {
-    this.authService.isExistedPhone(this.checkPhone.get('phone')).subscribe(
-      data => {
-        this.isExistingPhone = data;
-        this.isSentOtp = true;
-        if (this.isExistingPhone === false) {
-          this.sendCodeToPhone();
+    if (this.phone.length !== 10) {
+      this.snackbarError('Số điện thoại không hợp lệ');
+    } else {
+      this.authService.isExistedPhone(this.phone).subscribe(
+        data => {
+          console.log('data isExistedPhone: ', data);
+          if (data === true) {
+            this.snackbarError('Số điện thoại đã tồn tại, vui lòng nhập số khác!');
+          } else {
+            this.isSentOtp = true;
+            this.isExistingPhone = false;
+            this.sendCodeToPhone();
+          }
+        },
+        error => {
+          console.log('error : ', error);
         }
-      },
-      error => {
-        console.log('error : ', error);
-      }
-    );
-  }
-
-  get phone(): any {
-    return this.checkPhone.get('phone');
+      );
+    }
   }
 
   sendCodeToPhone(): void {
     firebase.auth()
-      .signInWithPhoneNumber(this.modifyPhone(this.checkPhone.get('phone').value), this.windowRef.recaptchaVerifier)
+      .signInWithPhoneNumber(this.modifyPhone(this.phone), this.windowRef.recaptchaVerifier)
       .then(result => {
         this.windowRef.confirmationResult = result;
+        this.snackbarSuccess('Mã OTP sẽ được gửi tới Số điện thoại của bạn, hãy kiểm tra tin nhắn');
       })
       .catch(error => {
         console.log('error', error.errors.message);
@@ -149,7 +186,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
     this.windowRef.confirmationResult
       .confirm(this.verifyOTP.get('otp').value)
       .then(result => {
-        if (result){
+        if (result) {
           console.log('result : ', result);
           this.haveCheckedOTP = true;
           this.verifyOTPSuccess = true;
@@ -162,40 +199,45 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit(): void {
-    const user: User = {
-      userId: 0,
-      userName: this.informationUser.get('userName').value,
-      gender: this.informationUser.get('gender').value,
-      birthday: this.informationUser.get('birthday').value,
-      phone: this.checkPhone.get('phone').value,
-      email: '',
-      password: this.informationUser.get('password').value,
-      roles: ['user'],
-      enable: true,
-    };
+    if (this.informationUser.invalid) {
+      this.snackbarError('Bạn phải nhập đầy đủ thông tin!');
+    } else {
+      const user: User = {
+        userId: 0,
+        userName: this.userName,
+        gender: this.gender,
+        birthday: this.birthday,
+        phone: this.phone,
+        email: '',
+        password: this.password,
+        roles: ['user'],
+        enable: true,
+      };
 
-    this.authService.registerByPhone(user).subscribe(
-      data => {
-        if (data !== null){
-          this.responseAfterRegister = data;
-          this.registerSuccess = true;
+      this.authService.registerByPhone(user).subscribe(
+        data => {
+          if (data !== null) {
+            console.log('data registerByPhone : ', data);
+            this.responseAfterRegister = data;
+            this.registerSuccess = true;
+          }
+        },
+        error => {
+          console.log('error : ', error);
         }
-      },
-      error => {
-        console.log('error : ', error);
-      }
-    );
+      );
+    }
   }
 
   signIn(): void {
     const temp: RequestLogin = {
-      phoneEmail: this.checkPhone.get('phone').value,
-      password: this.informationUser.get('password').value
+      phoneEmail: this.phone,
+      password: this.password
     };
     this.authService.signIn(temp).subscribe(
       data => {
         console.log('data sign in ', data);
-        if (typeof data !== 'boolean'){
+        if (typeof data !== 'boolean') {
           this.tokenStorage.saveToken(data.accessToken);
           this.tokenStorage.saveUser(data);
           this.reloadPage();
@@ -206,6 +248,28 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
         console.log('error : ', error);
       }
     );
+  }
+
+  snackbarError(message): void {
+    this.snackbar.openFromComponent(NotifyErrorComponent, {
+      data: {
+        content: message
+      },
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+  }
+
+  snackbarSuccess(message): void {
+    this.snackbar.openFromComponent(NotifySuccessComponent, {
+      data: {
+        content: message
+      },
+      duration: 5000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 
   reloadPage(): void {

@@ -56,10 +56,14 @@ import {SidenavService} from './_services/sidenav.service';
 import {ContactComponent} from './contact/contact.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {DialogFriendInformationComponent} from './dialog/dialog-friend-information/dialog-friend-information.component';
-import { NotifyRequestAddFriendComponent } from './notify/notify-request-add-friend/notify-request-add-friend.component';
-import { NotifyNewMessageComponent } from './notify/notify-new-message/notify-new-message.component';
-import { NotifyAcceptedAddFriendComponent } from './notify/notify-accepted-add-friend/notify-accepted-add-friend.component';
-import { ChatComponent } from './chat/chat.component';
+import {NotifyRequestAddFriendComponent} from './notify/notify-request-add-friend/notify-request-add-friend.component';
+import {NotifyNewMessageComponent} from './notify/notify-new-message/notify-new-message.component';
+import {NotifyAcceptedAddFriendComponent} from './notify/notify-accepted-add-friend/notify-accepted-add-friend.component';
+import {ChatComponent} from './chat/chat.component';
+import {DatePipe} from '@angular/common';
+import {NotifyErrorComponent} from './notify/notify-error/notify-error.component';
+import {NotifySuccessComponent} from './notify/notify-success/notify-success.component';
+import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-guard.service';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -71,6 +75,10 @@ const config = {
   appId: environment.configFirebase.appId,
   measurementId: environment.configFirebase.messagingSenderId,
 };
+
+function useValue(): any {
+  return undefined;
+}
 
 @NgModule({
   declarations: [
@@ -98,6 +106,8 @@ const config = {
     NotifyNewMessageComponent,
     NotifyAcceptedAddFriendComponent,
     ChatComponent,
+    NotifyErrorComponent,
+    NotifySuccessComponent,
   ],
   imports: [
     BrowserModule,
@@ -155,8 +165,11 @@ const config = {
     MatListModule,
     MatBadgeModule
   ],
-  providers: [authInterceptorProviders, WindowService, SidenavService],
-  bootstrap: [AppComponent]
+  providers: [authInterceptorProviders, WindowService, SidenavService, DatePipe, AuthGuard, AuthGuardService
+  ],
+  bootstrap: [AppComponent],
+
 })
+
 export class AppModule {
 }

@@ -11,19 +11,42 @@ import {RegisterByEmailComponent} from './register/register-by-email/register-by
 import {RegisterByPhoneComponent} from './register/register-by-phone/register-by-phone.component';
 import {ContactComponent} from './contact/contact.component';
 import {ChatComponent} from './chat/chat.component';
+import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-guard.service';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'home', component: HomeComponent},
-  {path: 'board-user', component: BoardUserComponent},
-  {path: 'login', component: SignInComponent},
-  {path: 'register', component: RegisterComponent},
-  {path: 'profile', component: ProfileComponent},
-  {path: 'admin', component: AdminComponent},
-  {path: 'register-by-email', component: RegisterByEmailComponent},
-  {path: 'register-by-phone', component: RegisterByPhoneComponent},
-  {path: 'contact', component: ContactComponent},
-  {path: 'chat', component: ChatComponent}
+  {
+    path: '', component: HomeComponent
+  },
+  {
+    path: 'home', component: HomeComponent
+  },
+  {
+    path: 'board-user', component: BoardUserComponent, canActivate: [AuthGuardService]
+  },
+  {
+    path: 'login', component: SignInComponent
+  },
+  {
+    path: 'register', component: RegisterComponent
+  },
+  {
+    path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]
+  },
+  {
+    path: 'admin', component: AdminComponent, canActivate: [AuthGuardService]
+  },
+  {
+    path: 'register-by-email', component: RegisterByEmailComponent
+  },
+  {
+    path: 'register-by-phone', component: RegisterByPhoneComponent
+  },
+  {
+    path: 'contact', component: ContactComponent, canActivate: [AuthGuardService]
+  },
+  {
+    path: 'chat', component: ChatComponent, canActivate: [AuthGuardService]
+  }
 ];
 
 @NgModule({
@@ -31,4 +54,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class AppRoutingModule {
+
 }

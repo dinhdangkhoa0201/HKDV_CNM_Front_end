@@ -19,7 +19,7 @@ export class WebsocketService {
     const ws = new SockJS(this.webSocketEndPoint);
     this.stompClient = Stomp.over(ws);
 
-    this.stompClient.connect({}, (frame) => {
+/*    this.stompClient.connect({}, (frame) => {
       const message = this.stompClient.subscribe('/chat/' + this.tokenStorage.getUser().userId,
         response => {
           console.log('response :: ', response.body);
@@ -29,14 +29,14 @@ export class WebsocketService {
       console.log('message : ', message);
     }, (err) => {
       this.errorCallBack(err);
-    });
+    });*/
   }
 
   errorCallBack(error): void {
-    console.log('errorCallBack -> ', error);
+/*    console.log('errorCallBack -> ', error);
     setTimeout(() => {
       this.connect();
-    }, 5000);
+    }, 5000);*/
   }
 
   disconnect(): void {

@@ -8,7 +8,7 @@ export function uniqueEmailValidator(authService: AuthService): AsyncValidatorFn
   return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
     return authService.isExistedEmail(control.value).pipe(
       map(result => {
-        console.log('resutl validate unique email  : ' + result);
+        console.log('result validate unique email  : ' + result);
         return result ? {uniqueEmail: true} : null;
       })
     );
