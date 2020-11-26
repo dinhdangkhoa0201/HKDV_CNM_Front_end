@@ -81,7 +81,6 @@ export class DialogUserInformationComponent implements OnInit {
     if (confirm('Bạn có muốn lưu?')) {
       this.userService.updateInformationUser(userId.value, this.userInformForm.getRawValue()).subscribe(
         data => {
-          this.token.saveToken(data.accessToken);
           this.token.saveUser(data);
           this.reloadPage();
         },

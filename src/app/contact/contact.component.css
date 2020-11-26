@@ -29,3 +29,7 @@ div.font p {
   margin: 0;
   padding: 0;
 }
+
+.highlight{
+  background: #42A948; /* green */
+}

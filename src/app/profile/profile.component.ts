@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
   hideCurrentPassword: boolean;
   hideNewPassword: boolean;
   hideConfirmPassword: boolean;
-  timeSnackbar = 5000;
+  timeSnackbar = 2000;
 
 
   constructor(private token: TokenStorageService, private userService: UserService, private snackbar: MatSnackBar) {
@@ -117,40 +117,26 @@ export class ProfileComponent implements OnInit {
 
   submitChangePassword(): void {
     if (!this.currentPassword) {
-      this.snackbar.openFromComponent(NotifyErrorComponent, {
-        data: {
-          content: 'Chưa nhập Mật khẩu hiệu tại'
-        },
-        duration: this.timeSnackbar,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-        panelClass: ['mat-toolbar', 'mat-primary']
-      });
+      this.snackbarError('Chưa nhập Mật khẩu hiệu tại');
     } else if (!this.newPassword) {
-      this.snackbar.openFromComponent(NotifyErrorComponent, {
-        data: {
-          content: 'Chưa nhập Mật khẩu mới'
-        },
-        duration: this.timeSnackbar,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-        panelClass: ['mat-toolbar', 'mat-primary']
-      });
+      this.snackbarError('Chưa nhập Mật khẩu mới');
     } else if (!this.confirmNewPassword) {
-      this.snackbar.openFromComponent(NotifyErrorComponent, {
-        data: {
-          content: 'Chưa nhập Xác nhận mật khẩu mới'
-        },
-        duration: this.timeSnackbar,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-        panelClass: ['mat-toolbar', 'mat-primary']
-      });
+      this.snackbarError('Chưa nhập Xác nhận mật khẩu mới');
     } else {
-      this.userService.updatePassword(this.currentUser.userId, this.changePassword.get('currentPassword').value, this.changePassword.get('newPassword').value)
-        .subscribe(res => {
-          console.log('res : ', res);
-        });
+      if (confirm('Bạn có muốn đổi mật khẩu?')) {
+        this.userService.updatePassword(this.currentUser.userId, this.changePassword.get('currentPassword').value, this.changePassword.get('newPassword').value)
+          .subscribe(data => {
+            console.log('updatePassword data : ', data);
+            if (data) {
+              this.snackbarSuccess('Đổi mật khẩu thành công');
+              window.location.reload();
+            } else {
+              this.snackbarError('Sai mật khẩu');
+            }
+          }, error => {
+            console.log('submitChangePassword err ', error);
+          });
+      }
     }
   }
 

@@ -134,53 +134,59 @@
 
       <!-- # Start Tag : Đổi mật khẩu -->
       <mat-tab label="Đổi mật khẩu">
-        <mat-card>
-          <form [formGroup]="changePassword">
-            <table class="table table-borderless">
-              <tr>
-                <th>Mật khẩu hiện tại</th>
-                <td>
-                  <mat-form-field appearance="outline" fxFill>
-                    <mat-label>Mật khẩu hiện tại</mat-label>
-                    <input matInput [type]="hideCurrentPassword ? 'password' : 'text'" formControlName="currentPassword" type="password">
-                    <button mat-icon-button matSuffix (click)="hideCurrentPassword = !hideCurrentPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideCurrentPassword">
-                      <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-<!--                    <mat-error *ngIf="hasError('currentPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
-                  </mat-form-field>
-                </td>
-              </tr>            <tr>
-              <th>Mật khẩu mới</th>
-              <td>
-                <mat-form-field appearance="outline" fxFill>
-                  <mat-label>Mật khẩu hiện mới</mat-label>
-                  <input matInput [type]="hideNewPassword ? 'password' : 'text'" formControlName="newPassword" type="password">
-                  <button mat-icon-button matSuffix (click)="hideNewPassword = !hideNewPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideNewPassword">
-                    <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  </button>
-<!--                  <mat-error *ngIf="hasError('newPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
-                </mat-form-field>
-              </td>
-            </tr>            <tr>
-              <th>Xác nhận mật khẩu mới</th>
-              <td>
-                <mat-form-field appearance="outline" fxFill>
-                  <mat-label>Xác nhận mật khẩu mới</mat-label>
-                  <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmNewPassword" type="password">
-                  <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
-                    <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  </button>
-<!--                  <mat-error *ngIf="hasError('confirmNewPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
-                </mat-form-field>
-              </td>
-            </tr>
-            </table>
-          </form>
-          <mat-card-actions>
-            <button mat-raised-button class="btn btn-outline-primary" (click)="submitChangePassword()">Xác nhận</button>
-            <button mat-raised-button class="btn btn-outline-danger" (click)="changePassword.reset()">Huỷ</button>
-          </mat-card-actions>
-        </mat-card>
+        <div class="row mt-2" fxFill>
+          <div class="col-lg-2 col-md-1"></div>
+          <div class="col-lg-8 col-md-10">
+            <mat-card>
+              <form [formGroup]="changePassword">
+                <table class="table table-borderless">
+                  <tr>
+                    <th>Mật khẩu hiện tại</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-label>Mật khẩu hiện tại</mat-label>
+                        <input matInput [type]="hideCurrentPassword ? 'password' : 'text'" formControlName="currentPassword" type="password">
+                        <button mat-icon-button matSuffix (click)="hideCurrentPassword = !hideCurrentPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideCurrentPassword">
+                          <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <!--                    <mat-error *ngIf="hasError('currentPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
+                      </mat-form-field>
+                    </td>
+                  </tr>            <tr>
+                  <th>Mật khẩu mới</th>
+                  <td>
+                    <mat-form-field appearance="outline" fxFill>
+                      <mat-label>Mật khẩu hiện mới</mat-label>
+                      <input matInput [type]="hideNewPassword ? 'password' : 'text'" formControlName="newPassword" type="password">
+                      <button mat-icon-button matSuffix (click)="hideNewPassword = !hideNewPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideNewPassword">
+                        <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                      </button>
+                      <!--                  <mat-error *ngIf="hasError('newPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
+                    </mat-form-field>
+                  </td>
+                </tr>            <tr>
+                  <th>Xác nhận mật khẩu mới</th>
+                  <td>
+                    <mat-form-field appearance="outline" fxFill>
+                      <mat-label>Xác nhận mật khẩu mới</mat-label>
+                      <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmNewPassword" type="password">
+                      <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
+                        <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                      </button>
+                      <!--                  <mat-error *ngIf="hasError('confirmNewPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
+                    </mat-form-field>
+                  </td>
+                </tr>
+                </table>
+              </form>
+              <mat-card-actions>
+                <button mat-raised-button class="btn btn-outline-primary" (click)="submitChangePassword()">Xác nhận</button>
+                <button mat-raised-button class="btn btn-outline-danger" (click)="changePassword.reset()">Huỷ</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+          <div class="col-lg-2 col-md-1"></div>
+        </div>
       </mat-tab>
       <!-- # End Tag : Đổi mật khẩu -->
 

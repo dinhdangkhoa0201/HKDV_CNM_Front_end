@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
     this.isLoggedIn = false;
 
     this.currentUser =  this.tokenStorageService.getUser();
-    this.isLoggedIn = !!this.tokenStorageService.getToken();
+    this.isLoggedIn = !!this.tokenStorageService.getUser();
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();

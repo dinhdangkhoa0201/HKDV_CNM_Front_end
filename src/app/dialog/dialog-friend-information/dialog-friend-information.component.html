@@ -38,11 +38,10 @@
 
   </mat-dialog-content>
   <mat-dialog-actions>
-
     <button mat-raised-button color="primary" (click)="sendRequestAddFriend()" *ngIf="relationType === 0">Gửi lời kết bạn</button>
     <button mat-raised-button color="warn" *ngIf="relationType === 1">Đã gửi lời kết bạn! Huỷ kết bạn</button>
     <button mat-raised-button color="warn" *ngIf="relationType === 2">Xác nhận</button>
-    <button mat-raised-button color="accent">Huỷ kết bạn</button>
+    <button mat-raised-button color="accent" (click)="unFriend()" *ngIf="relationType === 3">Huỷ kết bạn</button>
   </mat-dialog-actions>
 
 </mat-card>

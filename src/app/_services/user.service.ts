@@ -64,7 +64,19 @@ export class UserService {
     return this.http.get(`${API_URL + '/checkReceivedInvitation/' + userId + '?friendId=' + friendId}`);
   }
 
+  checkStatusIsFriend(userId, friendId): Observable<any>{
+    return this.http.get(`${API_URL + '/checkStatusIsFriend/' + userId + '?friendId=' + friendId}`);
+  }
+
   acceptRequestAddFriend(userId, friendId): Observable<any>{
     return this.http.get(`${API_URL + '/acceptRequestAddFriend/' + userId + '?friendId=' + friendId}`);
+  }
+
+  unFriend(userId, friendId): Observable<any>{
+    return this.http.get(`${API_URL + '/unfriend/' + userId + '?friendId=' + friendId}`);
+  }
+
+  deleteInvitation(userId, friendId): Observable<any>{
+    return this.http.get(`${API_URL + '/deleteInvitation/' + userId + '?friendId=' + friendId}`);
   }
 }

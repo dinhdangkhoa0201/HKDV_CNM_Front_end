@@ -23,16 +23,19 @@ export class ContactComponent implements OnInit, AfterViewInit {
       title: 'Bạn bè',
       icon: 'people',
       badge: false,
+      selected: true
     },
     {
       title: 'Lời mời kết bạn',
       icon: 'add_ic_call',
       badge: false,
+      selected: false
     },
     {
       title: 'Lời mời đã gửi',
       icon: 'settings_phone',
-      badge: false
+      badge: false,
+      selected: false
     }
   ];
 
@@ -61,6 +64,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   isFinding: boolean;
   resultOfFinding: boolean;
+  selectedRowIndex: -1;
 
 
   constructor(private userService: UserService, private dialog: MatDialog, private tokenStorage: TokenStorageService, private sse: SseService, private snackBar: MatSnackBar) {
@@ -71,10 +75,10 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.getListFriend();
     this.notify();
     this.buttonStyle = 0;
-
     this.notifyStyleFriend = false;
     this.notifyStyleReceivedInvitation = false;
     this.notifyStyleSentInvitation = false;
+    this.isFinding = false;
   }
 
   isAllSelected(): any {
@@ -97,27 +101,61 @@ export class ContactComponent implements OnInit, AfterViewInit {
   }
 
   filterContact(list): void {
-/*    const value = list.selectedOptions.selected[0]?.value;*/
-/*    console.log('value ', list.selectedOptions.selected[0]?.value);*/
-    const temp =  list.selectedOptions.selected[0]?.value;
+    /*    const value = list.selectedOptions.selected[0]?.value;*/
+    /*    console.log('value ', list.selectedOptions.selected[0]?.value);*/
+    const temp = list.selectedOptions.selected[0]?.value;
+    console.log('filterContact : ', temp);
     switch (temp) {
       case 'Bạn bè': {
         this.getListFriend();
         this.buttonStyle = 0;
+        this.isFinding = false;
         break;
       }
       case 'Lời mời kết bạn': {
         this.getListInvites();
         this.buttonStyle = 1;
+        this.isFinding = false;
         break;
       }
       case 'Lời mời đã gửi': {
         this.getListRequests();
         this.buttonStyle = 2;
+        this.isFinding = false;
         break;
       }
     }
+  }
 
+  filterContactChips(item): void {
+    /*    const value = list.selectedOptions.selected[0]?.value;*/
+    /*    console.log('value ', list.selectedOptions.selected[0]?.value);*/
+    const temp = item;
+    console.log('filterContactChips temp : ', temp);
+    this.listItems[0].selected = false;
+    this.listItems[1].selected = false;
+    this.listItems[2].selected = false;
+
+    switch (item.title) {
+      case 'Bạn bè': {
+        this.getListFriend();
+        this.listItems[0].selected = true;
+        this.buttonStyle = 0;
+        break;
+      }
+      case 'Lời mời kết bạn': {
+        this.getListInvites();
+        this.listItems[1].selected = true;
+        this.buttonStyle = 1;
+        break;
+      }
+      case 'Lời mời đã gửi': {
+        this.getListRequests();
+        this.listItems[2].selected = true;
+        this.buttonStyle = 2;
+        break;
+      }
+    }
   }
 
   applyFilter(event: Event): void {
@@ -175,6 +213,11 @@ export class ContactComponent implements OnInit, AfterViewInit {
           verticalPosition: 'top'
         });
 
+        if (data.status === 'DELETE_INVITATION') {
+          console.log('DELETE_INVITATION');
+          this.listItems[2].badge = false;
+          this.getListInvites();
+        }
       }, error => {
         console.log('err subscribe : ', error);
       }
@@ -191,7 +234,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.isFinding = false;
         this.listItems[0].badge = false;
       },
       err => {
@@ -210,7 +252,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.isFinding = false;
       },
       err => {
         console.log('err getlistinvites : ', err);
@@ -228,7 +269,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.isFinding = false;
         this.listItems[1].badge = false;
       },
       err => {
@@ -247,7 +287,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
       data => {
         console.log('data acceptRequestAddFriend : ', data);
         if (data === true) {
-
+          window.location.reload();
         }
       }, error => {
         console.log('err acceptRequestAddFriend : ', error);
@@ -255,4 +295,28 @@ export class ContactComponent implements OnInit, AfterViewInit {
     );
   }
 
+  deleteInvitation(friendId): void {
+    if (confirm('Bạn có muốn xoá lời mời này?')) {
+      this.userService.deleteInvitation(this.tokenStorage.getUser().userId, friendId).subscribe(
+        data => {
+          console.log('data deleteInvitation', data);
+          if (data === true) {
+            this.getListInvites();
+          }
+        }, error => {
+
+        }
+      );
+    }
+  }
+
+  clickOnRow(row): void {
+    console.log('click on row', row);
+    this.dialogRef = this.dialog.open(DialogFriendInformationComponent, {
+      data: {
+        user: row,
+        ownerId: this.tokenStorage.getUser().userId,
+      }
+    });
+  }
 }

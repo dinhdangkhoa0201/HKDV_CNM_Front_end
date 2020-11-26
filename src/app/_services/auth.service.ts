@@ -20,7 +20,7 @@ export class AuthService {
   signIn(credentials): Observable<any> {
     console.log('credential : ' + JSON.stringify(credentials));
     return this.http.post(
-      AUTH_API + '/sign-in',
+      AUTH_API + '/login',
       {
         phoneEmail: credentials.phoneEmail,
         password: credentials.password,
@@ -31,7 +31,7 @@ export class AuthService {
 
   registerByPhone(user): Observable<any> {
     console.log('register user : ' + JSON.stringify(user));
-    return this.http.post(AUTH_API + '/sign-up/by-phone', {
+    return this.http.post(AUTH_API + '/register/by-phone', {
       userId: user.userId,
       userName: user.userName,
       gender: user.gender,
@@ -46,7 +46,7 @@ export class AuthService {
 
   registerByEmail(user): Observable<any> {
     console.log('register user : ' + JSON.stringify(user));
-    return this.http.post(AUTH_API + '/sign-up/by-email', {
+    return this.http.post(AUTH_API + '/register/by-email', {
       userId: user.userId,
       userName: user.userName,
       gender: user.gender,
@@ -58,21 +58,6 @@ export class AuthService {
       roles: user.roles
     });
   }
-
-/*  register(user): Observable<any> {
-    console.log('register user : ' + JSON.stringify(user));
-    return this.http.post(AUTH_API + '/sign-up', {
-      userId: user.userId,
-      userName: user.userName,
-      gender: user.gender,
-      birthday: user.birthday,
-      phone: user.phone,
-      email: user.email,
-      password: user.password,
-      enable: user.enable,
-      roles: user.roles
-    });
-  }*/
 
   isExistedPhone(phone): Observable<any> {
     let body = new HttpParams();

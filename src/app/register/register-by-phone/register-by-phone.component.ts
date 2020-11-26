@@ -238,7 +238,6 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
       data => {
         console.log('data sign in ', data);
         if (typeof data !== 'boolean') {
-          this.tokenStorage.saveToken(data.accessToken);
           this.tokenStorage.saveUser(data);
           this.reloadPage();
           sessionStorage.setItem('isLoggedIn', String(true));

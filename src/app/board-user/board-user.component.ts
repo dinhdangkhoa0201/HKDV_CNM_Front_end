@@ -30,7 +30,7 @@ export class BoardUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoggedIn = !!this.token.getToken();
+    this.isLoggedIn = !!this.token.getUser();
 
     console.log('is Logged in : ' + this.isLoggedIn);
 

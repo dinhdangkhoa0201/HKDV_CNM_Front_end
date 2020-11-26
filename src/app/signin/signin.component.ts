@@ -37,7 +37,7 @@ export class SignInComponent implements OnInit {
       password: new FormControl('', [])
     });
 
-    if (this.tokenStorage.getToken()) {
+    if (this.tokenStorage.getUser()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
     }
@@ -61,6 +61,7 @@ export class SignInComponent implements OnInit {
     }
 
   }
+
   executeUserCreation(): void {
     const temp: RequestLogin = {
       phoneEmail: this.phoneEmail,
@@ -71,15 +72,15 @@ export class SignInComponent implements OnInit {
 
     this.authService.signIn(temp).subscribe(
       (data) => {
-        console.log('sigin data : ' + data);
-        if (typeof data !== 'boolean') {
-          this.tokenStorage.saveToken(data.accessToken);
+        if (data !== null) {
           this.tokenStorage.saveUser(data);
           this.isLoginFailed = false;
           this.isLoggedIn = true;
           this.roles = this.tokenStorage.getUser().roles;
           sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
           this.reloadPage();
+        } else {
+          this.snackBarError('Phone / Email hoặc Password sai!');
         }
       },
       (err) => {

@@ -11,17 +11,18 @@ import {TokenStorageService} from '../../_services/token-storage.service';
   styleUrls: ['./dialog-friend-information.component.css']
 })
 export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
-  user: User;
+  friend: User;
   ownerId: number;
   sentInvitation: boolean;
   relationType: number; // 0: none, 1: sent invitation, 2: received invitation
 
   friendInformation: FormGroup;
   readonly: boolean;
+
   constructor(public dialogRef: MatDialogRef<DialogFriendInformationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private userService: UserService, private tokenStorage: TokenStorageService) {
     console.log('data ', data);
-    this.user = data.user;
+    this.friend = data.user;
     this.ownerId = data.ownerId;
   }
 
@@ -37,27 +38,29 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
     });
     this.readonly = true;
     this.friendInformation.setValue({
-      userId: this.user.userId,
-      userName: this.user.userName,
-      gender: this.user.gender,
-      birthday: this.user.birthday,
-      phone: this.user.phone,
-      email: this.user.email
+      userId: this.friend.userId,
+      userName: this.friend.userName,
+      gender: this.friend.gender,
+      birthday: this.friend.birthday,
+      phone: this.friend.phone,
+      email: this.friend.email
     });
     this.relationType = 0;
-    this.checkSentInvitation(this.user.userId);
-    this.checkReceivedInvitation(this.user.userId);
+
+    this.checkSentInvitation(this.friend.userId);
+    this.checkReceivedInvitation(this.friend.userId);
+    this.checkStatusIsFriend(this.friend.userId);
   }
 
   ngAfterViewInit(): void {
   }
 
   sendRequestAddFriend(): void {
-    console.log('userId : ', this.user.userId);
-    this.userService.addFriend(this.tokenStorage.getUser().userId, this.user.userId).subscribe(
+    console.log('userId : ', this.friend.userId);
+    this.userService.addFriend(this.tokenStorage.getUser().userId, this.friend.userId).subscribe(
       data => {
         console.log('data sendRequestAddFriend : ', data);
-        if (data === true){
+        if (data === true) {
           this.relationType = 1;
         }
       }, error => {
@@ -67,11 +70,11 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
 
   }
 
-  checkSentInvitation(friendId): void{
+  checkSentInvitation(friendId): void {
     this.userService.checkSentInvitation(this.tokenStorage.getUser().userId, friendId).subscribe(
       data => {
-        console.log('data checkfriend : ', data.length);
-        if (data.length > 0){
+        console.log('data checkSentInvitation : ', data.length);
+        if (data.length > 0) {
           this.relationType = 1;
         }
       }, error => {
@@ -80,16 +83,44 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
     );
   }
 
-  checkReceivedInvitation(friendId): void{
+  checkReceivedInvitation(friendId): void {
     this.userService.checkReceivedInvitation(this.tokenStorage.getUser().userId, friendId).subscribe(
       data => {
-        console.log('data checkfriend : ', data.length);
-        if (data.length > 0){
+        console.log('data checkReceivedInvitation : ', data.length);
+        if (data.length > 0) {
           this.relationType = 2;
         }
       }, error => {
-        console.log('err checkfriend : ', error);
+        console.log('err checkReceivedInvitation : ', error);
       }
     );
+  }
+
+  checkStatusIsFriend(friendId): void {
+    this.userService.checkStatusIsFriend(this.tokenStorage.getUser().userId, friendId).subscribe(
+      data => {
+        console.log('data checkStatusIsFriend : ', data.length);
+        if (data.length > 0) {
+          this.relationType = 3;
+        } else {
+          this.relationType = 4;
+        }
+      }, error => {
+        console.log('error checkStatusIsFriend : ', error);
+      }
+    );
+  }
+
+  unFriend(): void {
+    if (confirm('Bạn có muốn huỷ kết bạn với ' + this.friend.userName)) {
+      this.userService.unFriend(this.tokenStorage.getUser().userId, this.friend.userId).subscribe(
+        data => {
+          console.log('data unFriend : ', data);
+          window.location.reload();
+        }, error => {
+          console.log('error checkStatusIsFriend : ', error);
+        }
+      );
+    }
   }
 }

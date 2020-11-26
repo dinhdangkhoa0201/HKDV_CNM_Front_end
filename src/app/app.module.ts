@@ -10,7 +10,6 @@ import {RegisterComponent} from './register/register.component';
 import {HomeComponent} from './home/home.component';
 import {ProfileComponent} from './profile/profile.component';
 import {BoardUserComponent} from './board-user/board-user.component';
-import {authInterceptorProviders} from './_helpers/auth.interceptor';
 import {AdminComponent} from './admin/admin.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTableModule} from '@angular/material/table';
@@ -36,6 +35,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatChipsModule} from '@angular/material/chips';
 
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
@@ -141,7 +141,8 @@ function useValue(): any {
     MatListModule,
     MatSidenavModule,
     MatTooltipModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatChipsModule
   ],
   exports: [
     MatFormFieldModule,
@@ -163,9 +164,10 @@ function useValue(): any {
     MatSnackBarModule,
     MatDividerModule,
     MatListModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatChipsModule
   ],
-  providers: [authInterceptorProviders, WindowService, SidenavService, DatePipe, AuthGuard, AuthGuardService
+  providers: [WindowService, SidenavService, DatePipe, AuthGuard, AuthGuardService
   ],
   bootstrap: [AppComponent],
 

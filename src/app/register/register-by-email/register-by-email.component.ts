@@ -229,7 +229,6 @@ export class RegisterByEmailComponent implements OnInit {
     this.authService.signIn(temp).subscribe(
       (data) => {
         if (data !== null) {
-          this.tokenStorage.saveToken(data.accessToken);
           this.tokenStorage.saveUser(data);
           this.reloadPage();
           sessionStorage.setItem('isLoggedIn', String(true));

@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  // API_URL: 'http://ec2-52-77-235-75.ap-southeast-1.compute.amazonaws.com:8090',
   API_URL: 'http://localhost:8090',
   configFirebase: {
     apiKey: 'AIzaSyAAuIHfeF3vG6jiUOSsmK64tOK9oZHGnA0',

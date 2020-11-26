@@ -1,32 +1,27 @@
 <div class="mt-3">
   <div class="row">
-    <div class="col-lg-3 ">
+    <div class="col-lg-3 col-md-4 col-sm-4">
       <div class="mat-elevation-z8 p-3">
-        <div fxLayout="row" fxLayoutAlign="center center">
-
-          <mat-form-field appearance="outline">
+        <div>
+          <mat-form-field appearance="outline" fxFill>
             <mat-label>Tìm kiếm</mat-label>
-            <input matInput (keyup)="isFindingFriend($event.target)" value="1693372703">
+            <input matInput (keyup)="isFindingFriend($event.target)" value="">
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
-
-          <button mat-icon-button class="ml-2 mb-4"
-                  matTooltipPosition="below"
-                  matTooltip="Thêm bạn">
-            <mat-icon>person_add</mat-icon>
-          </button>
-
-          <button mat-icon-button class="ml-2 mb-4"
-                  matTooltipPosition="below"
-                  matTooltip="Thêm nhóm chat">
-            <mat-icon>group_add</mat-icon>
-          </button>
-
         </div>
 
         <mat-divider></mat-divider>
 
         <div *ngIf="isFinding === true">
+          <div class="mt-3 mb-3">
+            <mat-chip-list #listChip [multiple]="false">
+              <mat-chip *ngFor="let item of listItems" [value]="item" (click)="filterContactChips(item)">
+                <span class="mt-3 mb-2" *ngIf="!item.badge">{{item.title}}</span>
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+          <mat-divider></mat-divider>
+
           <div *ngIf="resultOfFinding === false">
             <mat-nav-list>
               <mat-list-item *ngFor="let user of listFindings" (click)="showInformation(user)">
@@ -48,7 +43,7 @@
         <div *ngIf="isFinding === false">
           <h3>Danh sách</h3>
           <mat-selection-list #list [multiple]="false">
-            <mat-list-option *ngFor="let item of listItems" (click)="filterContact(list)" [value]="item.title">
+            <mat-list-option *ngFor="let item of listItems" (click)="filterContact(list)" [value]="item.title" [selected]="item.selected">
               <span class="mt-3 mb-2" *ngIf="!item.badge">{{item.title}}</span>
               <span class="mt-3 mb-2" *ngIf="item.badge" matBadge="N">{{item.title}}</span>
             </mat-list-option>
@@ -56,10 +51,9 @@
         </div>
 
       </div>
-
     </div>
 
-    <div class="col-lg-9 mat-elevation-z8">
+    <div class="col-lg-9 col-md-8 col-sm-8 mat-elevation-z8">
       <div fxLayout="row" fxLayoutAlign="end center">
         <mat-form-field fxFlex fxFlex="50">
           <mat-label>Tìm kiếm</mat-label>
@@ -113,19 +107,24 @@
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef>Action</th>
           <td mat-cell *matCellDef="let contact">
-            <button class="btn btn-outline-primary" mat-raised-button *ngIf="buttonStyle === 1" (click)="acceptRequestAddFriend(contact.userId)">Xác nhận</button>
-            <button class="btn btn-outline-danger" mat-raised-button *ngIf="buttonStyle === 1 || buttonStyle === 2">Delete</button>
+            <button class="btn btn-outline-primary" mat-raised-button *ngIf="buttonStyle === 1"
+                    (click)="acceptRequestAddFriend(contact.userId)">Xác nhận
+            </button>
+            <button class="btn btn-outline-danger" mat-raised-button *ngIf="buttonStyle === 1 || buttonStyle === 2"
+                    (click)="deleteInvitation(contact.userId)">
+              Delete
+            </button>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            (click)="clickOnRow(row)"></tr>
 
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" colspan="4">No data matching the filter</td>
         </tr>
-
       </table>
 
       <mat-paginator [pageSizeOptions]="[5, 15, 25, 50]"></mat-paginator>
