@@ -72,7 +72,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.checkPhone = new FormGroup({
-      phone: new FormControl('', [], [uniquePhoneValidator(this.authService)])
+      phone: new FormControl('', [])
     });
     this.verifyOTP = new FormGroup({
       otp: new FormControl('', [Validators.required])
@@ -196,6 +196,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
       .catch(error => {
         console.log(error, 'Incorrect code entered?');
         this.checkOTPn = true;
+        this.snackbarError('Mã OTP không chính xác');
       });
   }
 
