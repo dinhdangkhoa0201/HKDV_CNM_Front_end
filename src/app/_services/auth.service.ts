@@ -100,11 +100,25 @@ export class AuthService {
   }
 
   sendOTPToEmail(email): Observable<any> {
-    let body = new HttpParams();
-    body = body.set('email', email);
     return this.http.post(`${ AUTH_API + '/isExistedEmail/sendEmail' }`, {}, {
       params: {
         email
+      }
+    });
+  }
+
+  sendOTPWithEmail(email): Observable<any> {
+    return this.http.post(`${AUTH_API + '/sendOTPWithEmail'}`, {}, {
+      params: {
+        email
+      }
+    });
+  }
+
+  sendOTPWithPhone(phone): Observable<any> {
+    return this.http.post(`${AUTH_API + '/isExistedPhoneAndReturnObject'}`, {}, {
+      params: {
+        phone
       }
     });
   }

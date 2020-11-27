@@ -188,7 +188,7 @@ export class RegisterByEmailComponent implements OnInit {
       };
       this.authService.registerByEmail(user).subscribe(
         data => {
-          if (data === true) {
+          if (data !== null) {
             this.responseAfterRegister = data;
             this.registerSuccess = true;
             console.log('data register After register : ', this.responseAfterRegister);

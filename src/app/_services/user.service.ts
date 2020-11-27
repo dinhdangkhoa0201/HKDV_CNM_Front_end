@@ -24,6 +24,15 @@ export class UserService {
     });
   }
 
+  resetPassword(userId, newPassword): Observable<any> {
+    console.log(userId);
+    return this.http.post(`${API_URL + '/resetPassword'}/${userId}`, {}, {
+      params: {
+        newPassword
+      }
+    });
+  }
+
   updateInformationUser(userId, user): Observable<any>{
     console.log('user updateInformationUser', user);
     return this.http.post(`${API_URL + '/update'}/${userId}`, {

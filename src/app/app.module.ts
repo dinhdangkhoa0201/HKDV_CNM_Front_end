@@ -64,6 +64,7 @@ import {DatePipe} from '@angular/common';
 import {NotifyErrorComponent} from './notify/notify-error/notify-error.component';
 import {NotifySuccessComponent} from './notify/notify-success/notify-success.component';
 import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-guard.service';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -108,6 +109,7 @@ function useValue(): any {
     ChatComponent,
     NotifyErrorComponent,
     NotifySuccessComponent,
+    ForgotPasswordComponent,
   ],
   imports: [
     BrowserModule,

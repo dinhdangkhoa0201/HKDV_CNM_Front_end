@@ -3,7 +3,6 @@ import {HomeComponent} from './home/home.component';
 
 import {BoardUserComponent} from './board-user/board-user.component';
 import {ProfileComponent} from './profile/profile.component';
-import {RegisterComponent} from './register/register.component';
 import {SignInComponent} from './signin/signin.component';
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
@@ -12,13 +11,15 @@ import {RegisterByPhoneComponent} from './register/register-by-phone/register-by
 import {ContactComponent} from './contact/contact.component';
 import {ChatComponent} from './chat/chat.component';
 import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-guard.service';
+import {RegisterComponent} from './register/register.component';
+import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
 
 const routes: Routes = [
   {
     path: '', component: HomeComponent
   },
   {
-    path: 'home', component: HomeComponent
+    path: 'home', component: HomeComponent, canActivate: [AuthGuardService]
   },
   {
     path: 'board-user', component: BoardUserComponent, canActivate: [AuthGuardService]
@@ -46,6 +47,9 @@ const routes: Routes = [
   },
   {
     path: 'chat', component: ChatComponent, canActivate: [AuthGuardService]
+  },
+  {
+    path: 'forgot-password', component: ForgotPasswordComponent
   }
 ];
 

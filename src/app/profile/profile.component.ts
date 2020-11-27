@@ -122,6 +122,8 @@ export class ProfileComponent implements OnInit {
       this.snackbarError('Chưa nhập Mật khẩu mới');
     } else if (!this.confirmNewPassword) {
       this.snackbarError('Chưa nhập Xác nhận mật khẩu mới');
+    } else if (this.confirmNewPassword !== this.newPassword) {
+      this.snackbarError('Mật khẩu xác nhận không chính xác');
     } else {
       if (confirm('Bạn có muốn đổi mật khẩu?')) {
         this.userService.updatePassword(this.currentUser.userId, this.changePassword.get('currentPassword').value, this.changePassword.get('newPassword').value)

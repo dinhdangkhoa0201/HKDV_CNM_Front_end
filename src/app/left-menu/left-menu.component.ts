@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { onSideNavChange, animateText } from '../_interfaces/animation';
+import {TokenStorageService} from '../_services/token-storage.service';
 
 @Component({
   selector: 'app-left-menu',
@@ -11,11 +12,14 @@ export class LeftMenuComponent implements OnInit {
 
   sideNavState: boolean;
   linkText: boolean;
-  constructor() { }
+  user: any;
+  constructor(private token: TokenStorageService) { }
+
 
   ngOnInit(): void {
     this.sideNavState = false;
     this.linkText = false;
+    this.user = this.token.getUser();
   }
 
   onSidenavToggle(): void {

@@ -95,6 +95,7 @@
           <mat-icon matSuffix>arrow_right_alt</mat-icon>
         </button>
       </div>
+
     </mat-step>
 
     <mat-step title="Thông tin cá nhân" [stepControl]="informationUser" [editable]="editable">
@@ -153,7 +154,7 @@
 
         <mat-card-actions>
           <button mat-raised-button class="btn btn-success ml-2"
-                  (click)="onSubmit()">Đăng ký
+                  (click)="onSubmit()" [disabled]="registerSuccess">Đăng ký
           </button>
         </mat-card-actions>
       </mat-card>

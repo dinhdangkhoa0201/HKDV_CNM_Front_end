@@ -103,7 +103,7 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
         if (data.length > 0) {
           this.relationType = 3;
         } else {
-          this.relationType = 4;
+          this.relationType = 0;
         }
       }, error => {
         console.log('error checkStatusIsFriend : ', error);

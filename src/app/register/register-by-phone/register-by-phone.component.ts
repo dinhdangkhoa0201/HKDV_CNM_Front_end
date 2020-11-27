@@ -102,6 +102,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
 
     this.hidePassword = true;
     this.hideConfirmPassword = true;
+
     if (!firebase.apps.length) {
       firebase.initializeApp(config);
     }
@@ -174,7 +175,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
         this.snackbarSuccess('Mã OTP sẽ được gửi tới Số điện thoại của bạn, hãy kiểm tra tin nhắn');
       })
       .catch(error => {
-        console.log('error', error.errors.message);
+        console.log('error', error);
       });
   }
 
