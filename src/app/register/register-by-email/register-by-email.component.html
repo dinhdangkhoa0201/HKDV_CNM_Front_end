@@ -1,5 +1,5 @@
 <div>
-  <mat-horizontal-stepper>
+  <mat-horizontal-stepper #stepper>
     <!-- Start Stepper 1 -->
 
     <mat-step [editable]="editable" [stepControl]="checkEmail" title="Kiểm tra email">
@@ -15,6 +15,8 @@
               <mat-label>Địa chỉ email</mat-label>
               <input formControlName="email" matInput type="email">
               <mat-icon matSuffix>mail_outline</mat-icon>
+
+              <mat-error *ngIf="hasError('email', 'required', checkEmail)">Chưa nhập mật khẩu hiện tại</mat-error>
             </mat-form-field>
 
             <button (click)="checkIsEmail()" color="primary" mat-raised-button>Kiểm tra</button>
@@ -50,11 +52,11 @@
 
       </div>
 
-      <div class="mt-5">
-        <button [disabled]="sendOTPSuccess === false" color="primary" mat-raised-button matStepperNext>Next
-          <mat-icon>arrow_right_alt</mat-icon>
-        </button>
-      </div>
+      <!--      <div class="mt-5">
+              <button [disabled]="sendOTPSuccess === false" color="primary" mat-raised-button matStepperNext>Next
+                <mat-icon>arrow_right_alt</mat-icon>
+              </button>
+            </div>-->
     </mat-step>
     <!-- End Stepper 1 -->
 
@@ -69,13 +71,15 @@
               <mat-label>Mã OTP</mat-label>
               <input formControlName="otp" matInput>
               <mat-icon matSuffix>qr_code</mat-icon>
+              <mat-error *ngIf="hasError('otp', 'required', checkOTP)">Chưa nhập mật khẩu hiện tại</mat-error>
+
             </mat-form-field>
 
             <div *ngIf="verifyOTPSuccess === false && beVerifyingOTP === true" class="alert alert-danger">
               Mã xác nhận không chính xác
             </div>
 
-            <button (click)="verifyOTP()" class="btn btn-outline-success" mat-raised-button>Xác nhận</button>
+            <button (click)="verifyOTP()" color="primary" mat-raised-button>Xác nhận</button>
 
           </div>
         </mat-card>
@@ -83,16 +87,16 @@
       </div>
 
 
-      <div *ngIf="verifyOTPSuccess === true" class="alert alert-success">
-        <p>Mã xác nhận <strong>Chính xác</strong></p>
-        <p>Hãy chọn <strong>Next</strong> để qua bước tiếp theo!</p>
-      </div>
+      <!--      <div *ngIf="verifyOTPSuccess === true" class="alert alert-success">
+              <p>Mã xác nhận <strong>Chính xác</strong></p>
+              <p>Hãy chọn <strong>Next</strong> để qua bước tiếp theo!</p>
+            </div>-->
 
-      <div class="mt-5">
-        <button [disabled]="verifyOTPSuccess === false" color="primary" mat-raised-button matStepperNext>Next
-          <mat-icon>arrow_right_alt</mat-icon>
-        </button>
-      </div>
+      <!--      <div class="mt-5">
+              <button [disabled]="verifyOTPSuccess === false" color="primary" mat-raised-button matStepperNext>Next
+                <mat-icon>arrow_right_alt</mat-icon>
+              </button>
+            </div>-->
     </mat-step>
     <!-- End Stepper 2-->
 
@@ -121,6 +125,7 @@
                   <mat-option value="Nữ">Nữ</mat-option>
                   <mat-option value="Khác">Khác</mat-option>
                 </mat-select>
+                <mat-error *ngIf="hasError('gender', 'required', informationUser)">Chưa nhập Giới tính</mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline">
@@ -173,12 +178,12 @@
         </mat-card>
       </div>
 
-      <div class="mt-5">
-        <button mat-raised-button matStepperNext [disabled]="!informationUser.valid || registerSuccess === false"
-                color="primary">Next
-          <mat-icon matSuffix>arrow_right_alt</mat-icon>
-        </button>
-      </div>
+      <!--      <div class="mt-5">
+              <button mat-raised-button matStepperNext [disabled]="!informationUser.valid || registerSuccess === false"
+                      color="primary">Next
+                <mat-icon matSuffix>arrow_right_alt</mat-icon>
+              </button>
+            </div>-->
 
       <!--      <div class="mt-5">
               <button [disabled]="registerSuccess === false" mat-raised-button matStepperNext color="primary">Next</button>

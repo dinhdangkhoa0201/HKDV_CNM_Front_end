@@ -123,11 +123,10 @@ export class AuthService {
     });
   }
 
-  verifyOTPCode(userId, email, otp): Observable<any>{
+  verifyOTPCode(email, otp): Observable<any>{
     console.log('email: ' + email + ', otp : ' + otp);
     return this.http.post(`${AUTH_API + '/verifyOTPEmail'}`, {}, {
       params: {
-        userId,
         email,
         otp
       }

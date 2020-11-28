@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../_services/auth.service';
 import {of} from 'rxjs';
@@ -15,6 +15,7 @@ import {uniquePhoneValidator} from '../../_services/unique-phone-validator.direc
 import {NotifyErrorComponent} from '../../notify/notify-error/notify-error.component';
 import {NotifySuccessComponent} from '../../notify/notify-success/notify-success.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatStepper} from '@angular/material/stepper';
 
 const existingPhoneValidator = (authService: AuthService) => (c: FormControl) => {
   console.log('c : ', c.value);
@@ -63,6 +64,8 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   checkOTPn: boolean;
   hidePassword: boolean;
   hideConfirmPassword: boolean;
+
+  @ViewChild('stepper') private stepper: MatStepper;
 
 
   constructor(private authService: AuthService, private win: WindowService, private fireAuthService: AngularFireAuth, private tokenStorage: TokenStorageService, private snackbar: MatSnackBar) {
@@ -147,8 +150,15 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
 
   checkExistingPhone(): void {
     if (this.phone.length !== 10) {
+      this.checkPhone.controls.phone.setErrors({
+        required: true
+      });
+      this.checkPhone.markAllAsTouched();
       this.snackbarError('Số điện thoại không hợp lệ');
-    } else {
+    } /*else if (typeof this.windowRef.confirmationResult === 'undefined') {
+      this.snackbarError('Hãy xác nhận reCAPTCHA');
+    }*/ else {
+      console.log('this.windowRef.recaptchaVerifier : ', this.windowRef.recaptchaVerifier);
       this.authService.isExistedPhone(this.phone).subscribe(
         data => {
           console.log('data isExistedPhone: ', data);
@@ -172,6 +182,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
       .signInWithPhoneNumber(this.modifyPhone(this.phone), this.windowRef.recaptchaVerifier)
       .then(result => {
         this.windowRef.confirmationResult = result;
+        console.log('result signInWithPhoneNumber ', result);
         this.snackbarSuccess('Mã OTP sẽ được gửi tới Số điện thoại của bạn, hãy kiểm tra tin nhắn');
       })
       .catch(error => {
@@ -184,24 +195,34 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   }
 
   checkOTP(): void {
-    this.windowRef.confirmationResult
-      .confirm(this.verifyOTP.get('otp').value)
-      .then(result => {
-        if (result) {
-          console.log('result : ', result);
-          this.haveCheckedOTP = true;
-          this.verifyOTPSuccess = true;
-        }
-      })
-      .catch(error => {
-        console.log(error, 'Incorrect code entered?');
-        this.checkOTPn = true;
-        this.snackbarError('Mã OTP không chính xác');
+    if (this.otp.length === 0) {
+      this.verifyOTP.controls.otp.setErrors({
+        required: true
       });
+      this.verifyOTP.markAllAsTouched();
+      this.snackbarError('Chưa nhập Mã OTP');
+    } else {
+      this.windowRef.confirmationResult
+        .confirm(this.verifyOTP.get('otp').value)
+        .then(result => {
+          if (result) {
+            console.log('result : ', result);
+            this.haveCheckedOTP = true;
+            this.verifyOTPSuccess = true;
+            this.goNext();
+          }
+        })
+        .catch(error => {
+          console.log(error, 'Incorrect code entered?');
+          this.checkOTPn = true;
+          this.snackbarError('Mã OTP không chính xác');
+        });
+    }
   }
 
   onSubmit(): void {
     if (this.informationUser.invalid) {
+      this.informationUser.markAllAsTouched();
       this.snackbarError('Bạn phải nhập đầy đủ thông tin!');
     } else {
       const user: User = {
@@ -222,6 +243,8 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
             console.log('data registerByPhone : ', data);
             this.responseAfterRegister = data;
             this.registerSuccess = true;
+            this.snackbarSuccess('Đăng ký thành công');
+            this.goNext();
           }
         },
         error => {
@@ -276,5 +299,13 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   reloadPage(): void {
     window.location.reload();
     window.location.href = '/profile';
+  }
+
+  goBack(): void {
+    this.stepper.previous();
+  }
+
+  goNext(): void {
+    this.stepper.next();
   }
 }

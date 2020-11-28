@@ -72,13 +72,14 @@ export class SignInComponent implements OnInit {
 
     this.authService.signIn(temp).subscribe(
       (data) => {
+        console.log('data Sign in', data);
         if (data !== null) {
           this.tokenStorage.saveUser(data);
           this.isLoginFailed = false;
           this.isLoggedIn = true;
           this.roles = this.tokenStorage.getUser().roles;
           sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
-          this.reloadPage();
+/*          this.reloadPage();*/
         } else {
           this.snackBarError('Phone / Email hoặc Password sai!');
         }

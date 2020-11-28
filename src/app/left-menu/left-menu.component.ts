@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { onSideNavChange, animateText } from '../_interfaces/animation';
+import {Component, OnInit} from '@angular/core';
+import {onSideNavChange, animateText} from '../_interfaces/animation';
 import {TokenStorageService} from '../_services/token-storage.service';
 
 @Component({
@@ -13,13 +13,29 @@ export class LeftMenuComponent implements OnInit {
   sideNavState: boolean;
   linkText: boolean;
   user: any;
-  constructor(private token: TokenStorageService) { }
+  admin: boolean;
+
+  constructor(private token: TokenStorageService) {
+  }
 
 
   ngOnInit(): void {
+    this.admin = false;
     this.sideNavState = false;
     this.linkText = false;
     this.user = this.token.getUser();
+    this.isAdmin();
+  }
+
+  isAdmin(): any {
+    console.log('role ', this.user.roles);
+    this.user.roles.forEach(role => {
+      if (role.roleName === 'ROLE_ADMIN') {
+        this.admin = true;
+        return true;
+      }
+      return false;
+    });
   }
 
   onSidenavToggle(): void {

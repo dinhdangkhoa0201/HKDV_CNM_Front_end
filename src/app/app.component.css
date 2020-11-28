@@ -28,7 +28,8 @@
 }
 
 mat-sidenav-container {
-  height: 100% !important;
+  /*height: 100% !important;*/
+  height: 90vh !important;
 }
 
 /*

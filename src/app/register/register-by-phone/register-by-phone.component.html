@@ -1,5 +1,5 @@
 <div>
-  <mat-horizontal-stepper>
+  <mat-horizontal-stepper #stepper>
     <mat-step title="Kiểm tra Số điện thoại" [stepControl]="checkPhone" [editable]="editable">
       <ng-template matStepLabel>Xác thực Số điện thoại</ng-template>
 
@@ -12,6 +12,9 @@
               <mat-label>Số điện thoại</mat-label>
               <input matInput formControlName="phone">
               <mat-icon matSuffix>phone_android</mat-icon>
+
+              <mat-error *ngIf="hasError('phone', 'required', checkPhone)">Chưa nhập mã OTP</mat-error>
+
             </mat-form-field>
 
             <div id="recaptcha-container-phone" class="mt-5 mb-5"></div>
@@ -46,14 +49,14 @@
               </div>-->
 
               <mat-card-actions>
-                <button mat-raised-button [disabled]="!verifyOTP.valid" (click)="checkOTP()">Kiểm tra OTP</button>
+                <button mat-raised-button (click)="checkOTP()" color="primary">Kiểm tra OTP</button>
               </mat-card-actions>
             </div>
           </div>
 
-          <div *ngIf="verifyOTPSuccess === true" class="alert alert-success">
+<!--          <div *ngIf="verifyOTPSuccess === true" class="alert alert-success">
             <p>Mã OTP chính xác</p>
-          </div>
+          </div>-->
 
         </mat-card>
 
@@ -62,13 +65,13 @@
 
       <!-- # End: Thông báo hậu xác nhận Firebase -->
 
-      <div class="mt-5">
+<!--      <div class="mt-5">
         <button [disabled]="haveCheckedOTP === false && verifyOTPSuccess === false" mat-raised-button matStepperNext
                 color="primary" class="ml-2">
           Next
           <mat-icon matSuffix>arrow_right_alt</mat-icon>
         </button>
-      </div>
+      </div>-->
 
     </mat-step>
 
@@ -142,22 +145,22 @@
         </mat-card>
       </div>
 
-      <div class="mt-5">
+<!--      <div class="mt-5">
         <button mat-raised-button matStepperNext [disabled]="!informationUser.valid || registerSuccess === false"
                 color="primary">Next
           <mat-icon matSuffix>arrow_right_alt</mat-icon>
         </button>
-      </div>
+      </div>-->
 
     </mat-step>
 
     <mat-step>
-      <div class="alert alert-info" *ngIf="registerSuccess === true">
-        <p>Đăng ký thành công!</p>
+      <div class="alert alert-info" *ngIf="registerSuccess === false">
+        <h1>Đăng ký thành công!</h1>
         <button mat-raised-button class="btn btn-outline-success" (click)="signIn()">Đăng nhập</button>
       </div>
       <div class="alert alert-danger" *ngIf="registerSuccess === false">
-        <p>Đăng ký không thành công!</p>
+        <h1>Đăng ký không thành công!</h1>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

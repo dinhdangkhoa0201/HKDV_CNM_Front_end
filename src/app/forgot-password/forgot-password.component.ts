@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NotifyErrorComponent} from '../notify/notify-error/notify-error.component';
 import {NotifySuccessComponent} from '../notify/notify-success/notify-success.component';
@@ -12,6 +12,7 @@ import {WindowService} from '../_services/window.service';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import {environment} from '../../environments/environment.prod';
+import {MatStepper} from '@angular/material/stepper';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -54,13 +55,20 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
 
   windowRef: any;
 
+  /*-------------------*/
+  editable: boolean;
+
+
   isSentOtp: boolean;
+  @ViewChild('stepperPhone') private stepperPhone: MatStepper;
+
+  @ViewChild('stepperEmail') private stepperEmail: MatStepper;
+
 
   constructor(private snackbar: MatSnackBar, private authService: AuthService, private userService: UserService,
               private tokenStorage: TokenStorageService, private win: WindowService, private fireAuthService: AngularFireAuth) {
     this.windowRef = this.win.windowRef;
   }
-
 
   ngAfterViewInit(): void {
     this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
@@ -68,6 +76,8 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.editable = false;
+
     this.emailForm = new FormGroup({
       email: new FormControl('', [])
     });
@@ -136,6 +146,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
             this.user = data;
             console.log('onSubmitChangePassword resetPassword user', this.user);
             this.snackbarSuccess('Đổi mật khẩu thành công!');
+            this.goNextStepperEmail();
           } else {
             this.snackbarError('Đổi mật khẩu không thành công!');
           }
@@ -172,6 +183,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
         if (data !== null) {
           this.responseOTP.userId = data.userId;
           this.sendOTPSuccess = true;
+          this.goNextStepperEmail();
         } else {
           this.snackbarError('Loi');
         }
@@ -207,11 +219,12 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
     if (this.otp.trim().length === 0) {
       this.snackbarError('Chưa nhập Mã OTP');
     } else {
-      this.authService.verifyOTPCode(this.responseOTP.userId, this.email, this.otp).subscribe(
+      this.authService.verifyOTPCode(this.email, this.otp).subscribe(
         data => {
           if (data === true) {
             this.verifyOTPSuccess = true;
             this.snackbarSuccess('Mã OTP chính xác');
+            this.goNextStepperEmail();
           } else {
             this.snackbarError('Mã OTP không chính xác');
           }
@@ -249,7 +262,9 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
     window.location.href = '/profile';
   }
 
-  /*-------------------*/
+  goNextStepperEmail(): void{
+    this.stepperEmail.next();
+  }
 
 
   sendOTPWithPhone(): void {
@@ -292,6 +307,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
         console.log('result : ', result);
         this.snackbarSuccess('Mã OTP chính xác!');
         this.verifyOTPSuccess = true;
+        this.goNextStepperPhone();
       })
       .catch(error => {
         console.log(error, 'Incorrect code entered?');
@@ -317,6 +333,7 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
             this.user = data;
             console.log('onSubmitChangePassword resetPassword user', this.user);
             this.snackbarSuccess('Đổi mật khẩu thành công!');
+            this.goNextStepperPhone();
           } else {
             this.snackbarError('Đổi mật khẩu không thành công!');
           }
@@ -349,5 +366,9 @@ export class ForgotPasswordComponent implements OnInit, AfterViewInit {
 
   modifyPhone(phone): any {
     return '+84' + phone.substring(1);
+  }
+
+  goNextStepperPhone(): void{
+    this.stepperPhone.next();
   }
 }

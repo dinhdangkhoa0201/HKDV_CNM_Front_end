@@ -65,6 +65,7 @@ import {NotifyErrorComponent} from './notify/notify-error/notify-error.component
 import {NotifySuccessComponent} from './notify/notify-success/notify-success.component';
 import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-guard.service';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import {AdminGuardService} from './_services/admin-guard.service';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -169,7 +170,7 @@ function useValue(): any {
     MatBadgeModule,
     MatChipsModule
   ],
-  providers: [WindowService, SidenavService, DatePipe, AuthGuard, AuthGuardService
+  providers: [WindowService, SidenavService, DatePipe, AuthGuard, AuthGuardService, AdminGuardService
   ],
   bootstrap: [AppComponent],
 

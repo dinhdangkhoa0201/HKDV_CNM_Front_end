@@ -1,4 +1,5 @@
-<div class="sidenav_container" (mouseenter)="onSidenavToggle()" (mouseleave)="onSidenavToggle()" [@onSideNavChange]="sideNavState ? 'open' : 'close'">
+<div class="sidenav_container" (mouseenter)="onSidenavToggle()" (mouseleave)="onSidenavToggle()"
+     [@onSideNavChange]="sideNavState ? 'open' : 'close'">
   <div fxLayout="column" fxLayoutGap="" style="height: 100%;">
     <div fxLayout="column">
       <mat-nav-list>
@@ -26,6 +27,12 @@
           <mat-icon class="iconColor">perm_phone_msg</mat-icon>
           <span class="ml-5" [@animateText]="linkText ? 'show' : 'hide'">Contact</span>
         </a>
+
+        <a *ngIf="admin" mat-list-item href="/admin" routerLink="/admin">
+          <mat-icon class="iconColor">admin_panel_settings</mat-icon>
+          <span class="ml-5" [@animateText]="linkText ? 'show' : 'hide'">Contact</span>
+        </a>
+
       </mat-nav-list>
     </div>
   </div>

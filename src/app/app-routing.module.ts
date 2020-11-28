@@ -13,6 +13,7 @@ import {ChatComponent} from './chat/chat.component';
 import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-guard.service';
 import {RegisterComponent} from './register/register.component';
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
+import {AdminGuardService} from './_services/admin-guard.service';
 
 const routes: Routes = [
   {
@@ -34,7 +35,7 @@ const routes: Routes = [
     path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]
   },
   {
-    path: 'admin', component: AdminComponent, canActivate: [AuthGuardService]
+    path: 'admin', component: AdminComponent, canActivate: [AuthGuardService, AdminGuardService]
   },
   {
     path: 'register-by-email', component: RegisterByEmailComponent

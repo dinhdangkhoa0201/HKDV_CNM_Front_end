@@ -1,4 +1,4 @@
-import {Component, OnInit, Output} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../_services/auth.service';
 import {User} from '../../_interfaces/user';
@@ -13,6 +13,8 @@ import {EventEmitter} from 'events';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NotifyErrorComponent} from '../../notify/notify-error/notify-error.component';
 import {NotifySuccessComponent} from '../../notify/notify-success/notify-success.component';
+import {MatStep, MatStepper} from '@angular/material/stepper';
+import {THIS_EXPR} from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-register-by-email',
@@ -20,6 +22,7 @@ import {NotifySuccessComponent} from '../../notify/notify-success/notify-success
   styleUrls: ['./register-by-email.component.css']
 })
 export class RegisterByEmailComponent implements OnInit {
+
   checkEmail: FormGroup;
   informationUser: FormGroup;
   checkOTP: FormGroup;
@@ -42,6 +45,7 @@ export class RegisterByEmailComponent implements OnInit {
   @Output() loginin: EventEmitter<boolean> = new EventEmitter();
 
   responseAfterRegister: ResponseAfterRegister;
+  @ViewChild('stepper') private stepper: MatStepper;
 
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router, private snackbar: MatSnackBar) {
@@ -61,6 +65,7 @@ export class RegisterByEmailComponent implements OnInit {
       password: new FormControl('', [Validators.required]),
       confirmPassword: new FormControl('', [Validators.required])
     });
+
     this.isLoading = false;
     this.isChecking = false;
     this.editable = false;
@@ -131,6 +136,11 @@ export class RegisterByEmailComponent implements OnInit {
 
   checkIsEmail(): void {
     if (this.email.trim().length === 0) {
+      this.checkEmail.controls.email.setErrors({
+        required: true
+      });
+      this.checkEmail.markAllAsTouched();
+
       this.snackbarError('Chưa nhập Email');
     } else {
       this.authService.isExistedEmail(this.email)
@@ -161,6 +171,7 @@ export class RegisterByEmailComponent implements OnInit {
           this.isLoading = false;
           this.sendOTPSuccess = true;
           this.snackbarSuccess('Mã OTP đã được gửi tới Email cửa bạn, vui lòng kiểm tra Email!');
+          this.goNext();
         },
         error => {
           console.log('err: ', error);
@@ -172,6 +183,7 @@ export class RegisterByEmailComponent implements OnInit {
 
   onSubmit(): void {
     if (this.informationUser.invalid) {
+      this.informationUser.markAllAsTouched();
       this.snackbarError('Bạn phải nhập đầy đủ thông tin!');
 
     } else {
@@ -193,6 +205,7 @@ export class RegisterByEmailComponent implements OnInit {
             this.registerSuccess = true;
             console.log('data register After register : ', this.responseAfterRegister);
             this.snackbarSuccess('Đăng ký thành công!');
+            this.goNext();
           }
         },
         error => {
@@ -205,13 +218,22 @@ export class RegisterByEmailComponent implements OnInit {
 
   verifyOTP(): void {
     if (this.otp.trim().length === 0) {
+      this.checkOTP.controls.otp.setErrors({
+        required: true
+      });
+      this.checkOTP.markAllAsTouched();
+
       this.snackbarError('Chưa nhập mã OTP');
     } else {
-      this.authService.verifyOTPCode(this.responseOTP.userId, this.email, this.otp).subscribe(
+      this.authService.verifyOTPCode(this.email, this.otp).subscribe(
         data => {
           console.log('data verify : ', data);
-          this.beVerifyingOTP = true;
-          this.verifyOTPSuccess = data;
+          if (data === true) {
+            this.snackbarSuccess('Mã OTP chính xác');
+            this.beVerifyingOTP = true;
+            this.verifyOTPSuccess = data;
+            this.goNext();
+          }
         },
         error => {
           console.log('error : ', error);
@@ -267,6 +289,14 @@ export class RegisterByEmailComponent implements OnInit {
       horizontalPosition: 'right',
       verticalPosition: 'top',
     });
+  }
+
+  goBack(): void {
+    this.stepper.previous();
+  }
+
+  goNext(): void {
+    this.stepper.next();
   }
 }
 
