@@ -6,6 +6,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NotifyErrorComponent} from '../notify/notify-error/notify-error.component';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-signin',
@@ -27,7 +28,8 @@ export class SignInComponent implements OnInit {
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private router: Router,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private toast: ToastrService
   ) {
   }
 
@@ -53,9 +55,9 @@ export class SignInComponent implements OnInit {
 
   createUser(): any {
     if (!this.phoneEmail) {
-      this.snackBarError('Chưa nhập Phone / Email');
+      this.toastError('Chưa nhập Phone / Email', 'Lỗi');
     } else if (!this.password) {
-      this.snackBarError('Chưa nhập Mật khẩu');
+      this.toastError('Chưa nhập Mật khẩu', 'Lỗi');
     } else {
       this.executeUserCreation();
     }
@@ -72,23 +74,28 @@ export class SignInComponent implements OnInit {
 
     this.authService.signIn(temp).subscribe(
       (data) => {
-        console.log('data Sign in', data);
-        if (data !== null) {
-          this.tokenStorage.saveUser(data);
-          this.isLoginFailed = false;
-          this.isLoggedIn = true;
-          this.roles = this.tokenStorage.getUser().roles;
-          sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
-/*          this.reloadPage();*/
+/*        console.log('data Sign in', data);*/
+        if (data.enable) {
+          if (data !== null) {
+            this.tokenStorage.saveUser(data);
+            this.isLoginFailed = false;
+            this.isLoggedIn = true;
+            this.roles = this.tokenStorage.getUser().roles;
+            sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
+            this.reloadPage();
+          } else {
+            this.toastError('Phone / Email hoặc Password sai!', 'Lỗi');
+          }
         } else {
-          this.snackBarError('Phone / Email hoặc Password sai!');
+          this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
         }
+
       },
       (err) => {
-        console.log('err : ', err);
+/*        console.log('err : ', err);*/
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
-        this.snackBarError('Đăng nhập không thành công');
+        this.toastError('Đăng nhập không thành công', 'Lỗi');
       }
     );
   }
@@ -97,14 +104,7 @@ export class SignInComponent implements OnInit {
     window.location.reload();
   }
 
-  snackBarError(message): void {
-    this.snackbar.openFromComponent(NotifyErrorComponent, {
-      data: {
-        content: message,
-      },
-      duration: 5000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
+  toastError(message, title): void {
+    this.toast.error(message, title);
   }
 }

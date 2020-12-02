@@ -58,7 +58,15 @@ export class AdminService {
     return this.http.get(`${ADMIN_API + '/users/page'}?sort=${sort}&order=${order}&page=${page}`);
   }
 
-  deleteUser(userId): Observable<any>{
+  deleteUser(userId): Observable<any> {
     return this.http.delete(`${ADMIN_API + '/users'}/${userId}`);
   }
+
+/*  deleteUser(userId): Observable<any> {
+    return this.http.post(`${ADMIN_API + '/deleteUser'}`, {}, {
+      params: {
+        userId
+      }
+    });
+  }*/
 }

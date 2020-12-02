@@ -16,6 +16,7 @@ import {NotifyErrorComponent} from '../../notify/notify-error/notify-error.compo
 import {NotifySuccessComponent} from '../../notify/notify-success/notify-success.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
+import {ToastrService} from 'ngx-toastr';
 
 const existingPhoneValidator = (authService: AuthService) => (c: FormControl) => {
   console.log('c : ', c.value);
@@ -68,7 +69,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   @ViewChild('stepper') private stepper: MatStepper;
 
 
-  constructor(private authService: AuthService, private win: WindowService, private fireAuthService: AngularFireAuth, private tokenStorage: TokenStorageService, private snackbar: MatSnackBar) {
+  constructor(private authService: AuthService, private win: WindowService, private fireAuthService: AngularFireAuth, private tokenStorage: TokenStorageService, private snackbar: MatSnackBar, private toast: ToastrService) {
     this.windowRef = this.win.windowRef;
   }
 
@@ -154,7 +155,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
         required: true
       });
       this.checkPhone.markAllAsTouched();
-      this.snackbarError('Số điện thoại không hợp lệ');
+      this.toastError('Số điện thoại không hợp lệ');
     } /*else if (typeof this.windowRef.confirmationResult === 'undefined') {
       this.snackbarError('Hãy xác nhận reCAPTCHA');
     }*/ else {
@@ -163,7 +164,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
         data => {
           console.log('data isExistedPhone: ', data);
           if (data === true) {
-            this.snackbarError('Số điện thoại đã tồn tại, vui lòng nhập số khác!');
+            this.toastError('Số điện thoại đã tồn tại, vui lòng nhập số khác!');
           } else {
             this.isSentOtp = true;
             this.isExistingPhone = false;
@@ -183,7 +184,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
       .then(result => {
         this.windowRef.confirmationResult = result;
         console.log('result signInWithPhoneNumber ', result);
-        this.snackbarSuccess('Mã OTP sẽ được gửi tới Số điện thoại của bạn, hãy kiểm tra tin nhắn');
+        this.toastSuccess('Mã OTP sẽ được gửi tới Số điện thoại của bạn, hãy kiểm tra tin nhắn');
       })
       .catch(error => {
         console.log('error', error);
@@ -200,7 +201,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
         required: true
       });
       this.verifyOTP.markAllAsTouched();
-      this.snackbarError('Chưa nhập Mã OTP');
+      this.toastError('Chưa nhập Mã OTP');
     } else {
       this.windowRef.confirmationResult
         .confirm(this.verifyOTP.get('otp').value)
@@ -215,7 +216,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
         .catch(error => {
           console.log(error, 'Incorrect code entered?');
           this.checkOTPn = true;
-          this.snackbarError('Mã OTP không chính xác');
+          this.toastError('Mã OTP không chính xác');
         });
     }
   }
@@ -223,7 +224,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   onSubmit(): void {
     if (this.informationUser.invalid) {
       this.informationUser.markAllAsTouched();
-      this.snackbarError('Bạn phải nhập đầy đủ thông tin!');
+      this.toastError('Bạn phải nhập đầy đủ thông tin!');
     } else {
       const user: User = {
         userId: 0,
@@ -243,7 +244,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
             console.log('data registerByPhone : ', data);
             this.responseAfterRegister = data;
             this.registerSuccess = true;
-            this.snackbarSuccess('Đăng ký thành công');
+            this.toastSuccess('Đăng ký thành công');
             this.goNext();
           }
         },
@@ -274,26 +275,12 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
     );
   }
 
-  snackbarError(message): void {
-    this.snackbar.openFromComponent(NotifyErrorComponent, {
-      data: {
-        content: message
-      },
-      duration: 5000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
+  toastError(message): void {
+    this.toast.error(message);
   }
 
-  snackbarSuccess(message): void {
-    this.snackbar.openFromComponent(NotifySuccessComponent, {
-      data: {
-        content: message
-      },
-      duration: 5000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
+  toastSuccess(message): void {
+    this.toast.success(message);
   }
 
   reloadPage(): void {

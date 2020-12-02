@@ -5,6 +5,8 @@ import {UserService} from '../_services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NotifyErrorComponent} from '../notify/notify-error/notify-error.component';
 import {NotifySuccessComponent} from '../notify/notify-success/notify-success.component';
+import validate = WebAssembly.validate;
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -23,17 +25,14 @@ export class ProfileComponent implements OnInit {
   timeSnackbar = 2000;
 
 
-  constructor(private token: TokenStorageService, private userService: UserService, private snackbar: MatSnackBar) {
+  constructor(private token: TokenStorageService, private userService: UserService, private snackbar: MatSnackBar, private toast: ToastrService) {
   }
 
   ngOnInit(): void {
     this.informationUser = new FormGroup({
-      userId: new FormControl(''),
-      userName: new FormControl(''),
-      gender: new FormControl(''),
-      birthday: new FormControl(''),
-      phone: new FormControl(''),
-      email: new FormControl(''),
+      userName: new FormControl('', [Validators.required]),
+      gender: new FormControl('', [Validators.required]),
+      birthday: new FormControl('', [Validators.required]),
     });
     this.changePassword = new FormGroup({
       currentPassword: new FormControl('', [Validators.required]),
@@ -49,12 +48,9 @@ export class ProfileComponent implements OnInit {
 
     if (this.currentUser !== null) {
       this.informationUser.setValue({
-        userId: this.currentUser.userId,
         userName: this.currentUser.userName,
         gender: this.currentUser.gender,
         birthday: this.currentUser.birthday,
-        phone: this.currentUser.phone,
-        email: this.currentUser.email
       });
     }
 
@@ -65,8 +61,16 @@ export class ProfileComponent implements OnInit {
     this.hideConfirmPassword = true;
   }
 
-  get userId(): any {
-    return this.informationUser.get('userId');
+  get userName(): any {
+    return this.informationUser.get('userName').value;
+  }
+
+  get gender(): any {
+    return this.informationUser.get('gender').value;
+  }
+
+  get birthday(): any {
+    return this.informationUser.get('birthday').value;
   }
 
   get email(): any {
@@ -83,20 +87,25 @@ export class ProfileComponent implements OnInit {
 
 
   updateInformation(): void {
-    if (confirm('Bạn có muốn lưu?')) {
-      this.userService.updateInformationUser(this.userId.value, this.informationUser.getRawValue()).subscribe(
-        data => {
-          this.snackbarSuccess('Thông tin cá nhân cập nhật thành công');
-          this.token.saveUser(data);
-          this.reloadPage();
-        },
-        error => {
-          console.log('err ', error);
-          this.snackbarError('Thông tin cá nhân cập nhật không thành công');
-        }
-      );
+    if (this.informationUser.invalid) {
+      this.toastError('Chưa nhập đủ thông tin cần thiết');
+      this.informationUser.markAllAsTouched();
+    } else {
+      if (confirm('Bạn có muốn lưu?')) {
+        this.userService.updateInformationUser(this.currentUser.userId, this.informationUser.getRawValue()).subscribe(
+          data => {
+            this.toastSuccess('Thông tin cá nhân cập nhật thành công');
+            this.token.saveUser(data);
+            this.reloadPage();
+          },
+          error => {
+            console.log('err ', error);
+            this.toastError('Thông tin cá nhân cập nhật không thành công');
+          }
+        );
+      }
+      this.editable = false;
     }
-    this.editable = false;
   }
 
   reloadPage(): void {
@@ -117,23 +126,23 @@ export class ProfileComponent implements OnInit {
 
   submitChangePassword(): void {
     if (!this.currentPassword) {
-      this.snackbarError('Chưa nhập Mật khẩu hiệu tại');
+      this.toastError('Chưa nhập Mật khẩu hiệu tại');
     } else if (!this.newPassword) {
-      this.snackbarError('Chưa nhập Mật khẩu mới');
+      this.toastError('Chưa nhập Mật khẩu mới');
     } else if (!this.confirmNewPassword) {
-      this.snackbarError('Chưa nhập Xác nhận mật khẩu mới');
+      this.toastError('Chưa nhập Xác nhận mật khẩu mới');
     } else if (this.confirmNewPassword !== this.newPassword) {
-      this.snackbarError('Mật khẩu xác nhận không chính xác');
+      this.toastError('Mật khẩu xác nhận không chính xác');
     } else {
       if (confirm('Bạn có muốn đổi mật khẩu?')) {
         this.userService.updatePassword(this.currentUser.userId, this.changePassword.get('currentPassword').value, this.changePassword.get('newPassword').value)
           .subscribe(data => {
             console.log('updatePassword data : ', data);
             if (data) {
-              this.snackbarSuccess('Đổi mật khẩu thành công');
+              this.toastSuccess('Đổi mật khẩu thành công');
               window.location.reload();
             } else {
-              this.snackbarError('Sai mật khẩu');
+              this.toastError('Sai mật khẩu');
             }
           }, error => {
             console.log('submitChangePassword err ', error);
@@ -142,25 +151,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  snackbarError(message): void {
-    this.snackbar.openFromComponent(NotifyErrorComponent, {
-      data: {
-        content: message
-      },
-      duration: 5000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
+  toastError(message): void {
+    this.toast.error(message);
   }
 
-  snackbarSuccess(message): void {
-    this.snackbar.openFromComponent(NotifySuccessComponent, {
-      data: {
-        content: message
-      },
-      duration: 5000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
+  toastSuccess(message): void {
+    this.toast.success(message);
   }
 }

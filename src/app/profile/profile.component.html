@@ -14,31 +14,43 @@
               <tr>
                 <th>Họ và tên</th>
                 <td>
-                  {{this.informationUser.get('userName').value}}
+                  {{currentUser.userName}}
                 </td>
               </tr>
               <tr>
                 <th>Giới tính</th>
                 <td>
-                  {{this.informationUser.get('gender').value}}
+                  {{currentUser.gender}}
                 </td>
               </tr>
               <tr>
                 <th>Ngày sinh</th>
                 <td>
-                  {{this.informationUser.get('birthday').value}}
+                  {{currentUser.birthday}}
                 </td>
               </tr>
               <tr>
                 <th>Số điện thoại</th>
                 <td>
-                  {{this.informationUser.get('phone').value}}
+                  {{currentUser.phone}}
+                  <span *ngIf="currentUser.phone.length === 0">
+                    <a routerLink="/add-phone">Thêm Số điện thoai</a>
+                  </span>
+                  <span *ngIf="currentUser.phone.length > 0">
+                    <a routerLink="/update-phone">Thay đổi Số điện thoại</a>
+                  </span>
                 </td>
               </tr>
               <tr>
                 <th>Email</th>
                 <td>
-                  {{this.informationUser.get('email').value}}
+                  {{currentUser.email}}
+                  <span *ngIf="currentUser.email.length === 0">
+                    <a routerLink="/add-email">Thêm Email</a>
+                  </span>
+                  <span *ngIf="currentUser.email.length > 0">
+                    <a routerLink="/add-email">Thay đổi Email</a>
+                  </span>
                 </td>
               </tr>
             </table>
@@ -60,6 +72,7 @@
                         <mat-label>Họ và tên</mat-label>
                         <input matInput formControlName="userName" name="userName">
                         <mat-icon matSuffix>account_circle</mat-icon>
+                        <mat-error *ngIf="hasError('userName', 'required', informationUser)">Chưa nhập Họ và tên</mat-error>
                       </mat-form-field>
                     </td>
                   </tr>
@@ -72,6 +85,7 @@
                           <mat-option value="Nữ">Nữ</mat-option>
                           <mat-option value="Khác">Khác</mat-option>
                         </mat-select>
+                        <mat-error *ngIf="hasError('gender', 'required', informationUser)">Chưa nhập Họ và tên</mat-error>
                       </mat-form-field>
                     </td>
                   </tr>
@@ -81,10 +95,11 @@
                       <mat-form-field appearance="outline" fxFill>
                         <mat-label>Ngày sinh</mat-label>
                         <input matInput type="date" formControlName="birthday">
+                        <mat-error *ngIf="hasError('birthday', 'required', informationUser)">Chưa nhập Họ và tên</mat-error>
                       </mat-form-field>
                     </td>
                   </tr>
-                  <tr>
+<!--                  <tr>
                     <th>Số điện thoại</th>
                     <td>
                       <mat-form-field appearance="outline" fxFill>
@@ -99,8 +114,8 @@
                         </div>
                       </div>
                     </td>
-                  </tr>
-                  <tr>
+                  </tr>-->
+<!--                  <tr>
                     <th>Email</th>
                     <td>
                       <mat-form-field appearance="outline" fxFill>
@@ -114,7 +129,7 @@
                         </div>
                       </div>
                     </td>
-                  </tr>
+                  </tr>-->
                 </table>
               </form>
             </mat-card-content>

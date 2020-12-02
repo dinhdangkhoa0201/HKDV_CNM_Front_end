@@ -36,6 +36,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatChipsModule} from '@angular/material/chips';
+import {ToastrModule} from 'ngx-toastr';
 
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
@@ -66,6 +67,10 @@ import {NotifySuccessComponent} from './notify/notify-success/notify-success.com
 import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-guard.service';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import {AdminGuardService} from './_services/admin-guard.service';
+import { UpdateEmailComponent } from './update/update-email/update-email.component';
+import { UpdatePhoneComponent } from './update/update-phone/update-phone.component';
+import { AddPhoneComponent } from './update/add-phone/add-phone.component';
+import { AddEmailComponent } from './update/add-email/add-email.component';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -111,6 +116,10 @@ function useValue(): any {
     NotifyErrorComponent,
     NotifySuccessComponent,
     ForgotPasswordComponent,
+    UpdateEmailComponent,
+    UpdatePhoneComponent,
+    AddPhoneComponent,
+    AddEmailComponent,
   ],
   imports: [
     BrowserModule,
@@ -145,7 +154,8 @@ function useValue(): any {
     MatSidenavModule,
     MatTooltipModule,
     MatBadgeModule,
-    MatChipsModule
+    MatChipsModule,
+    ToastrModule.forRoot()
   ],
   exports: [
     MatFormFieldModule,

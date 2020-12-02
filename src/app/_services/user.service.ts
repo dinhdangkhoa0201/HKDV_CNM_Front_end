@@ -39,8 +39,6 @@ export class UserService {
       userName: user.userName,
       gender: user.gender,
       birthday: user.birthday,
-      phone: user.phone,
-      email: user.email,
     });
   }
 
@@ -55,6 +53,22 @@ export class UserService {
 
   getListInvites(userId): Observable<any> {
     return this.http.get(`${API_URL + '/invites/' + userId}`);
+  }
+
+  updatePhone(userId, phone): Observable<any>{
+    return this.http.post(`${API_URL + '/updatePhone/' + userId}`, {}, {
+      params: {
+        phone
+      }
+    });
+  }
+
+  updateEmail(userId, email): Observable<any> {
+    return this.http.post(`${API_URL + '/updateEmail/' + userId}`, {}, {
+      params: {
+        email
+      }
+    });
   }
 
   getListFriends(userId): Observable<any> {
@@ -85,7 +99,11 @@ export class UserService {
     return this.http.get(`${API_URL + '/unfriend/' + userId + '?friendId=' + friendId}`);
   }
 
-  deleteInvitation(userId, friendId): Observable<any>{
-    return this.http.get(`${API_URL + '/deleteInvitation/' + userId + '?friendId=' + friendId}`);
+  deleteInvitationSent(userId, friendId): Observable<any>{
+    return this.http.get(`${API_URL + '/deleteInvitationSent/' + userId + '?friendId=' + friendId}`);
+  }
+
+  deleteInvitationReceived(userId, friendId): Observable<any> {
+    return this.http.get(`${API_URL + '/deleteInvitationReceived/' + userId + '?friendId=' + friendId}`);
   }
 }

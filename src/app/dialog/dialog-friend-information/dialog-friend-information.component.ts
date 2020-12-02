@@ -4,6 +4,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {UserService} from '../../_services/user.service';
 import {TokenStorageService} from '../../_services/token-storage.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-dialog-friend-information',
@@ -20,7 +21,7 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
   readonly: boolean;
 
   constructor(public dialogRef: MatDialogRef<DialogFriendInformationComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private userService: UserService, private tokenStorage: TokenStorageService) {
+              @Inject(MAT_DIALOG_DATA) public data: any, private userService: UserService, private tokenStorage: TokenStorageService, private toast: ToastrService) {
     console.log('data ', data);
     this.friend = data.user;
     this.ownerId = data.ownerId;
@@ -45,11 +46,13 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
       phone: this.friend.phone,
       email: this.friend.email
     });
-    this.relationType = 0;
+    this.relationType = -1;
 
-    this.checkSentInvitation(this.friend.userId);
-    this.checkReceivedInvitation(this.friend.userId);
-    this.checkStatusIsFriend(this.friend.userId);
+    if (this.friend.userId !== this.tokenStorage.getUser().userId) {
+      this.checkSentInvitation(this.friend.userId);
+      this.checkReceivedInvitation(this.friend.userId);
+      this.checkStatusIsFriend(this.friend.userId);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -122,5 +125,62 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
         }
       );
     }
+  }
+
+  acceptInvitation(): void {
+    this.userService.acceptRequestAddFriend(this.tokenStorage.getUser().userId, this.friend.userId).subscribe(
+      data => {
+        console.log('data acceptRequestAddFriend : ', data);
+        if (data === true) {
+          window.location.reload();
+        }
+      }, error => {
+        console.log('err acceptRequestAddFriend : ', error);
+      }
+    );
+  }
+
+  deleteInvitaion(): void {
+    if (this.relationType === 1) {
+      this.deleteInvitationSent(this.friend.userId);
+    } else if(this.relationType === 2){
+      this.deleteInvitationReceived(this.friend.userId);
+    }
+  }
+
+  deleteInvitationReceived(friendId): void {
+    if (confirm('Bạn có muốn xoá lời mời này?')) {
+      this.userService.deleteInvitationReceived(this.tokenStorage.getUser().userId, friendId).subscribe(
+        data => {
+          console.log('data deleteInvitation', data);
+          if (data === true) {
+            this.toastSuccess('Xoá lời kết bạn thành công');
+            this.dialogRef.close();
+          }
+        }, error => {
+          console.log('deleteInvitation deleteInvitation ', error);
+        }
+      );
+    }
+  }
+
+  deleteInvitationSent(friendId): void {
+    if (confirm('Bạn có muốn xoá lời mời này?')) {
+      this.userService.deleteInvitationSent(this.tokenStorage.getUser().userId, friendId).subscribe(
+        data => {
+          console.log('data deleteInvitation', data);
+          if (data === true) {
+            this.toastSuccess('Xoá lời kết bạn thành công');
+            this.dialogRef.close();
+          }
+        }, error => {
+          console.log('deleteInvitation deleteInvitation ', error);
+        }
+      );
+    }
+  }
+
+  toastSuccess(message): void {
+    this.toast.success(message, 'Success');
   }
 }

@@ -10,6 +10,9 @@ import {DialogFriendInformationComponent} from '../dialog/dialog-friend-informat
 import {TokenStorageService} from '../_services/token-storage.service';
 import {SseService} from '../_services/sse.service';
 import {MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
+import {NotifyErrorComponent} from '../notify/notify-error/notify-error.component';
+import {NotifySuccessComponent} from '../notify/notify-success/notify-success.component';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-contact',
@@ -39,7 +42,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
     }
   ];
 
-  displayedColumns: string[] = ['Select', 'Avatar', 'Name', 'Email', 'Phone', 'Action'];
+  displayedColumns: string[] = ['Avatar', 'Name', 'Email', 'Phone'];
   dataSource: MatTableDataSource<User>;
   isLoadingResults: boolean;
   dialogRef: MatDialogRef<any>;
@@ -66,8 +69,10 @@ export class ContactComponent implements OnInit, AfterViewInit {
   resultOfFinding: boolean;
   selectedRowIndex: -1;
 
+  selected: string;
 
-  constructor(private userService: UserService, private dialog: MatDialog, private tokenStorage: TokenStorageService, private sse: SseService, private snackBar: MatSnackBar) {
+
+  constructor(private userService: UserService, private dialog: MatDialog, private tokenStorage: TokenStorageService, private sse: SseService, private snackBar: MatSnackBar, private snackbar: MatSnackBar, private  toast: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -79,6 +84,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.notifyStyleReceivedInvitation = false;
     this.notifyStyleSentInvitation = false;
     this.isFinding = false;
+    this.selected = '';
   }
 
   isAllSelected(): any {
@@ -103,9 +109,9 @@ export class ContactComponent implements OnInit, AfterViewInit {
   filterContact(list): void {
     /*    const value = list.selectedOptions.selected[0]?.value;*/
     /*    console.log('value ', list.selectedOptions.selected[0]?.value);*/
-    const temp = list.selectedOptions.selected[0]?.value;
-    console.log('filterContact : ', temp);
-    switch (temp) {
+    this.selected = list.selectedOptions.selected[0]?.value;
+    console.log('filterContact : ', this.selected);
+    switch (this.selected) {
       case 'Bạn bè': {
         this.getListFriend();
         this.buttonStyle = 0;
@@ -130,8 +136,8 @@ export class ContactComponent implements OnInit, AfterViewInit {
   filterContactChips(item): void {
     /*    const value = list.selectedOptions.selected[0]?.value;*/
     /*    console.log('value ', list.selectedOptions.selected[0]?.value);*/
-    const temp = item;
-    console.log('filterContactChips temp : ', temp);
+    this.selected = item.title;
+    console.log('filterContactChips temp : ', this.selected );
     this.listItems[0].selected = false;
     this.listItems[1].selected = false;
     this.listItems[2].selected = false;
@@ -202,24 +208,39 @@ export class ContactComponent implements OnInit, AfterViewInit {
       data => {
         data = JSON.parse(data.data);
         console.log('data : ', data);
+
         if (data.title === '1') {
           this.listItems[0].badge = true;
+
+          this.toast.success(data.message, '');
+
+          // this.snackBar.open(data.message, 'Close', {
+          //   duration: 5000,
+          //   horizontalPosition: 'right',
+          //   verticalPosition: 'top'
+          // });
+
         } else if (data.title === '2') {
           this.listItems[1].badge = true;
+          this.toast.success(data.message, '');
+
+          // this.snackBar.open(data.message, 'Close', {
+          //   duration: 5000,
+          //   horizontalPosition: 'right',
+          //   verticalPosition: 'top'
+          // });
         }
-        this.snackBar.open(data.message, 'Close', {
-          duration: 5000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top'
-        });
+
 
         if (data.status === 'DELETE_INVITATION') {
-          console.log('DELETE_INVITATION');
+/*          console.log('DELETE_INVITATION');*/
           this.listItems[2].badge = false;
           this.getListInvites();
         }
+
+
       }, error => {
-        console.log('err subscribe : ', error);
+/*        console.log('err subscribe : ', error);*/
       }
     );
   }
@@ -295,18 +316,44 @@ export class ContactComponent implements OnInit, AfterViewInit {
     );
   }
 
-  deleteInvitation(friendId): void {
+  deleteInvitationSent(friendId): void {
     if (confirm('Bạn có muốn xoá lời mời này?')) {
-      this.userService.deleteInvitation(this.tokenStorage.getUser().userId, friendId).subscribe(
+      this.userService.deleteInvitationSent(this.tokenStorage.getUser().userId, friendId).subscribe(
         data => {
           console.log('data deleteInvitation', data);
           if (data === true) {
+            this.toastSuccess('Xoá lời kết bạn thành công');
+            this.getListRequests();
+          }
+        }, error => {
+          console.log('deleteInvitation deleteInvitation ', error);
+        }
+      );
+    }
+  }
+
+  deleteInvitationReceived(friendId): void {
+    if (confirm('Bạn có muốn xoá lời mời này?')) {
+      this.userService.deleteInvitationReceived(this.tokenStorage.getUser().userId, friendId).subscribe(
+        data => {
+          console.log('data deleteInvitation', data);
+          if (data === true) {
+            this.toastSuccess('Xoá lời kết bạn thành công');
             this.getListInvites();
           }
         }, error => {
-
+          console.log('deleteInvitation deleteInvitation ', error);
         }
       );
+    }
+  }
+
+  delete(userId): void {
+    console.log('selected : ', this.selected);
+    if (this.selected === 'Lời mời kết bạn') {
+      this.deleteInvitationReceived(userId);
+    } else if (this.selected === 'Lời mời đã gửi') {
+      this.deleteInvitationSent(userId);
     }
   }
 
@@ -319,4 +366,14 @@ export class ContactComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  toastError(message): void {
+    this.toast.error(message, 'Error');
+  }
+
+  toastSuccess(message): void {
+    this.toast.success(message, 'Success');
+  }
+
+
 }

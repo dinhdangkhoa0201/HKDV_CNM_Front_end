@@ -33,3 +33,11 @@ div.font p {
 .highlight{
   background: #42A948; /* green */
 }
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}

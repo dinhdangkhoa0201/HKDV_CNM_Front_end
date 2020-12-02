@@ -23,6 +23,7 @@ export class ChatComponent implements OnInit {
   webSocketEndPoint = 'http://localhost:8090/websocket';
   stompClient: any;
   newMessage: ResponseMessage[];
+
   listFriendOnline: ResponseFriendOnline[];
 
   notificationNewMessage: ResponseMessage;

@@ -60,9 +60,11 @@ export class AuthService {
   }
 
   isExistedPhone(phone): Observable<any> {
-    let body = new HttpParams();
-    body = body.set('phone', phone);
-    return this.http.post(`${ AUTH_API + '/isExistedPhone' }`, body);
+    return this.http.post(`${ AUTH_API + '/isExistedPhone' }`, {}, {
+      params: {
+        phone
+      }
+    });
   }
 
   isExistedEmail(email): Observable<any> {
@@ -95,6 +97,32 @@ export class AuthService {
           let body = new HttpParams();
           body = body.set('phone', phone);
           return this.http.post(`${ AUTH_API + '/isExistedPhone' }`, body);
+        })
+      );
+  }
+
+  checkEmailExistAsyn(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<{ [key: string]: any } | null> => {
+      console.log('control : ' + control.value);
+      return this.isExistEmailAsync(control.value)
+        .pipe(
+          map(res => {
+            console.log('res : ' + res);
+            if (res.length){
+              return {state: true};
+            }
+          })
+        );
+    };
+  }
+
+  isExistEmailAsync(email): Observable<any> {
+    return timer(1000)
+      .pipe(
+        switchMap(() => {
+          let body = new HttpParams();
+          body = body.set('email', email);
+          return this.http.post(`${AUTH_API + '/isExistedEmail'}`, body);
         })
       );
   }

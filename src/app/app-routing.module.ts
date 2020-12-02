@@ -14,6 +14,11 @@ import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-
 import {RegisterComponent} from './register/register.component';
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
 import {AdminGuardService} from './_services/admin-guard.service';
+import {AddPhoneComponent} from './update/add-phone/add-phone.component';
+import {AddEmailComponent} from './update/add-email/add-email.component';
+import {UpdatePhoneComponent} from './update/update-phone/update-phone.component';
+import {A} from '@angular/cdk/keycodes';
+import {UpdateEmailComponent} from './update/update-email/update-email.component';
 
 const routes: Routes = [
   {
@@ -51,6 +56,18 @@ const routes: Routes = [
   },
   {
     path: 'forgot-password', component: ForgotPasswordComponent
+  },
+  {
+    path: 'add-phone', component: AddPhoneComponent, canActivate: [AuthGuardService]
+  },
+  {
+    path: 'add-email', component: AddEmailComponent, canActivate: [AuthGuardService]
+  },
+  {
+    path: 'update-phone', component: UpdatePhoneComponent, canActivate: [AuthGuardService]
+  },
+  {
+    path: 'update-email', component: UpdateEmailComponent, canActivate: [AuthGuardService]
   }
 ];
 

@@ -33,29 +33,44 @@
 
         <mat-form-field>
           <mat-label>Số điện thoại</mat-label>
-          <input matInput type="tel" formControlName="phone" id="phone" placeholder="Số điện thoại">
+          <input matInput type="tel" formControlName="phone" id="phone" placeholder="Số điện thoại" uniquePhone>
           <mat-error *ngIf="hasError('phone', 'required')">Chưa nhập Số điện thoại</mat-error>
           <mat-error *ngIf="hasError('phone', 'pattern')">Số điện thoại sai định dạng</mat-error>
-          <mat-error *ngIf="hasError('phone', 'state')">Số điện thoại đã được sử dụng</mat-error>
+          <mat-error *ngIf="addUserForm.controls['phone']?.errors?.uniquePhone">Số điện thoại đã được sử dụng</mat-error>
+<!--          <mat-error *ngIf="hasError('phone', 'uniquePhone')">Số điện thoại đã được sử dụng</mat-error>-->
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" id="email" placeholder="Email">
+          <input matInput type="email" formControlName="email" id="email" placeholder="Email" uniqueEmail>
           <mat-error *ngIf="hasError('email', 'required')">Chưa nhập Email</mat-error>
+          <mat-error *ngIf="addUserForm.controls['email']?.errors?.uniqueEmail">Email đã được sử dụng</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>Mật khẩu</mat-label>
-          <input matInput type="password" formControlName="password" id="password" placeholder="Mật khẩu" #password>
+          <input matInput [type]="hide_1 ? 'password' : 'text'" type="password" formControlName="password" id="password" placeholder="Mật khẩu" #password>
+          <button mat-icon-button matSuffix (click)="hide_1 = !hide_1" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide_1">
+            <mat-icon>{{hide_1 ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
           <mat-error *ngIf="hasError('password', 'required')">Chưa nhập mật khẩu</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-label>Xác nhận mật khẩu</mat-label>
+
+            <mat-label>Xác nhận mật khẩu</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" type="password" formControlName="confirmPassword" placeholder="Xác nhận mật khẩu" pattern="{{ password.value }}">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="hasError('confirmPassword', 'required')">Chưa nhập Xác nhận mật khẩu</mat-error>
+            <mat-error *ngIf="hasError('confirmPassword', 'pattern')">Xác nhận mật khẩu không chính xác</mat-error>
+
+
+<!--          <mat-label>Xác nhận mật khẩu</mat-label>
           <input matInput type="password" formControlName="confirmPassword" id="confirmPassword" placeholder="Xác nhận mật khẩu" pattern="{{ this.password }}">
           <mat-error *ngIf="hasError('confirmPassword', 'required')">Chưa nhập Xác nhận mật khẩu</mat-error>
-          <mat-error *ngIf="hasError('confirmPassword', 'pattern')">Xác nhận mật khẩu không chính xác</mat-error>
+          <mat-error *ngIf="hasError('confirmPassword', 'pattern')">Xác nhận mật khẩu không chính xác</mat-error>-->
         </mat-form-field>
 
         <section fxLayout="row" fxLayoutAlign="space-around">
@@ -67,7 +82,7 @@
     </mat-dialog-content>
 
     <div mat-dialog-actions fxLayoutAlign="center">
-      <button mat-raised-button color="accent" (click)="onSubmit()">Thêm</button>
+      <button mat-raised-button color="accent" (click)="onSubmit()" [disabled]="!addUserForm.valid">Thêm</button>
       <button mat-raised-button color="warn" (click)="closeDialog()">Huỷ</button>
     </div>
   </mat-card>

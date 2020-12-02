@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import {AbstractControl, AsyncValidatorFn, NG_ASYNC_VALIDATORS, ValidationErrors} from '@angular/forms';
+import {AbstractControl, AsyncValidator, AsyncValidatorFn, NG_ASYNC_VALIDATORS, ValidationErrors} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {uniqueEmailValidator} from './unique-email-validator.directive';
 import {AuthService} from './auth.service';
@@ -11,7 +11,7 @@ export function uniquePhoneValidator(authService: AuthService): AsyncValidatorFn
     return authService.isExistedPhone(control.value).pipe(
       map(result => {
         console.log('resutl validate unique phone  : ' + result);
-        return result ? {uniqueEmail: true} : null;
+        return result ? {uniquePhone: true} : null;
       })
     );
   };
@@ -20,7 +20,7 @@ export function uniquePhoneValidator(authService: AuthService): AsyncValidatorFn
   selector: '[uniquePhone]',
   providers: [{provide: NG_ASYNC_VALIDATORS, useExisting: UniquePhoneValidatorDirective, multi: true}]
 })
-export class UniquePhoneValidatorDirective {
+export class UniquePhoneValidatorDirective implements AsyncValidator {
 
   constructor(private authService: AuthService) {
   }

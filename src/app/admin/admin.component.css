@@ -22,3 +22,10 @@ th.mat-header-cell {
   align-items: center;
   justify-content: center;
 }
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
