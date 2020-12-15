@@ -170,6 +170,7 @@ export class ProfileComponent implements OnInit {
     this.file = event.target.files[0];
     this.userService.uploadAvatar(this.file, this.currentUser.userId).subscribe(res => {
       this.currentUser = res;
+      this.token.saveUser(res);
       this.avatarSrc = res.url;
       this.sseService.changeAvatarSource(this.avatarSrc);
     })

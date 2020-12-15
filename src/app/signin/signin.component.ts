@@ -44,7 +44,7 @@ export class SignInComponent implements OnInit {
     if (this.tokenStorage.getUser()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
-      this.sseService.changeAvatarSource(this.tokenStorage.getUser().url);
+      this.sseService.changeAvatarSource(this.tokenStorage.getUser().url !== "" ? this.tokenStorage.getUser().url : null);
     }
   }
 
