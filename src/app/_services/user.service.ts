@@ -1,9 +1,9 @@
 import { environment } from './../../environments/environment.prod';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Injectable} from '@angular/core';
-import {User} from '../_interfaces/user';
-import {A} from '@angular/cdk/keycodes';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { User } from '../_interfaces/user';
+import { A } from '@angular/cdk/keycodes';
 
 const API_URL = environment.API_URL + '/api/user';
 
@@ -14,9 +14,9 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  updatePassword(userId, oldPassword, newPassword): Observable<any>{
+  updatePassword(userId, oldPassword, newPassword): Observable<any> {
     console.log(userId);
-    return this.http.post(`${ API_URL + '/changePassword'}/${userId}`, {}, {
+    return this.http.post(`${API_URL + '/changePassword'}/${userId}`, {}, {
       params: {
         oldPassword,
         newPassword
@@ -33,7 +33,7 @@ export class UserService {
     });
   }
 
-  updateInformationUser(userId, user): Observable<any>{
+  updateInformationUser(userId, user): Observable<any> {
     console.log('user updateInformationUser', user);
     return this.http.post(`${API_URL + '/update'}/${userId}`, {
       userName: user.userName,
@@ -55,7 +55,7 @@ export class UserService {
     return this.http.get(`${API_URL + '/invites/' + userId}`);
   }
 
-  updatePhone(userId, phone): Observable<any>{
+  updatePhone(userId, phone): Observable<any> {
     return this.http.post(`${API_URL + '/updatePhone/' + userId}`, {}, {
       params: {
         phone
@@ -87,23 +87,29 @@ export class UserService {
     return this.http.get(`${API_URL + '/checkReceivedInvitation/' + userId + '?friendId=' + friendId}`);
   }
 
-  checkStatusIsFriend(userId, friendId): Observable<any>{
+  checkStatusIsFriend(userId, friendId): Observable<any> {
     return this.http.get(`${API_URL + '/checkStatusIsFriend/' + userId + '?friendId=' + friendId}`);
   }
 
-  acceptRequestAddFriend(userId, friendId): Observable<any>{
+  acceptRequestAddFriend(userId, friendId): Observable<any> {
     return this.http.get(`${API_URL + '/acceptRequestAddFriend/' + userId + '?friendId=' + friendId}`);
   }
 
-  unFriend(userId, friendId): Observable<any>{
+  unFriend(userId, friendId): Observable<any> {
     return this.http.get(`${API_URL + '/unfriend/' + userId + '?friendId=' + friendId}`);
   }
 
-  deleteInvitationSent(userId, friendId): Observable<any>{
+  deleteInvitationSent(userId, friendId): Observable<any> {
     return this.http.get(`${API_URL + '/deleteInvitationSent/' + userId + '?friendId=' + friendId}`);
   }
 
   deleteInvitationReceived(userId, friendId): Observable<any> {
     return this.http.get(`${API_URL + '/deleteInvitationReceived/' + userId + '?friendId=' + friendId}`);
+  }
+
+  uploadAvatar(file, userId): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('avatar', file, file.name);
+    return this.http.post(`${API_URL}/uploadAvatar/${userId}`, formData);
   }
 }
