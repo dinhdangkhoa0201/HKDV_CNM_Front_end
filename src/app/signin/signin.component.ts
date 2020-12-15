@@ -1,12 +1,13 @@
-import {RequestLogin} from './../_request/request-login';
-import {TokenStorageService} from './../_services/token-storage.service';
-import {AuthService} from './../_services/auth.service';
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {NotifyErrorComponent} from '../notify/notify-error/notify-error.component';
-import {ToastrService} from 'ngx-toastr';
+import { SseService } from './../_services/sse.service';
+import { RequestLogin } from './../_request/request-login';
+import { TokenStorageService } from './../_services/token-storage.service';
+import { AuthService } from './../_services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotifyErrorComponent } from '../notify/notify-error/notify-error.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signin',
@@ -29,7 +30,8 @@ export class SignInComponent implements OnInit {
     private tokenStorage: TokenStorageService,
     private router: Router,
     private snackbar: MatSnackBar,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private sseService: SseService
   ) {
   }
 
@@ -42,6 +44,7 @@ export class SignInComponent implements OnInit {
     if (this.tokenStorage.getUser()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
+      this.sseService.changeAvatarSource(this.tokenStorage.getUser().url);
     }
   }
 
@@ -74,7 +77,7 @@ export class SignInComponent implements OnInit {
 
     this.authService.signIn(temp).subscribe(
       (data) => {
-/*        console.log('data Sign in', data);*/
+        /*        console.log('data Sign in', data);*/
         if (data.enable) {
           if (data !== null) {
             this.tokenStorage.saveUser(data);
@@ -92,7 +95,7 @@ export class SignInComponent implements OnInit {
 
       },
       (err) => {
-/*        console.log('err : ', err);*/
+        /*        console.log('err : ', err);*/
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
         this.toastError('Đăng nhập không thành công', 'Lỗi');

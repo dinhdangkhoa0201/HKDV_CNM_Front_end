@@ -57,11 +57,7 @@ export class ProfileComponent implements OnInit {
         gender: this.currentUser.gender,
         birthday: this.currentUser.birthday,
       });
-      this.fileService.downloadAvatar(this.currentUser.userId).subscribe(data => {
-        this.sseService.changeAvatarSource(`http://localhost:8090/api/file/download-avatar/${this.currentUser.userId}`);
-      }, error => {
-        this.sseService.changeAvatarSource(null);
-      });
+      this.sseService.changeAvatarSource(this.currentUser.url !== "" ? this.currentUser.url : null);
       this.sseService.currentAvatar.subscribe(avatarSrc => this.avatarSrc = avatarSrc);
     }
 
@@ -172,11 +168,9 @@ export class ProfileComponent implements OnInit {
 
   onFileChange(event): void {
     this.file = event.target.files[0];
-    this.fileService.uploadAvatar(this.file, this.currentUser.userId).subscribe(res => {
-      this.avatarSrc = `http://localhost:8090/api/file/download-avatar/${this.currentUser.userId}`;
-      var timestamp = new Date().getTime();
-      var queryString = "?t=" + timestamp;
-      this.avatarSrc = this.avatarSrc + queryString;
+    this.userService.uploadAvatar(this.file, this.currentUser.userId).subscribe(res => {
+      this.currentUser = res;
+      this.avatarSrc = res.url;
       this.sseService.changeAvatarSource(this.avatarSrc);
     })
   }
