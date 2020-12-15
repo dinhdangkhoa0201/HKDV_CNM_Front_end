@@ -9,7 +9,7 @@ mat-nav-list a {
   color: white;
 }
 
-mat-nav-list a:focus {
+.menu a:hover {
   color: rgb(212, 42, 93);
 }
 
