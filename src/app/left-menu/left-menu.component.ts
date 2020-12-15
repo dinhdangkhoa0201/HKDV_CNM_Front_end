@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {onSideNavChange, animateText} from '../_interfaces/animation';
-import {TokenStorageService} from '../_services/token-storage.service';
+import { SseService } from './../_services/sse.service';
+import { FileService } from './../_services/file.service';
+import { Component, OnInit } from '@angular/core';
+import { onSideNavChange, animateText } from '../_interfaces/animation';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'app-left-menu',
@@ -14,8 +16,9 @@ export class LeftMenuComponent implements OnInit {
   linkText: boolean;
   user: any;
   admin: boolean;
+  avatarSrc: any;
 
-  constructor(private token: TokenStorageService) {
+  constructor(private token: TokenStorageService, private sseService: SseService) {
   }
 
 
@@ -24,6 +27,7 @@ export class LeftMenuComponent implements OnInit {
     this.sideNavState = false;
     this.linkText = false;
     this.user = this.token.getUser();
+    this.sseService.currentAvatar.subscribe(avatarSrc => this.avatarSrc = avatarSrc);
     this.isAdmin();
   }
 

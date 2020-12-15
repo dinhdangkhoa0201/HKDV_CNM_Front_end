@@ -1,12 +1,15 @@
-import {TokenStorageService} from './../_services/token-storage.service';
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../_services/user.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {NotifyErrorComponent} from '../notify/notify-error/notify-error.component';
-import {NotifySuccessComponent} from '../notify/notify-success/notify-success.component';
+import { SseService } from './../_services/sse.service';
+import { EventEmitter } from 'events';
+import { FileService } from './../_services/file.service';
+import { TokenStorageService } from './../_services/token-storage.service';
+import { Component, OnInit, Input, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../_services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotifyErrorComponent } from '../notify/notify-error/notify-error.component';
+import { NotifySuccessComponent } from '../notify/notify-success/notify-success.component';
 import validate = WebAssembly.validate;
-import {ToastrService} from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -14,18 +17,20 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
+  avatarSrc: string;
   currentUser: any;
   informationUser: FormGroup;
   editable: boolean;
   isLoggedIn: boolean;
   changePassword: FormGroup;
   hideCurrentPassword: boolean;
+  file: any;
   hideNewPassword: boolean;
   hideConfirmPassword: boolean;
   timeSnackbar = 2000;
 
 
-  constructor(private token: TokenStorageService, private userService: UserService, private snackbar: MatSnackBar, private toast: ToastrService) {
+  constructor(private token: TokenStorageService, private userService: UserService, private snackbar: MatSnackBar, private toast: ToastrService, private fileService: FileService, private sseService: SseService) {
   }
 
   ngOnInit(): void {
@@ -52,6 +57,12 @@ export class ProfileComponent implements OnInit {
         gender: this.currentUser.gender,
         birthday: this.currentUser.birthday,
       });
+      this.fileService.downloadAvatar(this.currentUser.userId).subscribe(data => {
+        this.sseService.changeAvatarSource(`http://localhost:8090/api/file/download-avatar/${this.currentUser.userId}`);
+      }, error => {
+        this.sseService.changeAvatarSource(null);
+      });
+      this.sseService.currentAvatar.subscribe(avatarSrc => this.avatarSrc = avatarSrc);
     }
 
     this.editable = false;
@@ -157,5 +168,16 @@ export class ProfileComponent implements OnInit {
 
   toastSuccess(message): void {
     this.toast.success(message);
+  }
+
+  onFileChange(event): void {
+    this.file = event.target.files[0];
+    this.fileService.uploadAvatar(this.file, this.currentUser.userId).subscribe(res => {
+      this.avatarSrc = `http://localhost:8090/api/file/download-avatar/${this.currentUser.userId}`;
+      var timestamp = new Date().getTime();
+      var queryString = "?t=" + timestamp;
+      this.avatarSrc = this.avatarSrc + queryString;
+      this.sseService.changeAvatarSource(this.avatarSrc);
+    })
   }
 }
