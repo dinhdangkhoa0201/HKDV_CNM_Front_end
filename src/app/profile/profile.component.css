@@ -6,13 +6,35 @@
   position: relative;
   background-attachment: fixed;
 }
+
 #image-avatar {
   background-color: white;
   bottom: 0;
   position: absolute;
-  width: 120px;
-  height: 120px;
-  border-radius: 10px;
-  border: solid 3px #fff;
-  box-shadow: 0 0 3px 2px #ccc;
+  width: 20vh;
+  height: 20vh;
+  /* border-radius: 10px; */
+  /* border: solid 3px #fff;
+  box-shadow: 0 0 3px 2px #ccc; */
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  user-select: auto;
+}
+
+#camera-icon {
+  background-color: white;
+  border: 1px solid lightgray;
+  color: lightgray;
+  bottom: 1vh;
+  left: 15vh;
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+  user-select: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

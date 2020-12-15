@@ -3,3 +3,7 @@
   background: rgb(212, 42, 93);
   color: #fff;
 }
+
+.nav-item {
+  margin: 0vh 1vh;
+}
