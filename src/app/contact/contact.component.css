@@ -1,4 +1,4 @@
-table.table{
+table.table {
   border-top: none !important;
 }
 
@@ -30,8 +30,9 @@ div.font p {
   padding: 0;
 }
 
-.highlight{
-  background: #42A948; /* green */
+.highlight {
+  background: #42A948;
+  /* green */
 }
 
 tr.example-element-row:not(.example-expanded-row):hover {
@@ -40,4 +41,21 @@ tr.example-element-row:not(.example-expanded-row):hover {
 
 tr.example-element-row:not(.example-expanded-row):active {
   background: #efefef;
+}
+
+.image-avatar {
+  background-color: white;
+  width: 20vh;
+  height: 20vh;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contact-avatar {
+  background-color: white;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 2px 0;
 }

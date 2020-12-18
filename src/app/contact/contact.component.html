@@ -25,9 +25,10 @@
           <div *ngIf="resultOfFinding === false">
             <mat-nav-list>
               <mat-list-item *ngFor="let user of listFindings" (click)="showInformation(user)">
-                <img mat-list-avatar id="image-avatar" *ngIf="user.url!==null; else default_image" [src]="user.url" />
+                <img mat-list-avatar class="image-avatar" *ngIf="user.url!==null; else default_image"
+                  [src]="user.url" />
                 <ng-template #default_image>
-                  <img mat-list-avatar id="image-avatar" src="./assets/image/user.png" />
+                  <img mat-list-avatar class="image-avatar" src="./assets/image/user.png" />
                 </ng-template>
                 <div class="ml-3" fxLayout="column">
 
@@ -90,7 +91,12 @@
         <ng-container matColumnDef="Avatar">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let contact">
-            <img src="./assets/image/user.png" width="30px">
+            <!-- <img src="./assets/image/user.png" width="30px"> -->
+            <img mat-list-avatar class="contact-avatar" *ngIf="contact.url!==null; else default_image"
+              [src]="contact.url" />
+            <ng-template #default_image>
+              <img mat-list-avatar class="contact-avatar" src="./assets/image/user.png" />
+            </ng-template>
           </td>
         </ng-container>
 

@@ -3,7 +3,7 @@
     <!-- <img src="./assets/image/user.png" width="120px"> -->
     <img mat-list-avatar class="image-avatar" *ngIf="friend.url!==null; else default_image" [src]="friend.url" />
     <ng-template #default_image>
-      <img mat-list-avatar id="image-avatar" src="./assets/image/user.png" />
+      <img mat-list-avatar class="image-avatar" src="./assets/image/user.png" />
     </ng-template>
   </div>
   <mat-dialog-content fxFill class="mt-3">
