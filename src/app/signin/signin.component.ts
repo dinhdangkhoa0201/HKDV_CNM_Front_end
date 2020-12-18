@@ -73,26 +73,59 @@ export class SignInComponent implements OnInit {
       password: this.password
     };
 
-    console.log('temp : ' + temp);
-
     this.authService.signIn(temp).subscribe(
       (data) => {
-        /*        console.log('data Sign in', data);*/
-        if (data.enable) {
-          if (data !== null) {
+        if (data === null) {
+          var phoneEmail = temp.phoneEmail;
+          if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(phoneEmail) && !phoneEmail.includes('@') && Number.isInteger(Number.parseInt(phoneEmail.charAt(0)))) {
+            this.toastError('Sai số điện thoại', 'Lỗi');
+          } else if (!phoneEmail.match("^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$") && phoneEmail.includes('@')) {
+            this.toastError('Sai email', 'Lỗi');
+          } else if (phoneEmail.includes('@')) {
+            this.authService.isExistEmailAsync(phoneEmail).subscribe(res => {
+              if (res) {
+                this.toastError('Sai mật khẩu', 'Lỗi');
+              } else {
+                this.toastError('Email không tồn tại', 'Lỗi');
+              }
+            })
+          } else {
+            this.authService.isExistPhoneAsync(phoneEmail).subscribe(res => {
+              if (res) {
+                this.toastError('Sai mật khẩu', 'Lỗi');
+              } else {
+                this.toastError('Phone không tồn tại', 'Lỗi');
+              }
+            })
+          }
+        }
+        else {
+          if (data.enable) {
             this.tokenStorage.saveUser(data);
             this.isLoginFailed = false;
             this.isLoggedIn = true;
             this.roles = this.tokenStorage.getUser().roles;
             sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
             this.reloadPage();
-          } else {
-            this.toastError('Phone / Email hoặc Password sai!', 'Lỗi');
           }
-        } else {
-          this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
+          else {
+            this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
+          }
         }
-
+        // if (data.enable) {
+        //   if (data !== null) {
+        //     this.tokenStorage.saveUser(data);
+        //     this.isLoginFailed = false;
+        //     this.isLoggedIn = true;
+        //     this.roles = this.tokenStorage.getUser().roles;
+        //     sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
+        //     this.reloadPage();
+        //   } else {
+        //     this.toastError('Phone / Email hoặc Password sai!', 'Lỗi');
+        //   }
+        // } else {
+        //   this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
+        // }
       },
       (err) => {
         /*        console.log('err : ', err);*/
