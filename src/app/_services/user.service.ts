@@ -117,6 +117,8 @@ export class UserService {
         friendId: friendId
       }
     });
+  }
+
 
   deleteInvitationReceived(userId, friendId): Observable<any> {
     return this.http.post(`${API_URL + '/deleteInvitationReceived/' + userId}`, {}, {
@@ -124,12 +126,6 @@ export class UserService {
         friendId: friendId
       }
     });
-  }
-
-  uploadAvatar(file, userId): Observable<any> {
-    const formData: FormData = new FormData();
-    formData.append('avatar', file, file.name);
-    return this.http.post(`${API_URL}/uploadAvatar/${userId}`, formData);
   }
 
   uploadAvatar(file, userId): Observable<any> {
