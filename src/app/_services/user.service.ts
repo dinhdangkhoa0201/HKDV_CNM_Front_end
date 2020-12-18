@@ -48,7 +48,11 @@ export class UserService {
 
   addFriend(userId, friendId): Observable<any> {
     console.log('add friend: ownerId ', userId + ', friendId : ', friendId);
-    return this.http.get(`${API_URL + '/addFriend/' + userId + '?friendId=' + friendId}`);
+    return this.http.post(`${API_URL + '/addFriend/' + userId}`, {}, {
+      params: {
+        friendId: friendId
+      }
+    });
   }
 
   getListInvites(userId): Observable<any> {
@@ -92,19 +96,40 @@ export class UserService {
   }
 
   acceptRequestAddFriend(userId, friendId): Observable<any> {
-    return this.http.get(`${API_URL + '/acceptRequestAddFriend/' + userId + '?friendId=' + friendId}`);
+    return this.http.post(`${API_URL + '/acceptRequestAddFriend/' + userId}`, {}, {
+      params: {
+        friendId: friendId
+      }
+    });
   }
 
   unFriend(userId, friendId): Observable<any> {
-    return this.http.get(`${API_URL + '/unfriend/' + userId + '?friendId=' + friendId}`);
+    return this.http.post(`${API_URL + '/unfriend/' + userId}`, {}, {
+      params: {
+        friendId: friendId
+      }
+    });
   }
 
   deleteInvitationSent(userId, friendId): Observable<any> {
-    return this.http.get(`${API_URL + '/deleteInvitationSent/' + userId + '?friendId=' + friendId}`);
-  }
+    return this.http.post(`${API_URL + '/deleteInvitationSent/' + userId}`, {}, {
+      params: {
+        friendId: friendId
+      }
+    });
 
   deleteInvitationReceived(userId, friendId): Observable<any> {
-    return this.http.get(`${API_URL + '/deleteInvitationReceived/' + userId + '?friendId=' + friendId}`);
+    return this.http.post(`${API_URL + '/deleteInvitationReceived/' + userId}`, {}, {
+      params: {
+        friendId: friendId
+      }
+    });
+  }
+
+  uploadAvatar(file, userId): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('avatar', file, file.name);
+    return this.http.post(`${API_URL}/uploadAvatar/${userId}`, formData);
   }
 
   uploadAvatar(file, userId): Observable<any> {
