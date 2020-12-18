@@ -1,20 +1,20 @@
-import {Component, OnInit, Output, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../_services/auth.service';
-import {User} from '../../_interfaces/user';
-import {ResponseOTP} from '../../_interfaces/responseOTP';
-import {uniqueEmailValidator} from '../../_services/unique-email-validator.directive';
-import {ResponseAfterRegister} from '../../_interfaces/response-after-register';
-import {RequestLogin} from '../../_request/request-login';
-import {TokenStorageService} from '../../_services/token-storage.service';
-import {Router} from '@angular/router';
-import {AppRoutingModule} from '../../app-routing.module';
-import {EventEmitter} from 'events';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {NotifyErrorComponent} from '../../notify/notify-error/notify-error.component';
-import {NotifySuccessComponent} from '../../notify/notify-success/notify-success.component';
-import {MatStep, MatStepper} from '@angular/material/stepper';
-import {THIS_EXPR} from '@angular/compiler/src/output/output_ast';
+import { Component, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../_services/auth.service';
+import { User } from '../../_interfaces/user';
+import { ResponseOTP } from '../../_interfaces/responseOTP';
+import { uniqueEmailValidator } from '../../_services/unique-email-validator.directive';
+import { ResponseAfterRegister } from '../../_interfaces/response-after-register';
+import { RequestLogin } from '../../_request/request-login';
+import { TokenStorageService } from '../../_services/token-storage.service';
+import { Router } from '@angular/router';
+import { AppRoutingModule } from '../../app-routing.module';
+import { EventEmitter } from 'events';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotifyErrorComponent } from '../../notify/notify-error/notify-error.component';
+import { NotifySuccessComponent } from '../../notify/notify-success/notify-success.component';
+import { MatStep, MatStepper } from '@angular/material/stepper';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-register-by-email',
@@ -99,7 +99,7 @@ export class RegisterByEmailComponent implements OnInit {
   noWhitespaceValidator(control: FormControl): any {
     const isWhitespace = (control.value || '').trim().length === 0;
     const isValid = !isWhitespace;
-    return isValid ? null : {whitespace: true};
+    return isValid ? null : { whitespace: true };
   }
 
   get currentUser(): any {
@@ -195,8 +195,9 @@ export class RegisterByEmailComponent implements OnInit {
         phone: '',
         email: this.checkEmail.get('email').value,
         password: this.informationUser.get('password').value,
-        roles: ['user'],
+        roles: 'user',
         enable: true,
+        url: ''
       };
       this.authService.registerByEmail(user).subscribe(
         data => {

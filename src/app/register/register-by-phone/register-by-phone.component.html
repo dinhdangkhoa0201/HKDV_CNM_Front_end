@@ -44,7 +44,7 @@
                 <mat-error *ngIf="hasError('otp', 'required', verifyOTP)">Chưa nhập mã OTP</mat-error>
               </mat-form-field>
 
-<!--              <div class="alert alert-danger" *ngIf="checkOTPn === true">
+              <!--              <div class="alert alert-danger" *ngIf="checkOTPn === true">
                 Mã OTP không chính xác
               </div>-->
 
@@ -54,7 +54,7 @@
             </div>
           </div>
 
-<!--          <div *ngIf="verifyOTPSuccess === true" class="alert alert-success">
+          <!--          <div *ngIf="verifyOTPSuccess === true" class="alert alert-success">
             <p>Mã OTP chính xác</p>
           </div>-->
 
@@ -65,7 +65,7 @@
 
       <!-- # End: Thông báo hậu xác nhận Firebase -->
 
-<!--      <div class="mt-5">
+      <!--      <div class="mt-5">
         <button [disabled]="haveCheckedOTP === false && verifyOTPSuccess === false" mat-raised-button matStepperNext
                 color="primary" class="ml-2">
           Next
@@ -86,7 +86,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Họ và tên</mat-label>
                 <input matInput formControlName="userName" id="userName" placeholder="Họ và tên"
-                       [readonly]="registerSuccess">
+                  [readonly]="registerSuccess">
                 <mat-icon matSuffix>account_circle</mat-icon>
                 <mat-error *ngIf="hasError('userName', 'required', informationUser)">Chưa nhập Họ và tên</mat-error>
               </mat-form-field>
@@ -104,16 +104,16 @@
               <mat-form-field appearance="outline">
                 <mat-label>Ngày sinh</mat-label>
                 <input matInput type="date" formControlName="birthday" id="birthday" placeholder="Ngày sinh"
-                       [readonly]="registerSuccess">
+                  [readonly]="registerSuccess">
                 <mat-error *ngIf="hasError('birthday', 'required', informationUser)">Chưa nhập Ngày sinh</mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <mat-label>Mật khẩu</mat-label>
                 <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" id="password"
-                       placeholder="Mật khẩu" #password [readonly]="registerSuccess">
+                  placeholder="Mật khẩu" #password [readonly]="registerSuccess">
                 <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
-                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                  [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
                   <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 <mat-error *ngIf="hasError('password', 'required', informationUser)">Chưa nhập Mật khẩu</mat-error>
@@ -122,10 +122,10 @@
               <mat-form-field appearance="outline">
                 <mat-label>Xác nhận mật khẩu</mat-label>
                 <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword"
-                       id="confirmPassword"
-                       placeholder="Xác nhận mật khẩu" pattern="{{ password.value }}" [readonly]="registerSuccess">
+                  id="confirmPassword" placeholder="Xác nhận mật khẩu" pattern="{{ password.value }}"
+                  [readonly]="registerSuccess">
                 <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword"
-                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
+                  [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
                   <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 <mat-error *ngIf="hasError('confirmPassword', 'required', informationUser)">Chưa nhập Xác nhận mật khẩu
@@ -138,14 +138,14 @@
           </mat-card-content>
 
           <mat-card-actions>
-            <button mat-raised-button class="btn btn-success ml-2"
-                    (click)="onSubmit()" [disabled]="registerSuccess">Đăng ký
+            <button mat-raised-button class="btn btn-success ml-2" (click)="onSubmit()"
+              [disabled]="registerSuccess">Đăng ký
             </button>
           </mat-card-actions>
         </mat-card>
       </div>
 
-<!--      <div class="mt-5">
+      <!--      <div class="mt-5">
         <button mat-raised-button matStepperNext [disabled]="!informationUser.valid || registerSuccess === false"
                 color="primary">Next
           <mat-icon matSuffix>arrow_right_alt</mat-icon>
@@ -155,6 +155,7 @@
     </mat-step>
 
     <mat-step>
+      <ng-template matStepLabel>Kết thúc</ng-template>
       <div class="alert alert-info" *ngIf="registerSuccess === true">
         <h1>Đăng ký thành công!</h1>
         <button mat-raised-button class="btn btn-outline-success" (click)="signIn()">Đăng nhập</button>

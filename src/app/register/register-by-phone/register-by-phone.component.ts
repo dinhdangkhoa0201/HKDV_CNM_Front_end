@@ -1,22 +1,22 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../_services/auth.service';
-import {of} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {environment} from '../../../environments/environment.prod';
-import {WindowService} from '../../_services/window.service';
-import {AngularFireAuth} from '@angular/fire/auth';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../_services/auth.service';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.prod';
+import { WindowService } from '../../_services/window.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
-import {User} from '../../_interfaces/user';
-import {ResponseAfterRegister} from '../../_interfaces/response-after-register';
-import {RequestLogin} from '../../_request/request-login';
-import {TokenStorageService} from '../../_services/token-storage.service';
-import {uniquePhoneValidator} from '../../_services/unique-phone-validator.directive';
-import {NotifyErrorComponent} from '../../notify/notify-error/notify-error.component';
-import {NotifySuccessComponent} from '../../notify/notify-success/notify-success.component';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatStepper} from '@angular/material/stepper';
-import {ToastrService} from 'ngx-toastr';
+import { User } from '../../_interfaces/user';
+import { ResponseAfterRegister } from '../../_interfaces/response-after-register';
+import { RequestLogin } from '../../_request/request-login';
+import { TokenStorageService } from '../../_services/token-storage.service';
+import { uniquePhoneValidator } from '../../_services/unique-phone-validator.directive';
+import { NotifyErrorComponent } from '../../notify/notify-error/notify-error.component';
+import { NotifySuccessComponent } from '../../notify/notify-success/notify-success.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatStepper } from '@angular/material/stepper';
+import { ToastrService } from 'ngx-toastr';
 
 const existingPhoneValidator = (authService: AuthService) => (c: FormControl) => {
   console.log('c : ', c.value);
@@ -234,8 +234,9 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
         phone: this.phone,
         email: '',
         password: this.password,
-        roles: ['user'],
+        roles: 'user',
         enable: true,
+        url: ''
       };
 
       this.authService.registerByPhone(user).subscribe(
