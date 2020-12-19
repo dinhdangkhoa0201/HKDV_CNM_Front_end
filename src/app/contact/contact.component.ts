@@ -78,7 +78,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<User>();
     this.getListFriend();
-    this.notify();
+    // this.notify();
     this.buttonStyle = 0;
     this.notifyStyleFriend = false;
     this.notifyStyleReceivedInvitation = false;
@@ -107,10 +107,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
   }
 
   filterContact(list): void {
-    /*    const value = list.selectedOptions.selected[0]?.value;*/
-    /*    console.log('value ', list.selectedOptions.selected[0]?.value);*/
     this.selected = list.selectedOptions.selected[0]?.value;
-    console.log('filterContact : ', this.selected);
     switch (this.selected) {
       case 'Bạn bè': {
         this.getListFriend();
@@ -134,10 +131,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
   }
 
   filterContactChips(item): void {
-    /*    const value = list.selectedOptions.selected[0]?.value;*/
-    /*    console.log('value ', list.selectedOptions.selected[0]?.value);*/
     this.selected = item.title;
-    console.log('filterContactChips temp : ', this.selected );
     this.listItems[0].selected = false;
     this.listItems[1].selected = false;
     this.listItems[2].selected = false;
@@ -178,10 +172,8 @@ export class ContactComponent implements OnInit, AfterViewInit {
       this.isFinding = true;
       this.userService.findFriend(target.value).subscribe(
         data => {
-          console.log('data list finding : ', data);
           this.listFindings = data;
           this.resultOfFinding = false;
-          console.log('list finding : ', this.listFindings);
         },
         err => {
           console.log('err isFindingFriend ', err);
@@ -193,7 +185,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
   }
 
   showInformation(user: User): void {
-    console.log('user : ', user);
     this.dialogRef = this.dialog.open(DialogFriendInformationComponent, {
       data: {
         user,
@@ -203,44 +194,17 @@ export class ContactComponent implements OnInit, AfterViewInit {
   }
 
   notify(): void {
-    console.log('hello');
     this.sse.subscribe().subscribe(
       data => {
         data = JSON.parse(data.data);
         console.log('data : ', data);
-
-        if (data.title === '1') {
+        if (data.status === 1) {
           this.listItems[0].badge = true;
-
-          this.toast.success(data.message, '');
-
-          // this.snackBar.open(data.message, 'Close', {
-          //   duration: 5000,
-          //   horizontalPosition: 'right',
-          //   verticalPosition: 'top'
-          // });
-
-        } else if (data.title === '2') {
+        } else if (data.status === 0) {
           this.listItems[1].badge = true;
-          this.toast.success(data.message, '');
-
-          // this.snackBar.open(data.message, 'Close', {
-          //   duration: 5000,
-          //   horizontalPosition: 'right',
-          //   verticalPosition: 'top'
-          // });
         }
-
-
-        if (data.status === 'DELETE_INVITATION') {
-/*          console.log('DELETE_INVITATION');*/
-          this.listItems[2].badge = false;
-          this.getListInvites();
-        }
-
-
       }, error => {
-/*        console.log('err subscribe : ', error);*/
+        console.log('err subscribe : ', error);
       }
     );
   }
@@ -249,7 +213,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.resultOfFinding = true;
     this.userService.getListFriends(this.tokenStorage.getUser().userId).subscribe(
       data => {
-        console.log('data friend : ', data);
         this.listFriend = data;
         this.dataSource = new MatTableDataSource<User>(this.listFriend);
 
@@ -267,7 +230,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.resultOfFinding = true;
     this.userService.getListOfSentInvitation(this.tokenStorage.getUser().userId).subscribe(
       data => {
-        console.log('data request : ', data);
         this.listOfSentInvitation = data;
         this.dataSource = new MatTableDataSource<User>(this.listOfSentInvitation);
 
@@ -284,7 +246,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.resultOfFinding = true;
     this.userService.getListInvites(this.tokenStorage.getUser().userId).subscribe(
       data => {
-        console.log('data invites : ', data);
         this.listOfReceivedInvites = data;
         this.dataSource = new MatTableDataSource<User>(this.listOfReceivedInvites);
 
@@ -303,10 +264,8 @@ export class ContactComponent implements OnInit, AfterViewInit {
   }
 
   acceptRequestAddFriend(friendId): void {
-    console.log('friend Id : ', friendId);
     this.userService.acceptRequestAddFriend(this.tokenStorage.getUser().userId, friendId).subscribe(
       data => {
-        console.log('data acceptRequestAddFriend : ', data);
         if (data === true) {
           window.location.reload();
         }
@@ -320,7 +279,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
     if (confirm('Bạn có muốn xoá lời mời này?')) {
       this.userService.deleteInvitationSent(this.tokenStorage.getUser().userId, friendId).subscribe(
         data => {
-          console.log('data deleteInvitation', data);
           if (data === true) {
             this.toastSuccess('Xoá lời kết bạn thành công');
             this.getListRequests();
@@ -336,7 +294,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
     if (confirm('Bạn có muốn xoá lời mời này?')) {
       this.userService.deleteInvitationReceived(this.tokenStorage.getUser().userId, friendId).subscribe(
         data => {
-          console.log('data deleteInvitation', data);
           if (data === true) {
             this.toastSuccess('Xoá lời kết bạn thành công');
             this.getListInvites();
@@ -349,7 +306,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
   }
 
   delete(userId): void {
-    console.log('selected : ', this.selected);
     if (this.selected === 'Lời mời kết bạn') {
       this.deleteInvitationReceived(userId);
     } else if (this.selected === 'Lời mời đã gửi') {
@@ -358,7 +314,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
   }
 
   clickOnRow(row): void {
-    console.log('click on row', row);
     this.dialogRef = this.dialog.open(DialogFriendInformationComponent, {
       data: {
         user: row,

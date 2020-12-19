@@ -65,12 +65,16 @@ import {DatePipe} from '@angular/common';
 import {NotifyErrorComponent} from './notify/notify-error/notify-error.component';
 import {NotifySuccessComponent} from './notify/notify-success/notify-success.component';
 import {AuthGuardService, AuthGuardService as AuthGuard} from './_services/auth-guard.service';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
 import {AdminGuardService} from './_services/admin-guard.service';
-import { UpdateEmailComponent } from './update/update-email/update-email.component';
-import { UpdatePhoneComponent } from './update/update-phone/update-phone.component';
-import { AddPhoneComponent } from './update/add-phone/add-phone.component';
-import { AddEmailComponent } from './update/add-email/add-email.component';
+import {UpdateEmailComponent} from './update/update-email/update-email.component';
+import {UpdatePhoneComponent} from './update/update-phone/update-phone.component';
+import {AddPhoneComponent} from './update/add-phone/add-phone.component';
+import {AddEmailComponent} from './update/add-email/add-email.component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import {DialogCreateGroupComponent} from './dialog/dialog-create-group/dialog-create-group.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MaterialFileInputModule} from 'ngx-material-file-input';
 
 const config = {
   apiKey: environment.configFirebase.apiKey,
@@ -120,6 +124,7 @@ function useValue(): any {
     UpdatePhoneComponent,
     AddPhoneComponent,
     AddEmailComponent,
+    DialogCreateGroupComponent,
   ],
   imports: [
     BrowserModule,
@@ -155,7 +160,10 @@ function useValue(): any {
     MatTooltipModule,
     MatBadgeModule,
     MatChipsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    ScrollingModule,
+    MatAutocompleteModule,
+    MaterialFileInputModule
   ],
   exports: [
     MatFormFieldModule,

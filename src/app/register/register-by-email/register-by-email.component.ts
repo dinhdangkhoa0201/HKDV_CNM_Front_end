@@ -15,6 +15,7 @@ import {NotifyErrorComponent} from '../../notify/notify-error/notify-error.compo
 import {NotifySuccessComponent} from '../../notify/notify-success/notify-success.component';
 import {MatStep, MatStepper} from '@angular/material/stepper';
 import {THIS_EXPR} from '@angular/compiler/src/output/output_ast';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-register-by-email',
@@ -26,7 +27,7 @@ export class RegisterByEmailComponent implements OnInit {
   checkEmail: FormGroup;
   informationUser: FormGroup;
   checkOTP: FormGroup;
-  editable: boolean;
+  editable = false;
   isChecking: boolean;
   isSentOTP: boolean;
   isLoading: boolean;
@@ -42,19 +43,22 @@ export class RegisterByEmailComponent implements OnInit {
   hidePassword: boolean;
   hideConfirmPassword: boolean;
 
+  REGEX_EMAIL = /^[a-z0-9.A-Z]+@[a-z0-9]+\.[a-z]{2,4}$/;
+
   @Output() loginin: EventEmitter<boolean> = new EventEmitter();
 
   responseAfterRegister: ResponseAfterRegister;
   @ViewChild('stepper') private stepper: MatStepper;
 
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router, private snackbar: MatSnackBar) {
-    this.checkEmail = this.formBuilder.group({
-      email: new FormControl('', [])
-    });
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router, private snackbar: MatSnackBar, private toasty: ToastrService) {
+
   }
 
   ngOnInit(): void {
+    this.checkEmail = this.formBuilder.group({
+      email: new FormControl('', [Validators.required, Validators.pattern(this.REGEX_EMAIL)], [uniqueEmailValidator(this.authService)])
+    });
     this.checkOTP = this.formBuilder.group({
       otp: new FormControl('', [Validators.required])
     });
@@ -68,7 +72,6 @@ export class RegisterByEmailComponent implements OnInit {
 
     this.isLoading = false;
     this.isChecking = false;
-    this.editable = false;
 
     this.isSentOTP = false;
     this.sendOTPSuccess = false;
@@ -136,24 +139,20 @@ export class RegisterByEmailComponent implements OnInit {
 
   checkIsEmail(): void {
     if (this.email.trim().length === 0) {
-      this.checkEmail.controls.email.setErrors({
-        required: true
-      });
       this.checkEmail.markAllAsTouched();
-
-      this.snackbarError('Chưa nhập Email');
+      this.toasty.error('Chưa nhập Email');
     } else {
       this.authService.isExistedEmail(this.email)
         .subscribe(
           data => {
             console.log('data isExistedEmail :', data);
             if (data === false) {
-              this.snackbarSuccess('Email hợp lệ!');
+              this.toasty.success('Email hợp lệ!');
               this.sendOTP();
               this.isSentOTP = true;
               this.isLoading = true;
             } else {
-              this.snackbarError('Email đã được sử dụng, vui lòng nhập Email khác!');
+              this.toasty.error('Email đã được sử dụng, vui lòng nhập Email khác!');
             }
           }, error => {
             console.log('error isExistedEmail before sendOTPEmail ', error);
@@ -170,12 +169,12 @@ export class RegisterByEmailComponent implements OnInit {
           console.log('data sendOTPToEmail : ', this.responseOTP);
           this.isLoading = false;
           this.sendOTPSuccess = true;
-          this.snackbarSuccess('Mã OTP đã được gửi tới Email cửa bạn, vui lòng kiểm tra Email!');
+          this.toasty.success('Mã OTP đã được gửi tới Email cửa bạn, vui lòng kiểm tra Email!');
           this.goNext();
         },
         error => {
           console.log('err: ', error);
-          this.snackbarError('Lỗi, không gửi được mã OTP');
+          this.toasty.error('Lỗi, không gửi được mã OTP');
         }
       );
   }
@@ -184,7 +183,7 @@ export class RegisterByEmailComponent implements OnInit {
   onSubmit(): void {
     if (this.informationUser.invalid) {
       this.informationUser.markAllAsTouched();
-      this.snackbarError('Bạn phải nhập đầy đủ thông tin!');
+      this.toasty.error('Bạn phải nhập đầy đủ thông tin!');
 
     } else {
       const user: User = {
@@ -195,8 +194,9 @@ export class RegisterByEmailComponent implements OnInit {
         phone: '',
         email: this.checkEmail.get('email').value,
         password: this.informationUser.get('password').value,
-        roles: ['user'],
+        roles: [],
         enable: true,
+        url: '',
       };
       this.authService.registerByEmail(user).subscribe(
         data => {
@@ -204,13 +204,13 @@ export class RegisterByEmailComponent implements OnInit {
             this.responseAfterRegister = data;
             this.registerSuccess = true;
             console.log('data register After register : ', this.responseAfterRegister);
-            this.snackbarSuccess('Đăng ký thành công!');
+            this.toasty.success('Đăng ký thành công!');
             this.goNext();
           }
         },
         error => {
           console.log('error : ', error);
-          this.snackbarError('Đăng ký không thành công!');
+          this.toasty.error('Đăng ký không thành công!');
         }
       );
     }
@@ -223,13 +223,13 @@ export class RegisterByEmailComponent implements OnInit {
       });
       this.checkOTP.markAllAsTouched();
 
-      this.snackbarError('Chưa nhập mã OTP');
+      this.toasty.error('Chưa nhập mã OTP');
     } else {
       this.authService.verifyOTPCode(this.email, this.otp).subscribe(
         data => {
           console.log('data verify : ', data);
           if (data === true) {
-            this.snackbarSuccess('Mã OTP chính xác');
+            this.toasty.success('Mã OTP chính xác');
             this.beVerifyingOTP = true;
             this.verifyOTPSuccess = data;
             this.goNext();
@@ -255,7 +255,7 @@ export class RegisterByEmailComponent implements OnInit {
           this.reloadPage();
           sessionStorage.setItem('isLoggedIn', String(true));
         } else {
-          this.snackbarError('Đăng nhập không thành công!');
+          this.toasty.error('Đăng nhập không thành công!');
         }
       },
       (err) => {
@@ -269,7 +269,7 @@ export class RegisterByEmailComponent implements OnInit {
     window.location.href = '/profile';
   }
 
-  snackbarError(message): void {
+/*  snackbarError(message): void {
     this.snackbar.openFromComponent(NotifyErrorComponent, {
       data: {
         content: message
@@ -278,9 +278,9 @@ export class RegisterByEmailComponent implements OnInit {
       horizontalPosition: 'right',
       verticalPosition: 'top',
     });
-  }
+  }*/
 
-  snackbarSuccess(message): void {
+/*  snackbarSuccess(message): void {
     this.snackbar.openFromComponent(NotifySuccessComponent, {
       data: {
         content: message
@@ -289,7 +289,7 @@ export class RegisterByEmailComponent implements OnInit {
       horizontalPosition: 'right',
       verticalPosition: 'top',
     });
-  }
+  }*/
 
   goBack(): void {
     this.stepper.previous();

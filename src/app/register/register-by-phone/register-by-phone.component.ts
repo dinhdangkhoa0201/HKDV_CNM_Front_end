@@ -53,7 +53,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   checkPhone: FormGroup;
   verifyOTP: FormGroup;
   informationUser: FormGroup;
-  editable: boolean;
+  editable = false;
   windowRef: any;
   isExistingPhone: boolean;
   isSentOtp: boolean;
@@ -65,6 +65,8 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   checkOTPn: boolean;
   hidePassword: boolean;
   hideConfirmPassword: boolean;
+  REGEX_PHONE = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+
 
   @ViewChild('stepper') private stepper: MatStepper;
 
@@ -76,7 +78,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.checkPhone = new FormGroup({
-      phone: new FormControl('', [])
+      phone: new FormControl('', [Validators.required, Validators.pattern(this.REGEX_PHONE)], [uniquePhoneValidator(this.authService)])
     });
     this.verifyOTP = new FormGroup({
       otp: new FormControl('', [Validators.required])
@@ -95,7 +97,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
       password: '123456789',
       confirmPassword: '123456789'
     });
-    this.editable = true;
+
     this.isExistingPhone = true;
     this.isSentOtp = false;
     this.messageErrorCode = '';
@@ -150,15 +152,12 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
   }
 
   checkExistingPhone(): void {
-    if (this.phone.length !== 10) {
-      this.checkPhone.controls.phone.setErrors({
-        required: true
-      });
+    if (this.phone.length === 0) {
+      this.checkPhone.markAllAsTouched();
+    } else if (this.phone.length !== 10) {
       this.checkPhone.markAllAsTouched();
       this.toastError('Số điện thoại không hợp lệ');
-    } /*else if (typeof this.windowRef.confirmationResult === 'undefined') {
-      this.snackbarError('Hãy xác nhận reCAPTCHA');
-    }*/ else {
+    } else {
       console.log('this.windowRef.recaptchaVerifier : ', this.windowRef.recaptchaVerifier);
       this.authService.isExistedPhone(this.phone).subscribe(
         data => {
@@ -169,6 +168,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
             this.isSentOtp = true;
             this.isExistingPhone = false;
             this.sendCodeToPhone();
+            this.stepper.next();
           }
         },
         error => {
@@ -236,6 +236,7 @@ export class RegisterByPhoneComponent implements OnInit, AfterViewInit {
         password: this.password,
         roles: ['user'],
         enable: true,
+        url: '',
       };
 
       this.authService.registerByPhone(user).subscribe(

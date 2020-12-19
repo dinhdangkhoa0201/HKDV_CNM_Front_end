@@ -128,28 +128,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   }
 
-/*  findAllUsers(): void {
-    this.adminService.findAllUsers().subscribe(
-      data => {
-        const users = Array.from<User>(data);
-
-        users.forEach((item, index) => {
-          if (item.userId === this.token.getUser().userId) {
-            users.splice(index, 1);
-          }
-        });
-
-        this.isLoadingResults = false;
-        this.dataSource = new MatTableDataSource<User>(users);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  }*/
-
   toastError(message, title): void {
     this.toast.error(message, title);
   }

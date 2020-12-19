@@ -4,6 +4,7 @@ import {TokenStorageService} from '../_services/token-storage.service';
 import {DialogUserInformationComponent} from '../dialog/dialog-user-information/dialog-user-information.component';
 import {DialogChangePasswordComponent} from '../dialog/dialog-change-password/dialog-change-password.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {SseService} from '../_services/sse.service';
 
 @Component({
   selector: 'app-header',
@@ -20,19 +21,20 @@ export class HeaderComponent implements OnInit {
   isAdmin: boolean;
   showAdminBoard = false;
 
-  constructor(private tokenStorageService: TokenStorageService, private dialog: MatDialog) { }
+  constructor(private tokenStorageService: TokenStorageService, private dialog: MatDialog, private sse: SseService) {
+  }
 
   ngOnInit(): void {
     this.isLoggedIn = false;
 
-    this.currentUser =  this.tokenStorageService.getUser();
+    this.currentUser = this.tokenStorageService.getUser();
     this.isLoggedIn = !!this.tokenStorageService.getUser();
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
-      if (this.roles.length > 0){
-        if (this.roles.indexOf('ROLE_ADMIN') > 0){
+      if (this.roles.length > 0) {
+        if (this.roles.indexOf('ROLE_ADMIN') > 0) {
           this.isAdmin = true;
         } else {
           this.isAdmin = false;
@@ -44,8 +46,19 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
-    this.tokenStorageService.signOut();
-    window.location.reload();
+    if (confirm('Bạn có muốn đăng xuất?')) {
+      this.sse.disconnect().subscribe(
+        data => {
+          this.tokenStorageService.signOut();
+          window.location.reload();
+        }, error => {
+          console.log('error ', error);
+          this.tokenStorageService.signOut();
+          window.location.reload();
+        }
+      );
+    }
+
   }
 
   openProfile(): void {

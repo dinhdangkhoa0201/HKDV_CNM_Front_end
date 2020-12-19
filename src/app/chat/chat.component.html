@@ -1,67 +1,199 @@
-<div class="row mt-2">
-  <div class="col-3">
+<div #main>
+  <div class="chat-room-wrapper container-fluid h-100">
 
-    <div class="chat-choose-wrapper" fxFill>
+    <div class="row justify-content-center h-100">
 
-      <mat-card class="chat-choose">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Tìm kiếm</mat-label>
-          <input matInput autocomplete="off" placeholder="Tìm kiếm">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
+      <div class="col-md-4 chat">
 
-        <mat-selection-list #list [multiple]="false">
-          <mat-list-option class="list-option-item" *ngFor="let friend of listFriend" (click)="chooseMessage(list)"
-                           [value]="friend" [selected]="listFriend.indexOf(friend) === 0">
+        <div class="card card mb-sm-3 mb-md-0 contacts_card">
 
-            <div fxLayout="row" fxLayoutAlign="start center">
-              <img src="./assets/image/user.png" width="40px">
-              <div class="ml-2" fxLayout="column">
-                <strong>{{friend.userName}}</strong>
-                <mat-hint *ngIf="listFriendAndStatus.indexOf(friend.userId) < 0">Offline</mat-hint>
-                <mat-hint *ngIf="listFriendAndStatus.indexOf(friend.userId) >= 0">Online</mat-hint>
+          <!-- Card header-->
+          <div class="card-header">
+
+            <div class="d-flex ">
+              <mat-form-field appearance="outline" class="flex-grow-1">
+                <mat-label>Tìm kiếm</mat-label>
+                <input matInput autocomplete="off" placeholder="Tìm kiếm">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+              <div>
+                <button class="mt-2 ml-2" mat-raised-button (click)="createGroup()">
+                  <mat-icon>group_add</mat-icon>
+                </button>
               </div>
             </div>
 
-            <mat-divider></mat-divider>
-          </mat-list-option>
-
-        </mat-selection-list>
-      </mat-card>
-    </div>
-  </div>
-  <div class="col-8">
-    <mat-card fxFill class="w-100 h-100">
-      <mat-list>
-        <mat-list-item *ngFor="let message of newMessage" class="mt-5">
-          <div class="card">
-            <div class="card-body" style="margin: 0; padding: 0">
-              <strong>{{message.senderName}}</strong>
-              <p>{{message.content}}</p>
-              <p>
-                <mat-hint>{{message.create}}</mat-hint>
-                <br>
-                <mat-hint>
-                  <mat-icon>done</mat-icon>
-                  Đã gửi
-                </mat-hint>
-              </p>
-            </div>
           </div>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
 
-    <mat-card class="d-flex-row mt-1">
-      <mat-form-field appearance="outline" class="flex-grow-1">
-        <input  matInput placeholder="Nhập tin nhắn" [(ngModel)]="message" autocomplete="off">
-        <mat-icon matSuffix>chat</mat-icon>
-      </mat-form-field>
-      <button class="" mat-raised-button (click)="sendMessage(message)">Send Message</button>
-    </mat-card>
-  </div>
+          <!-- Card body -->
+          <div class="card-body contacts_body">
 
-  <div class="col-4">
+            <div *ngIf="loadingListRoomChat">
+              <mat-spinner></mat-spinner>
+            </div>
+
+            <div *ngIf="!loadingListRoomChat">
+
+              <mat-selection-list [multiple]="false">
+
+                <cdk-virtual-scroll-viewport itemSize="10" class="room-chats">
+
+                  <mat-list-option class="room-chat-item" *ngFor="let roomChat of getKeys(listRoomChatsWithLastMessage)"
+                                   (click)="onChooseRoomChat(roomChat)" value="{{roomChat.messages}}"
+                                   [selected]="listRoomChats.indexOf(roomChat) === 0">
+                    <div class="d-flex">
+                      <div class="img_cont">
+
+                        <img src="{{friend?.url}}" class="rounded-circle user_img">
+
+                        <div *ngFor="let member of listFriendOnline">
+                          <div *ngIf="checkRoomOnline(member, roomChat.members) === true">
+                            <span class="online_icon"></span>
+                          </div>
+                          <div *ngIf="checkRoomOnline(member, roomChat.members) === false">
+                            <span class="online_icon offline"></span>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      <div class="user_info">
+                        <div *ngIf="roomChat.roomName !== null">
+                          <div *ngIf="roomChat.roomName.length > 0">
+                            <span>{{roomChat.roomName}}</span>
+                          </div>
+                          <div *ngIf="roomChat.roomName.length === 0">
+                            <span>{{roomChat.id}}</span>
+                          </div>
+                        </div>
+
+                        <div *ngIf="roomChat.roomName === null">
+                          <span>{{roomChat.id}}</span>
+                        </div>
+
+                        <p><span>{{getValue(roomChat).senderName}}
+                          :</span> {{getValue(roomChat).message}}</p>
+                      </div>
+                    </div>
+
+                  </mat-list-option>
+
+                </cdk-virtual-scroll-viewport>
+
+              </mat-selection-list>
+            </div>
+
+          </div>
+          <div class="card-footer"></div>
+
+        </div>
+
+
+      </div>
+
+      <div class="col-md-8 chat">
+
+        <div *ngIf="this.chooseRoomChat">
+          <div class="card">
+
+            <div class="card-header msg_head">
+
+              <div class="d-flex">
+                <div class="img_cont">
+                  <img src="{{friend ? friend.url : 'assets/image/user.png'}}" class="rounded-circle user_img">
+                  <!--                <img src="assets/image/user.png" class="rounded-circle user_img">-->
+                  <span class="online_icon"></span>
+                </div>
+
+                <div class="user_info">
+                  <span>Chat with Khalid</span>
+                </div>
+              </div>
+
+            </div>
+
+
+            <cdk-virtual-scroll-viewport #viewport itemSize="10" class="card-body room-chats">
+
+              <div class="message" *ngFor="let message of listMessages"
+                   value="{{message}}">
+
+                <div *ngIf="message.senderId !== userId">
+                  <div class="d-flex justify-content-start mb-4">
+
+                    <div class="img_cont_msg">
+                      <img src="{{getMember(message.senderId).url}}" class="img_cont_msg">
+                    </div>
+
+                    <div class="msg_container">
+                      <span class="msg_sender">{{message.senderName}}</span>
+
+                      <div *ngIf="message.type === 'text'" class="msg_detail">
+                        <span>{{message.message}}</span>
+                      </div>
+                      <div *ngIf="message.type === 'image'" class="msg_detail">
+                        <img src="{{message.message}}" alt="?" width="500px">
+                      </div>
+                      <span class="msg_time">{{message.time}}</span>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="message.senderId === userId">
+                  <div class="d-flex justify-content-end mb-4">
+
+                    <div class="msg_container_send">
+                      <div *ngIf="message.type === 'text'">
+                        <span>{{message.message}}</span>
+                      </div>
+                      <div *ngIf="message.type === 'image'">
+                        <img src="{{message.message}}" alt="?" width="500px">
+                      </div>
+
+                      <span class="msg_time_send">{{message.time}}</span>
+                    </div>
+                    <div class="img_cont_msg">
+                      <img src="{{user.url}}">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </cdk-virtual-scroll-viewport>
+
+            <div class="card-footer">
+
+              <div class="d-flex">
+                <div>
+                  <input type="file" style="display: none" #sendImage accept="image/*" (change)="onChangeFileInput()">
+
+                  <button class="mt-2 ml-1 mr-1" mat-raised-button color="primary" (click)="onClickFileInputButton()">
+                    <mat-icon matSuffix>image</mat-icon>
+                  </button>
+                </div>
+                <mat-form-field appearance="outline" class="flex-grow-1">
+                  <input matInput placeholder="Nhập tin nhắn" [(ngModel)]="message" autocomplete="off">
+                  <mat-icon matSuffix>chat</mat-icon>
+                </mat-form-field>
+
+                <div class="">
+                  <button class="mt-2 ml-1 mr-1" mat-raised-button (click)="_sendMessage(message)">
+                    <mat-icon matSuffix>send</mat-icon>
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
 
   </div>
 

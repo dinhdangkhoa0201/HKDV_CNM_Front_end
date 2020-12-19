@@ -31,9 +31,14 @@ mat-sidenav-container {
   /*height: 100% !important;*/
   height: 90vh !important;
 }
-
+app-header{
+  height: 8vh !important;
+}
 /*
 mat-sidenav {
   background-color: #ffcce0;
 }
 */
+.login-register a {
+  margin: 0vh 1vh;
+}

@@ -1,0 +1,56 @@
+<div>
+  <h2 mat-dialog-title>Tạo group</h2>
+  <mat-dialog-content fxLayout="column">
+
+    <mat-form-field class="w-100">
+      <mat-label>Tên group</mat-label>
+      <input matInput [formControl]="roomChatName">
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Tham gia</mat-label>
+
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let friend of chooseFriend" [selectable]="selectable" [removable]="removable"
+                  (removed)="remove(friend)">
+          {{friend.userName}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+
+        <input #friendInput matInput [formControl]="friendControl" [matAutocomplete]="auto" [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
+
+      </mat-chip-list>
+
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+
+        <mat-option *ngFor="let friend of filterFriend | async" [value]="friend">
+
+          <div class="d-flex">
+            <div *ngIf="friend.url === null">
+              <img src="assets/image/user.png" width="30px">
+            </div>
+            <div *ngIf="friend.url !== null">
+              <img src="{{friend.url}}" width="30px">
+            </div>
+            <div>
+              {{friend.userName}}
+            </div>
+          </div>
+
+        </mat-option>
+
+      </mat-autocomplete>
+
+    </mat-form-field>
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div class="d-flex justify-content-center">
+      <button mat-raised-button color="primary" (click)="createRoomChat()">Tạo</button>
+      <button mat-raised-button color="accent" (click)="closeDialog()">Huỷ</button>
+    </div>
+  </mat-dialog-actions>
+
+</div>

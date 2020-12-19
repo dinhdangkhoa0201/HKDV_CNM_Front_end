@@ -1,9 +1,8 @@
-export class Message {
+export class SendMessage {
+  roomId: string;
   senderId: number;
   senderName: string;
   senderImage: string;
   message: string;
-  time: string;
   type: string;
-  lastTime: number;
 }

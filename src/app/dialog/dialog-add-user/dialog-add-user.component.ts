@@ -1,15 +1,15 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
-import {Observable} from 'rxjs';
-import {AuthService} from '../../_services/auth.service';
-import {debounceTime, map} from 'rxjs/operators';
-import {User} from '../../_interfaces/user';
-import {AdminService} from '../../_services/admin.service';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../_services/auth.service';
+import { debounceTime, map } from 'rxjs/operators';
+import { User } from '../../_interfaces/user';
+import { AdminService } from '../../_services/admin.service';
 
-import {ToastrService} from 'ngx-toastr';
-import {uniquePhoneValidator} from '../../_services/unique-phone-validator.directive';
-import {uniqueEmailValidator} from '../../_services/unique-email-validator.directive';
+import { ToastrService } from 'ngx-toastr';
+import { uniquePhoneValidator } from '../../_services/unique-phone-validator.directive';
+import { uniqueEmailValidator } from '../../_services/unique-email-validator.directive';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -131,19 +131,20 @@ export class DialogAddUserComponent implements OnInit {
       password: this.addUserForm.get('password').value,
       roles: this.addUserForm.get('roles').value,
       enable: true,
+      url: ''
     };
     console.log('user', user);
 
     this.adminService.addUser(user).subscribe(
-      data => {
-        if (data !== null) {
-          this.dialogRef.close();
-          this.toast.success('Thêm người dùng thành công');
+        data => {
+          if (data !== null) {
+            this.dialogRef.close();
+            this.toast.success('Thêm người dùng thành công');
+          }
+        },
+        err => {
+          this.toast.error('err', err);
         }
-      },
-      err => {
-        this.toast.error('err', err);
-      }
     );
   }
 

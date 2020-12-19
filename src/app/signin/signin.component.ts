@@ -1,3 +1,4 @@
+import {SseService} from './../_services/sse.service';
 import {RequestLogin} from './../_request/request-login';
 import {TokenStorageService} from './../_services/token-storage.service';
 import {AuthService} from './../_services/auth.service';
@@ -29,7 +30,8 @@ export class SignInComponent implements OnInit {
     private tokenStorage: TokenStorageService,
     private router: Router,
     private snackbar: MatSnackBar,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private sseService: SseService
   ) {
   }
 
@@ -42,6 +44,7 @@ export class SignInComponent implements OnInit {
     if (this.tokenStorage.getUser()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
+      this.sseService.changeAvatarSource(this.tokenStorage.getUser().url !== '' ? this.tokenStorage.getUser().url : null);
     }
   }
 
@@ -70,13 +73,34 @@ export class SignInComponent implements OnInit {
       password: this.password
     };
 
-    console.log('temp : ' + temp);
-
     this.authService.signIn(temp).subscribe(
       (data) => {
-/*        console.log('data Sign in', data);*/
-        if (data.enable) {
-          if (data !== null) {
+        if (data === null) {
+          const phoneEmail = temp.phoneEmail;
+          // tslint:disable-next-line:radix
+          if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(phoneEmail) && !phoneEmail.includes('@') && Number.isInteger(Number.parseInt(phoneEmail.charAt(0)))) {
+            this.toastError('Sai số điện thoại', 'Lỗi');
+          } else if (!phoneEmail.match('^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$') && phoneEmail.includes('@')) {
+            this.toastError('Sai email', 'Lỗi');
+          } else if (phoneEmail.includes('@')) {
+            this.authService.isExistEmailAsync(phoneEmail).subscribe(res => {
+              if (res) {
+                this.toastError('Sai mật khẩu', 'Lỗi');
+              } else {
+                this.toastError('Email không tồn tại', 'Lỗi');
+              }
+            });
+          } else {
+            this.authService.isExistPhoneAsync(phoneEmail).subscribe(res => {
+              if (res) {
+                this.toastError('Sai mật khẩu', 'Lỗi');
+              } else {
+                this.toastError('Phone không tồn tại', 'Lỗi');
+              }
+            });
+          }
+        } else {
+          if (data.enable) {
             this.tokenStorage.saveUser(data);
             this.isLoginFailed = false;
             this.isLoggedIn = true;
@@ -84,15 +108,26 @@ export class SignInComponent implements OnInit {
             sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
             this.reloadPage();
           } else {
-            this.toastError('Phone / Email hoặc Password sai!', 'Lỗi');
+            this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
           }
-        } else {
-          this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
         }
-
+        // if (data.enable) {
+        //   if (data !== null) {
+        //     this.tokenStorage.saveUser(data);
+        //     this.isLoginFailed = false;
+        //     this.isLoggedIn = true;
+        //     this.roles = this.tokenStorage.getUser().roles;
+        //     sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
+        //     this.reloadPage();
+        //   } else {
+        //     this.toastError('Phone / Email hoặc Password sai!', 'Lỗi');
+        //   }
+        // } else {
+        //   this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
+        // }
       },
       (err) => {
-/*        console.log('err : ', err);*/
+        /*        console.log('err : ', err);*/
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
         this.toastError('Đăng nhập không thành công', 'Lỗi');

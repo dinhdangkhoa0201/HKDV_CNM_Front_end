@@ -34,9 +34,7 @@ label {
 * {
   margin: 8px;
 }
-/*
 
 ::ng-deep .mat-horizontal-stepper-header{
   pointer-events: none !important;
 }
-*/

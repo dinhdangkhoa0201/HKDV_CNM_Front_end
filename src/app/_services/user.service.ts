@@ -1,11 +1,12 @@
-import { environment } from './../../environments/environment.prod';
-import {HttpClient} from '@angular/common/http';
+import {environment} from './../../environments/environment.prod';
+import {HttpClient, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {User} from '../_interfaces/user';
 import {A} from '@angular/cdk/keycodes';
 
 const API_URL = environment.API_URL + '/api/user';
+const API_URL_FILE = environment.API_URL + '/api/file';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +15,9 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  updatePassword(userId, oldPassword, newPassword): Observable<any>{
+  updatePassword(userId, oldPassword, newPassword): Observable<any> {
     console.log(userId);
-    return this.http.post(`${ API_URL + '/changePassword'}/${userId}`, {}, {
+    return this.http.post(`${API_URL + '/changePassword'}/${userId}`, {}, {
       params: {
         oldPassword,
         newPassword
@@ -33,7 +34,7 @@ export class UserService {
     });
   }
 
-  updateInformationUser(userId, user): Observable<any>{
+  updateInformationUser(userId, user): Observable<any> {
     console.log('user updateInformationUser', user);
     return this.http.post(`${API_URL + '/update'}/${userId}`, {
       userName: user.userName,
@@ -48,14 +49,18 @@ export class UserService {
 
   addFriend(userId, friendId): Observable<any> {
     console.log('add friend: ownerId ', userId + ', friendId : ', friendId);
-    return this.http.get(`${API_URL + '/addFriend/' + userId + '?friendId=' + friendId}`);
+    return this.http.post(`${API_URL + '/addFriend/' + userId}`, {}, {
+      params: {
+        friendId
+      }
+    });
   }
 
   getListInvites(userId): Observable<any> {
     return this.http.get(`${API_URL + '/invites/' + userId}`);
   }
 
-  updatePhone(userId, phone): Observable<any>{
+  updatePhone(userId, phone): Observable<any> {
     return this.http.post(`${API_URL + '/updatePhone/' + userId}`, {}, {
       params: {
         phone
@@ -87,23 +92,56 @@ export class UserService {
     return this.http.get(`${API_URL + '/checkReceivedInvitation/' + userId + '?friendId=' + friendId}`);
   }
 
-  checkStatusIsFriend(userId, friendId): Observable<any>{
+  checkStatusIsFriend(userId, friendId): Observable<any> {
     return this.http.get(`${API_URL + '/checkStatusIsFriend/' + userId + '?friendId=' + friendId}`);
   }
 
-  acceptRequestAddFriend(userId, friendId): Observable<any>{
-    return this.http.get(`${API_URL + '/acceptRequestAddFriend/' + userId + '?friendId=' + friendId}`);
+  acceptRequestAddFriend(userId, friendId): Observable<any> {
+    return this.http.post(`${API_URL + '/acceptRequestAddFriend/' + userId}`, {}, {
+      params: {
+        friendId
+      }
+    });
   }
 
-  unFriend(userId, friendId): Observable<any>{
-    return this.http.get(`${API_URL + '/unfriend/' + userId + '?friendId=' + friendId}`);
+  unFriend(userId, friendId): Observable<any> {
+    return this.http.post(`${API_URL + '/unfriend/' + userId}`, {}, {
+      params: {
+        friendId
+      }
+    });
   }
 
-  deleteInvitationSent(userId, friendId): Observable<any>{
-    return this.http.get(`${API_URL + '/deleteInvitationSent/' + userId + '?friendId=' + friendId}`);
+  deleteInvitationSent(userId, friendId): Observable<any> {
+    return this.http.post(`${API_URL + '/deleteInvitationSent/' + userId}`, {}, {
+      params: {
+        friendId
+      }
+    });
   }
+
 
   deleteInvitationReceived(userId, friendId): Observable<any> {
-    return this.http.get(`${API_URL + '/deleteInvitationReceived/' + userId + '?friendId=' + friendId}`);
+    return this.http.post(`${API_URL + '/deleteInvitationReceived/' + userId}`, {}, {
+      params: {
+        friendId
+      }
+    });
+  }
+
+  uploadFile(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    const req = new HttpRequest('POST', `${API_URL_FILE}/upload-file`, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+    return this.http.request(req);
+  }
+
+  uploadAvatar(file, userId): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('avatar', file, file.name);
+    return this.http.post(`${API_URL}/uploadAvatar/${userId}`, formData);
   }
 }

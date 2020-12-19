@@ -66,6 +66,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   phone: string;
   email: string;
 
+  REGEX_PHONE = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+
   /* captchaPhone */
   /*  captchaPhone: any;
     captchaEmail: any;*/

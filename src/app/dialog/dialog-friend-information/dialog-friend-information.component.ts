@@ -22,7 +22,6 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
 
   constructor(public dialogRef: MatDialogRef<DialogFriendInformationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private userService: UserService, private tokenStorage: TokenStorageService, private toast: ToastrService) {
-    console.log('data ', data);
     this.friend = data.user;
     this.ownerId = data.ownerId;
   }
@@ -50,8 +49,7 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
 
     if (this.friend.userId !== this.tokenStorage.getUser().userId) {
       this.checkSentInvitation(this.friend.userId);
-      this.checkReceivedInvitation(this.friend.userId);
-      this.checkStatusIsFriend(this.friend.userId);
+
     }
   }
 
@@ -59,10 +57,9 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
   }
 
   sendRequestAddFriend(): void {
-    console.log('userId : ', this.friend.userId);
     this.userService.addFriend(this.tokenStorage.getUser().userId, this.friend.userId).subscribe(
       data => {
-        console.log('data sendRequestAddFriend : ', data);
+        console.log('sendRequestAddFriend ', data);
         if (data === true) {
           this.relationType = 1;
         }
@@ -76,9 +73,11 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
   checkSentInvitation(friendId): void {
     this.userService.checkSentInvitation(this.tokenStorage.getUser().userId, friendId).subscribe(
       data => {
-        console.log('data checkSentInvitation : ', data.length);
+        console.log('checkSentInvitation ', data);
         if (data.length > 0) {
           this.relationType = 1;
+        } else {
+          this.checkReceivedInvitation(this.friend.userId);
         }
       }, error => {
         console.log('err checkfriend : ', error);
@@ -89,9 +88,11 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
   checkReceivedInvitation(friendId): void {
     this.userService.checkReceivedInvitation(this.tokenStorage.getUser().userId, friendId).subscribe(
       data => {
-        console.log('data checkReceivedInvitation : ', data.length);
+        console.log('checkReceivedInvitation ', data);
         if (data.length > 0) {
           this.relationType = 2;
+        } else {
+          this.checkStatusIsFriend(this.friend.userId);
         }
       }, error => {
         console.log('err checkReceivedInvitation : ', error);
@@ -102,7 +103,7 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
   checkStatusIsFriend(friendId): void {
     this.userService.checkStatusIsFriend(this.tokenStorage.getUser().userId, friendId).subscribe(
       data => {
-        console.log('data checkStatusIsFriend : ', data.length);
+        console.log('checkStatusIsFriend ', data);
         if (data.length > 0) {
           this.relationType = 3;
         } else {
@@ -118,7 +119,6 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
     if (confirm('Bạn có muốn huỷ kết bạn với ' + this.friend.userName)) {
       this.userService.unFriend(this.tokenStorage.getUser().userId, this.friend.userId).subscribe(
         data => {
-          console.log('data unFriend : ', data);
           window.location.reload();
         }, error => {
           console.log('error checkStatusIsFriend : ', error);
@@ -130,7 +130,6 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
   acceptInvitation(): void {
     this.userService.acceptRequestAddFriend(this.tokenStorage.getUser().userId, this.friend.userId).subscribe(
       data => {
-        console.log('data acceptRequestAddFriend : ', data);
         if (data === true) {
           window.location.reload();
         }
@@ -140,10 +139,10 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
     );
   }
 
-  deleteInvitaion(): void {
+  deleteInvitation(): void {
     if (this.relationType === 1) {
       this.deleteInvitationSent(this.friend.userId);
-    } else if(this.relationType === 2){
+    } else if (this.relationType === 2) {
       this.deleteInvitationReceived(this.friend.userId);
     }
   }
@@ -152,7 +151,6 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
     if (confirm('Bạn có muốn xoá lời mời này?')) {
       this.userService.deleteInvitationReceived(this.tokenStorage.getUser().userId, friendId).subscribe(
         data => {
-          console.log('data deleteInvitation', data);
           if (data === true) {
             this.toastSuccess('Xoá lời kết bạn thành công');
             this.dialogRef.close();
@@ -168,7 +166,6 @@ export class DialogFriendInformationComponent implements OnInit, AfterViewInit {
     if (confirm('Bạn có muốn xoá lời mời này?')) {
       this.userService.deleteInvitationSent(this.tokenStorage.getUser().userId, friendId).subscribe(
         data => {
-          console.log('data deleteInvitation', data);
           if (data === true) {
             this.toastSuccess('Xoá lời kết bạn thành công');
             this.dialogRef.close();

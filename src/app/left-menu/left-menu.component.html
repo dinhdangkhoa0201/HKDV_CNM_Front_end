@@ -4,7 +4,11 @@
     <div fxLayout="column">
       <mat-nav-list>
         <a mat-list-item>
-          <img src="./assets/image/user.png" width="40px"/>
+          <!-- <img src="./assets/image/user.png" width="40px" /> -->
+          <img class="image-avatar" *ngIf="avatarSrc!==null; else default_image" [src]="avatarSrc" />
+          <ng-template #default_image>
+            <img class="image-avatar" src="./assets/image/user.png" />
+          </ng-template>
           <span class="ml-5" [@animateText]="linkText ? 'show' : 'hide'">{{user.userName}}</span>
         </a>
       </mat-nav-list>
@@ -12,7 +16,7 @@
     </div>
 
     <div fxLayout="column">
-      <mat-nav-list>
+      <mat-nav-list class="menu">
         <a mat-list-item href="/chat" routerLink="/chat">
           <mat-icon class="iconColor">chat</mat-icon>
           <span class="ml-5" [@animateText]="linkText ? 'show' : 'hide'">Message</span>

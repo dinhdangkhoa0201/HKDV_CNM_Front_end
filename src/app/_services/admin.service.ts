@@ -33,21 +33,21 @@ export class AdminService {
   }
 
   findUserById(userId): Observable<any>{
-    return this.http.get(`${ADMIN_API + '/users'}/${userId}`);
+    return this.http.get(`${ADMIN_API + '/findUserByUserId/' + userId}`);
   }
 
   findUserByPhone(phone): Observable<any>{
-    return this.http.get(`${ADMIN_API + '/users'}/${phone}`);
+    return this.http.get(`${ADMIN_API + '/findUserByPhone/' + phone}`);
   }
 
   findUserByEmail(email): Observable<any>{
-    return this.http.get(`${ADMIN_API + '/users'}/${email}`);
+    return this.http.get(`${ADMIN_API + '/findUserByEmail/' + email}`);
   }
 
   setEnableUser(userId, enable): Observable<any>{
     const body = new HttpParams();
     body.set('enable', enable);
-    return this.http.post(`${ADMIN_API + '/users'}/${userId}`, {}, {
+    return this.http.post(`${ADMIN_API + '/users/' + userId}`, {}, {
       params : {
         enable,
       }
