@@ -3,6 +3,12 @@
   background: rgb(212, 42, 93);
   color: #fff;
 }
+<<<<<<< HEAD
 li{
   margin: 0px 5px;
+=======
+
+.nav-item {
+  margin: 0vh 1vh;
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
 }

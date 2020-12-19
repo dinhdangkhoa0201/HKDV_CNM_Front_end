@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 import {environment} from './../../environments/environment.prod';
 import {HttpClient, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {User} from '../_interfaces/user';
 import {A} from '@angular/cdk/keycodes';
+=======
+import { environment } from './../../environments/environment.prod';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { User } from '../_interfaces/user';
+import { A } from '@angular/cdk/keycodes';
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
 
 const API_URL = environment.API_URL + '/api/user';
 const API_URL_FILE = environment.API_URL + '/api/file';
@@ -51,7 +60,11 @@ export class UserService {
     console.log('add friend: ownerId ', userId + ', friendId : ', friendId);
     return this.http.post(`${API_URL + '/addFriend/' + userId}`, {}, {
       params: {
+<<<<<<< HEAD
         friendId
+=======
+        friendId: friendId
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
       }
     });
   }
@@ -99,7 +112,11 @@ export class UserService {
   acceptRequestAddFriend(userId, friendId): Observable<any> {
     return this.http.post(`${API_URL + '/acceptRequestAddFriend/' + userId}`, {}, {
       params: {
+<<<<<<< HEAD
         friendId
+=======
+        friendId: friendId
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
       }
     });
   }
@@ -107,7 +124,11 @@ export class UserService {
   unFriend(userId, friendId): Observable<any> {
     return this.http.post(`${API_URL + '/unfriend/' + userId}`, {}, {
       params: {
+<<<<<<< HEAD
         friendId
+=======
+        friendId: friendId
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
       }
     });
   }
@@ -115,7 +136,11 @@ export class UserService {
   deleteInvitationSent(userId, friendId): Observable<any> {
     return this.http.post(`${API_URL + '/deleteInvitationSent/' + userId}`, {}, {
       params: {
+<<<<<<< HEAD
         friendId
+=======
+        friendId: friendId
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
       }
     });
   }
@@ -124,11 +149,16 @@ export class UserService {
   deleteInvitationReceived(userId, friendId): Observable<any> {
     return this.http.post(`${API_URL + '/deleteInvitationReceived/' + userId}`, {}, {
       params: {
+<<<<<<< HEAD
         friendId
+=======
+        friendId: friendId
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
       }
     });
   }
 
+<<<<<<< HEAD
   uploadFile(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('file', file);
@@ -139,6 +169,8 @@ export class UserService {
     return this.http.request(req);
   }
 
+=======
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
   uploadAvatar(file, userId): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('avatar', file, file.name);

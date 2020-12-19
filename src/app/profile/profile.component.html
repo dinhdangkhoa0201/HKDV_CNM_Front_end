@@ -1,11 +1,15 @@
 <div class="container">
 
   <div id="header">
+<<<<<<< HEAD
 
+=======
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
     <mat-form-field style="display: none;">
       <ngx-mat-file-input #input (change)="onFileChange($event)" [accept]="'.png, .jpg, .jpeg'" required>
       </ngx-mat-file-input>
     </mat-form-field>
+<<<<<<< HEAD
 
     <img class="image-avatar" *ngIf="avatarSrc!==null; else default_image" (click)="input.onContainerClick($event)"
          src="{{avatarSrc}}"/>
@@ -15,6 +19,14 @@
     </ng-template>
     <mat-icon id="camera-icon" (click)="input.onContainerClick($event)">camera_alt</mat-icon>
 
+=======
+    <img id="image-avatar" *ngIf="avatarSrc!==null; else default_image" (click)="input.onContainerClick($event)"
+      src="{{avatarSrc}}" />
+    <ng-template #default_image>
+      <img id="image-avatar" (click)="input.onContainerClick($event)" src="./assets/image/user.png" />
+    </ng-template>
+    <mat-icon id="camera-icon" (click)="input.onContainerClick($event)">camera_alt</mat-icon>
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
   </div>
 
   <div class="mt-2">
@@ -117,6 +129,40 @@
                       </mat-form-field>
                     </td>
                   </tr>
+<<<<<<< HEAD
+=======
+                  <!--                  <tr>
+                    <th>Số điện thoại</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-label>Số điện thoại</mat-label>
+                        <input matInput formControlName="phone" [readonly]="currentUser.phone.trim().length > 0" uniquePhone>
+                        <mat-icon matSuffix>phone_android</mat-icon>
+                      </mat-form-field>
+
+                      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+                        <div class="alert alert-danger" *ngIf="hasError('phone', 'uniquePhone', informationUser)">
+                          Số {{ phone.value }} không khả dụng
+                        </div>
+                      </div>
+                    </td>
+                  </tr>-->
+                  <!--                  <tr>
+                    <th>Email</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" [readonly]="currentUser.email.trim().length > 0">
+                        <mat-icon matSuffix>mail</mat-icon>
+                      </mat-form-field>
+                      <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                        <div class="alert alert-danger" *ngIf="hasError('email', 'uniqueEmail', informationUser)">
+                          Email {{ email.value }} không khả dụng
+                        </div>
+                      </div>
+                    </td>
+                  </tr>-->
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
                 </table>
               </form>
             </mat-card-content>
@@ -148,9 +194,15 @@
                       <mat-form-field appearance="outline" fxFill>
                         <mat-label>Mật khẩu hiện tại</mat-label>
                         <input matInput [type]="hideCurrentPassword ? 'password' : 'text'"
+<<<<<<< HEAD
                                formControlName="currentPassword" type="password">
                         <button mat-icon-button matSuffix (click)="hideCurrentPassword = !hideCurrentPassword"
                                 [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideCurrentPassword">
+=======
+                          formControlName="currentPassword" type="password">
+                        <button mat-icon-button matSuffix (click)="hideCurrentPassword = !hideCurrentPassword"
+                          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideCurrentPassword">
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
                           <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
 
@@ -179,11 +231,30 @@
                     </td>
                   </tr>
                   <tr>
+<<<<<<< HEAD
+=======
+                    <th>Mật khẩu mới</th>
+                    <td>
+                      <mat-form-field appearance="outline" fxFill>
+                        <mat-label>Mật khẩu hiện mới</mat-label>
+                        <input matInput [type]="hideNewPassword ? 'password' : 'text'" formControlName="newPassword"
+                          type="password">
+                        <button mat-icon-button matSuffix (click)="hideNewPassword = !hideNewPassword"
+                          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideNewPassword">
+                          <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <!--                  <mat-error *ngIf="hasError('newPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr>
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
                     <th>Xác nhận mật khẩu mới</th>
                     <td>
                       <mat-form-field appearance="outline" fxFill>
                         <mat-label>Xác nhận mật khẩu mới</mat-label>
                         <input matInput [type]="hideConfirmPassword ? 'password' : 'text'"
+<<<<<<< HEAD
                                formControlName="confirmNewPassword" type="password" pattern="{{ newPassword.value }}">
                         <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword"
                                 [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
@@ -195,6 +266,14 @@
                         <mat-error *ngIf="hasError('confirmNewPassword', 'pattern', changePassword)">Xác nhận mật khẩu
                           không chính xác
                         </mat-error>
+=======
+                          formControlName="confirmNewPassword" type="password">
+                        <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword"
+                          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
+                          <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <!--                  <mat-error *ngIf="hasError('confirmNewPassword', 'required', changePassword)">Chưa nhập mật khẩu hiện tại</mat-error>-->
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
                       </mat-form-field>
                     </td>
                   </tr>
@@ -202,8 +281,12 @@
               </form>
               <mat-card-actions>
                 <button mat-raised-button class="btn btn-outline-primary" (click)="submitChangePassword()">Xác
+<<<<<<< HEAD
                   nhận
                 </button>
+=======
+                  nhận</button>
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
                 <button mat-raised-button class="btn btn-outline-danger" (click)="changePassword.reset()">Huỷ</button>
               </mat-card-actions>
             </mat-card>

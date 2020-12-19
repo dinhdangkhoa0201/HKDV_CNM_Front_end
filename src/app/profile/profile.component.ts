@@ -1,5 +1,9 @@
 import { SseService } from './../_services/sse.service';
 import { EventEmitter } from 'events';
+<<<<<<< HEAD
+=======
+import { FileService } from './../_services/file.service';
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
 import { TokenStorageService } from './../_services/token-storage.service';
 import { Component, OnInit, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -29,7 +33,11 @@ export class ProfileComponent implements OnInit {
   timeSnackbar = 2000;
 
 
+<<<<<<< HEAD
   constructor(private token: TokenStorageService, private userService: UserService, private snackbar: MatSnackBar, private toast: ToastrService, private sseService: SseService) {
+=======
+  constructor(private token: TokenStorageService, private userService: UserService, private snackbar: MatSnackBar, private toast: ToastrService, private fileService: FileService, private sseService: SseService) {
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
   }
 
   ngOnInit(): void {
@@ -56,7 +64,11 @@ export class ProfileComponent implements OnInit {
         gender: this.currentUser.gender,
         birthday: this.currentUser.birthday,
       });
+<<<<<<< HEAD
       this.sseService.changeAvatarSource(this.currentUser.url !== '' ? this.currentUser.url : null);
+=======
+      this.sseService.changeAvatarSource(this.currentUser.url !== "" ? this.currentUser.url : null);
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
       this.sseService.currentAvatar.subscribe(avatarSrc => this.avatarSrc = avatarSrc);
     }
 
@@ -172,6 +184,10 @@ export class ProfileComponent implements OnInit {
       this.token.saveUser(res);
       this.avatarSrc = res.url;
       this.sseService.changeAvatarSource(this.avatarSrc);
+<<<<<<< HEAD
     });
+=======
+    })
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
   }
 }

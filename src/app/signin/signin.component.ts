@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {SseService} from './../_services/sse.service';
 import {RequestLogin} from './../_request/request-login';
 import {TokenStorageService} from './../_services/token-storage.service';
@@ -8,6 +9,18 @@ import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NotifyErrorComponent} from '../notify/notify-error/notify-error.component';
 import {ToastrService} from 'ngx-toastr';
+=======
+import { SseService } from './../_services/sse.service';
+import { RequestLogin } from './../_request/request-login';
+import { TokenStorageService } from './../_services/token-storage.service';
+import { AuthService } from './../_services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotifyErrorComponent } from '../notify/notify-error/notify-error.component';
+import { ToastrService } from 'ngx-toastr';
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
 
 @Component({
   selector: 'app-signin',
@@ -44,7 +57,11 @@ export class SignInComponent implements OnInit {
     if (this.tokenStorage.getUser()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
+<<<<<<< HEAD
       this.sseService.changeAvatarSource(this.tokenStorage.getUser().url !== '' ? this.tokenStorage.getUser().url : null);
+=======
+      this.sseService.changeAvatarSource(this.tokenStorage.getUser().url !== "" ? this.tokenStorage.getUser().url : null);
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
     }
   }
 
@@ -76,11 +93,18 @@ export class SignInComponent implements OnInit {
     this.authService.signIn(temp).subscribe(
       (data) => {
         if (data === null) {
+<<<<<<< HEAD
           const phoneEmail = temp.phoneEmail;
           // tslint:disable-next-line:radix
           if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(phoneEmail) && !phoneEmail.includes('@') && Number.isInteger(Number.parseInt(phoneEmail.charAt(0)))) {
             this.toastError('Sai số điện thoại', 'Lỗi');
           } else if (!phoneEmail.match('^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$') && phoneEmail.includes('@')) {
+=======
+          var phoneEmail = temp.phoneEmail;
+          if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(phoneEmail) && !phoneEmail.includes('@') && Number.isInteger(Number.parseInt(phoneEmail.charAt(0)))) {
+            this.toastError('Sai số điện thoại', 'Lỗi');
+          } else if (!phoneEmail.match("^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$") && phoneEmail.includes('@')) {
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
             this.toastError('Sai email', 'Lỗi');
           } else if (phoneEmail.includes('@')) {
             this.authService.isExistEmailAsync(phoneEmail).subscribe(res => {
@@ -89,7 +113,11 @@ export class SignInComponent implements OnInit {
               } else {
                 this.toastError('Email không tồn tại', 'Lỗi');
               }
+<<<<<<< HEAD
             });
+=======
+            })
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
           } else {
             this.authService.isExistPhoneAsync(phoneEmail).subscribe(res => {
               if (res) {
@@ -97,9 +125,16 @@ export class SignInComponent implements OnInit {
               } else {
                 this.toastError('Phone không tồn tại', 'Lỗi');
               }
+<<<<<<< HEAD
             });
           }
         } else {
+=======
+            })
+          }
+        }
+        else {
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
           if (data.enable) {
             this.tokenStorage.saveUser(data);
             this.isLoginFailed = false;
@@ -107,9 +142,16 @@ export class SignInComponent implements OnInit {
             this.roles = this.tokenStorage.getUser().roles;
             sessionStorage.setItem('isLoggedIn', String(this.isLoggedIn));
             this.reloadPage();
+<<<<<<< HEAD
           } else {
             this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
           }
+=======
+          }
+          else {
+            this.toastError('Tài khoản của bạn đã bị khoá', 'Lỗi');
+          }
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
         }
         // if (data.enable) {
         //   if (data !== null) {

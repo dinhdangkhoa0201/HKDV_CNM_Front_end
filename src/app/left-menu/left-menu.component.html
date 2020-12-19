@@ -1,13 +1,19 @@
 <div class="sidenav_container" (mouseenter)="onSidenavToggle()" (mouseleave)="onSidenavToggle()"
-     [@onSideNavChange]="sideNavState ? 'open' : 'close'">
+  [@onSideNavChange]="sideNavState ? 'open' : 'close'">
   <div fxLayout="column" fxLayoutGap="" style="height: 100%;">
     <div fxLayout="column">
       <mat-nav-list>
         <a mat-list-item>
           <!-- <img src="./assets/image/user.png" width="40px" /> -->
+<<<<<<< HEAD
           <img class="image-avatar" *ngIf="avatarSrc!==null; else default_image" [src]="avatarSrc" />
           <ng-template #default_image>
             <img class="image-avatar" src="./assets/image/user.png" />
+=======
+          <img id="image-avatar" *ngIf="avatarSrc!==null; else default_image" [src]="avatarSrc" />
+          <ng-template #default_image>
+            <img id="image-avatar" src="./assets/image/user.png" />
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
           </ng-template>
           <span class="ml-5" [@animateText]="linkText ? 'show' : 'hide'">{{user.userName}}</span>
         </a>

@@ -4,7 +4,7 @@
   background-size: cover;
 }
 
-.left-side{
+.left-side {
   position: relative;
 }
 
@@ -12,17 +12,18 @@
   position: absolute;
   top: 200px;
 }
+
 .brandImage {
   width: 50px;
 }
 
 .main_content {
-  width:100%;
+  width: 100%;
   height: calc(100vh - 100px);
   background: #efefef;
 }
 
-#main{
+#main {
   height: 93% !important;
   margin: 0;
 }
@@ -39,6 +40,10 @@ mat-sidenav {
   background-color: #ffcce0;
 }
 */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
 .login-register a {
   margin: 0vh 1vh;
 }

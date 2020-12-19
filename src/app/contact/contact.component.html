@@ -26,9 +26,15 @@
             <mat-nav-list>
               <mat-list-item *ngFor="let user of listFindings" (click)="showInformation(user)">
                 <img mat-list-avatar class="image-avatar" *ngIf="user.url!==null; else default_image"
+<<<<<<< HEAD
                      [src]="user.url"/>
                 <ng-template #default_image>
                   <img mat-list-avatar class="image-avatar" src="./assets/image/user.png"/>
+=======
+                  [src]="user.url" />
+                <ng-template #default_image>
+                  <img mat-list-avatar class="image-avatar" src="./assets/image/user.png" />
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
                 </ng-template>
                 <div class="ml-3" fxLayout="column">
 
@@ -48,7 +54,11 @@
           <h3>Danh sách</h3>
           <mat-selection-list #list [multiple]="false">
             <mat-list-option *ngFor="let item of listItems" (click)="filterContact(list)" [value]="item.title"
+<<<<<<< HEAD
                              [selected]="item.selected">
+=======
+              [selected]="item.selected">
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
               <span class="mt-3 mb-2" *ngIf="!item.badge">{{item.title}}</span>
               <span class="mt-3 mb-2" *ngIf="item.badge" matBadge="N">{{item.title}}</span>
             </mat-list-option>
@@ -70,6 +80,10 @@
       <table mat-table [dataSource]="dataSource" class="w-100">
 
         <!--        <ng-container matColumnDef="Select">
+<<<<<<< HEAD
+=======
+
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? masterToggle() : null"
                           [checked]="selection.hasValue() && isAllSelected()"
@@ -91,9 +105,15 @@
           <td mat-cell *matCellDef="let contact">
             <!-- <img src="./assets/image/user.png" width="30px"> -->
             <img mat-list-avatar class="contact-avatar" *ngIf="contact.url!==null; else default_image"
+<<<<<<< HEAD
                  [src]="contact.url"/>
             <ng-template #default_image>
               <img mat-list-avatar class="contact-avatar" src="./assets/image/user.png"/>
+=======
+              [src]="contact.url" />
+            <ng-template #default_image>
+              <img mat-list-avatar class="contact-avatar" src="./assets/image/user.png" />
+>>>>>>> 927f459a086855f1692623bcddae48da400b5cf8
             </ng-template>
           </td>
         </ng-container>
@@ -115,7 +135,7 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="example-element-row"
-            (click)="clickOnRow(row)"></tr>
+          (click)="clickOnRow(row)"></tr>
 
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
